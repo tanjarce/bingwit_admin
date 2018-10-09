@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-
-import SignOut from 'react-icons/lib/fa/sign-out'
-import Cart from 'react-icons/lib/fa/shopping-cart'
-
-
-import cdiLogo from '../assets/logo-small.svg'
-
 import '../styles/Sidebar.css'
-import SidebarItemLink from './SidebarItemLink';
 
-class SideBar extends Component {
+import SidebarItemLink from './SideItemLink'
+import * as permissions from '../permissions/permissions'
+import logo from '../assets/Bingwit.svg'
+
+class Sidebar extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
+            isOpen: false,
             iconSize: 60
         }
-        
+
+        this.isOpen = this.isOpen.bind(this)
         this.handleMobileLink = this.handleMobileLink.bind(this)
     }
 
@@ -29,32 +27,36 @@ class SideBar extends Component {
             this.props.expand()
         }
     }
+    isOpen() {
+        this.setState({
+            isOpen : !this.state.isOpen
+        })
+    }
     render() {
-        const { onLogOut, menus, onexpand } = this.props
+        const { isOpen } = this.state;
         return (
             <div>
                 <div className="area"></div>
-                <nav className={onexpand ? "main-menu onexpand" : "main-menu"}>
+                <nav className={isOpen ? "main-menu onexpand" : "main-menu"}>
                     <ul>
                         <li className="header">
                             <NavLink
                                 className="noHover" 
-                                to="/dashboard">
-                                <i className='fa'>
-                                {/* style={{width: this.state.iconSize + 'px'}} */}
+                                to="#">
+                                <i>
                                     <img
                                         className="nav-logo"
-                                        src={cdiLogo}
-                                        alt="cdi logo"/>
+                                        src={logo}
+                                        alt="Bingwit logo"/>
                                 </i>
                                 <span className="nav-header-text">
-                                    ReactJS - BoilerPlate
+                                    Bingwit
                                 </span>
                             </NavLink>
                         </li>
                         <li className="bars"
                             title="Menu"
-                            onClick={this.props.expand}>
+                            onClick={this.isOpen}>
                             <div className="bar1"></div>
                             <div className="bar2"></div>
                             <div className="bar3"></div>
@@ -62,54 +64,21 @@ class SideBar extends Component {
                                 Menu
                             </span>
                         </li>
-                        {menus.map(item => (
+                        {permissions.bingwitmenus.map(item => (
                             <SidebarItemLink menu={item} key={item.title} didNavigate={this.handleMobileLink}/>
                         ))}
                     </ul>
 
                     <ul className="logout">
                         <li>
-                            <NavLink to='/cart' activeClassName="active">
+                            <NavLink to='/logout' activeClassName="active">
                                 <i className='fa'>
-                                    <Cart/>
-                                </i>
-                                <span className="nav-text">
-                                    View Cart
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li>
-                        <a href="#logout" onClick={() => {
-                            this.handleMobileLink()
-                            onLogOut()
-                        }}>
-                                <i className="fa">
-                                    <SignOut />
+                                {permissions.logout.src}
                                 </i>
                                 <span className="nav-text">
                                     Logout
                                 </span>
-                            </a>
-                        </li>  
-                        <li>
-                            <a href="http://codedisruptors.com" rel="noopener noreferrer" target="_blank" style={{height: "60px"}} title="Official CDI Website"
-                                onClick={this.handleMobileLink}>
-                                <i className='fa'>
-                                    <img
-                                        className="nav-logo"
-                                        src={cdiLogo}
-                                        style={{
-                                            width: "28px"
-                                        }}
-                                        alt="CODE DISRUPTORS, INC."/>
-                                </i>
-                                <div className="rights-container">
-                                    <p style={{margin: 0, fontSize: "12px"}}>
-                                        powered by:
-                                    </p>
-                                    <p className="rights">CODE DISRUPTORS, INC.</p>
-                                </div>
-                            </a>
+                            </NavLink>
                         </li>
                     </ul>
                 </nav>
@@ -118,4 +87,4 @@ class SideBar extends Component {
     }
 }
 
-export default SideBar;
+export default Sidebar;

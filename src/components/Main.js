@@ -7,11 +7,11 @@ import * as API from '../services/API';
 import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
-import SideBar from './SideBar';
+import SideBar from './Sidebar';
 
 //PAGES
 import Dashboard from './Dashboard'
-import Food from './Food'
+import ManageUser from './ManageUser'
 import Cart from './Cart'
 import Users from './Users'
 import Accounts from './Accounts'
@@ -68,26 +68,17 @@ class Main extends Component {
                         <Route path="/dashboard" render={()=>(
                             <Dashboard />
                         )}/>
-                        <Route path="/food" render={() => (
-                            <Food 
-                                food={this.props.food}
-                                updateQuery={this.props.updateQuery}
-                                updateItems={this.props.updateItems}/>
+                        <Route path="/account" render={() => (
+                            <div>Account</div>
                         )}/>
-                        <Route path="/cart" render={()=>(
-                            <Cart />
+                        <Route path="/mnguser" render={()=>(
+                            <ManageUser />
                         )}/>
-                        <Route path="/users" render={()=>(
+                        <Route path="/notif" render={()=>(
                             <Users />
                         )}/>
-                        <Route path="/accounts" render={()=>(
+                        <Route path="/rules" render={()=>(
                             <Accounts />
-                        )}/>
-                        <Route path="/billings" render={()=>(
-                            <Billings />
-                        )}/>
-                        <Route path="/maps" render={()=>(
-                            <Maps />
                         )}/>
                         <Route render={()=>(
                             <Redirect to="/dashboard" />
