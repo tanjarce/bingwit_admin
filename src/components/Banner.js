@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Jumbotron, Container } from 'reactstrap';
-
+import '../styles/manage.css'
 class Banner extends Component {
     render() {
         const { header, contents } = this.props
         return (
             <div>
-                <Jumbotron className="p-3 px-5">
-                    {/* <Container className="p-0 m-0"> */}
-                        <h1 className="display-5">{header}</h1>
-                        <p className="lead">{contents}</p>
-                    {/* </Container> */}
+                <Jumbotron fluid className='main'>
+                    <Container>
+                        <span className='header'>{header}</span>
+                        <p className='body'>{contents}</p>
+                    </Container>
                 </Jumbotron>
             </div>
         );
