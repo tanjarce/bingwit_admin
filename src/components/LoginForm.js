@@ -100,7 +100,7 @@ class LoginForm extends Component {
                             </FormGroup>
                             <LoadingButton 
                                 color="primary"
-                                text="SIGN IN"
+                                text="Login"
                                 isLoading={loading}
                                 spinnerColor="#fff"
                                 spinnerSize={2}>
