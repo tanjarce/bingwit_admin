@@ -7,7 +7,7 @@ import * as API from '../services/API';
 import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
-import SideBar from './Sidebar';
+import SideBar from './SideBar';
 
 //PAGES
 import Dashboard from './Dashboard'
@@ -52,9 +52,9 @@ class Main extends Component {
         const menus = permissions.getPermission(type)
         const hasAccess = Session.hasAccess()
 
-        return hasAccess ? (
+        return !hasAccess ? (
             <div style={{height: '100vh'}}>   
-                {hasAccess && (
+                {!hasAccess && (
                     <SideBar
                         menus={menus}
                         onexpand={menuexpand}

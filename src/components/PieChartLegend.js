@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Badge} from 'reactstrap';
+import '../styles/style.css'
 
 
 class PieChartLegend extends Component {
@@ -7,9 +7,9 @@ class PieChartLegend extends Component {
     const { data, colors } = this.props
     const legends = data.map((data, index)=>{
         return(
-            <li key={index}>
-                <Badge style={{'background': colors[index]}}>&nbsp;&nbsp;</Badge>
-                &nbsp;{data.name}: {data.value}
+            <li key={index} className="piechart_colorLegend_li">
+                <span className="piechart_colorLegend" style={{'background': colors[index] }}></span>
+                {data.name}: {data.value}
             </li>
         )
     })
@@ -19,8 +19,8 @@ class PieChartLegend extends Component {
 
     return (
       <div>
-        <ul>{ legends }</ul>
-        <h3>Total</h3>
+        <ul className="piechart_legends">{ legends }</ul>
+        <h6>Total Users:</h6>
         <h4>{ totalValue }</h4>    
       </div>
     )

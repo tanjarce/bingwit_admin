@@ -14,7 +14,6 @@ class Login extends Component {
         
         this.state = {
             onLogin: true,
-            // isEmailInvalid: false,
             isInvalid: {},
             errorMessage: {},
         }
@@ -22,20 +21,22 @@ class Login extends Component {
         this.handleSignInSuccess = this.handleSignInSuccess.bind(this)
         this.handleSignInFail = this.handleSignInFail.bind(this)
         this.handleOnBlur = this.handleOnBlur.bind(this)
-        // this.reset = this.reset.bind(this)
+        this.reset = this.reset.bind(this)
         this.navigateToHome = this.navigateToHome.bind(this)
         this.navigateToForgotPassword = this.navigateToForgotPassword.bind(this)
     }
     
-    handleOnBlur (name, error, value = '') {
-        console.log(name, error, value)
-        if (!value.length){
+    handleOnBlur (e) {
+        const name = e.target.name
+        const value = e.target.value
+        
+        if (!value){
             this.setState((oldState)=>({
                 isInvalid: {
                     ...oldState.isInvalid, [name]: true
                 },
                 errorMessage: {
-                    ...oldState.errorMessage, [name]: error
+                    ...oldState.errorMessage, [name]: `${name} is required.`
                 }    
             }))
         } else {
@@ -82,10 +83,10 @@ class Login extends Component {
             onLogin: !oldState.onLogin
         }))
     }
+    
     render() {
         const { isInvalid, errorMessage, onLogin, isEmailInvalid } = this.state
         const hasAccess = Session.hasAccess()
-        // console.log(hasAccess)
         return !hasAccess ? (
             <div className="login" style={{'height': '100vh'}}>
                     <Card className="login-window bg-transparent border-0">

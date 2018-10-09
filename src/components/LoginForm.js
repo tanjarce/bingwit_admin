@@ -7,7 +7,6 @@ import logo from '../images/bingwit_logo.svg'
 
 import * as API from '../services/API'
 
-
 import LoadingButton from './ButtonSpinner'
 
 class LoginForm extends Component {
@@ -78,31 +77,27 @@ class LoginForm extends Component {
                                 <Input name="username"
                                         placeholder="Username"
                                         type="text"
-                                        onBlur={(e)=>{ this.props.onBlur('username', 'required', e.target.value) }}
+                                        onBlur={(e)=>{ this.props.onBlur(e) }}
                                         onChange={this.handleChange}
                                         invalid={isInvalid.username}
-                                        
+                                        autoFocus
                                         />
-                                <FormFeedback className="text-capitalize">{errorMessage.username}</FormFeedback>
+                                <FormFeedback className="text-capitalize" >{errorMessage.username}</FormFeedback>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="password">Password</Label>
                                 <Input name="password"
                                         placeholder="Password"
-                                        type={
-                                            (showPassword)
-                                            ? 'text' : 'password'
-                                        }
+                                        type={ (showPassword) ? 'text' : 'password' }
                                         style={{'paddingRight': '40px'}}
-                                        onBlur={(e)=>{ this.props.onBlur('password', 'required', e.target.value) }}
+                                        onBlur={(e)=>{ this.props.onBlur(e) }}
                                         onChange={this.handleChange}
                                         invalid={isInvalid.password}/>
-                                <FormFeedback className="text-capitalize">{errorMessage.password}</FormFeedback>
+                                <FormFeedback className="text-capitalize" >{errorMessage.password}</FormFeedback>
                                 <span 
                                     className="toggle_show_password" 
-                                    onClick={this.toggleShowPassword}
-                                >
+                                    onClick={this.toggleShowPassword}>
                                     <img src={ (showPassword) ? showpassword : hidepassword } alt="eye"/>
                                 </span>
                             </FormGroup>
