@@ -8,15 +8,10 @@ import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
 import SideBar from './Sidebar';
-
+import Accounts from './Accounts'
 //PAGES
 import Dashboard from './Dashboard'
 import ManageUser from './ManageUser'
-import Cart from './Cart'
-import Users from './Users'
-import Accounts from './Accounts'
-import Billings from './Billings'
-import Maps from './Maps'
 
 class Main extends Component {
     constructor(props) {
@@ -69,16 +64,16 @@ class Main extends Component {
                             <Dashboard />
                         )}/>
                         <Route path="/account" render={() => (
-                            <div>Account</div>
+                            <Accounts />
                         )}/>
                         <Route path="/mnguser" render={()=>(
                             <ManageUser />
                         )}/>
                         <Route path="/notif" render={()=>(
-                            <Users />
+                           <div>Notifications</div>
                         )}/>
                         <Route path="/rules" render={()=>(
-                            <Accounts />
+                            <div>Rules</div>
                         )}/>
                         <Route render={()=>(
                             <Redirect to="/dashboard" />

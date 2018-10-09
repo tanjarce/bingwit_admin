@@ -1,11 +1,15 @@
+@font-face{
+  font-family: Lato;
+  src: url(Lato.ttf);  
+}
 html,
 body,
 body #root,
 #root div.content {
   height: 100%;
-  background-color: rgb(247, 247, 247);
+  font-family: Lato;
+  background-color: rgb(255, 255, 255);
 }
-
 #root > div {
   height: inherit;
 }
@@ -13,7 +17,7 @@ body #root,
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: Lato;
 }
 
 .sideBar {

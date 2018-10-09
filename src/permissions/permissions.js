@@ -46,6 +46,8 @@ export const user1 = {
     'province' : 'Benguet, Philippines',
     'contact' : '+63 912-345-6776',
     'status' : 'Active',
+    'bio' : 'Ako si Alberto. Isang peshirman nangagarap maging wrapper. Marunong ako mag wrap idol ko si Gloc 9, kaso sa hirap ng buhay isa lang akong mangengesda sa benguet. 29 na anak ang aking binubuhay. Panay isda lang ang amin nakakain. Pileng ko nga may hasang na ko. Pero ayos lang. Nakakain naman kami lagi ng Lobster, Lapu-lapu, Salmon. Marami pang iba eh, tuwing umaga Crab, sa tanghali naman Bay Eel .. tapos sa gabi Bluefin Tuna lang nakakain namin. Minsan lang kami nakain ng mamahalin na pagkain... kung susuwertehin tuyo. Paborito ko talaga iyon. ang sarap. *Crying* ang hirap ng buhay T_T.'
+    ,
     'ratings' : '5.0',
     'sales' : '300,129.50'
 };
@@ -62,14 +64,14 @@ export const bingwitmenus = [{
     <path d="M28.8915 11.2921H25.0088C24.7025 11.2921 24.4541 11.5184 24.4541 11.7976V29.4934C24.4541 29.7726 24.7025 29.999 25.0088 29.999H28.8915C29.1978 29.999 29.4462 29.7726 29.4462 29.4934V11.7976C29.4462 11.5184 29.1978 11.2921 28.8915 11.2921ZM28.3368 28.9878H25.5635V12.3032H28.3368V28.9878Z" fill="#7B8F9E"/>
     </svg>,
     'title' : 'Dashboard',
-    'url' : 'dashboard'
+    'url' : '/dashboard'
 },{
     'id' : 2,
     'src' : <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M30 15.0018C30 6.73554 23.2645 0 14.9982 0C6.73201 0 0 6.73554 0 15.0018C0 19.5548 2.06569 23.6506 5.27931 26.4037C5.31828 26.4426 5.35725 26.4816 5.43167 26.5171C8.03235 28.6997 11.3629 30 15.0372 30C18.6335 30 21.9641 28.6997 24.5648 26.595C24.7172 26.556 24.8341 26.4426 24.9085 26.3257C28.0123 23.5337 30 19.5158 30 15.0018ZM1.37828 15.0018C1.37828 7.50088 7.50088 1.37828 15.0018 1.37828C22.5026 1.37828 28.6252 7.50088 28.6252 15.0018C28.6252 18.676 27.1726 22.003 24.7986 24.455C24.416 22.655 23.268 19.5937 19.7461 17.606C20.5504 16.6104 21.0075 15.3101 21.0075 13.9318C21.0075 10.6401 18.3288 7.96152 15.0372 7.96152C11.7456 7.96152 9.06696 10.6401 9.06696 13.9318C9.06696 15.3101 9.56299 16.5714 10.3283 17.606C6.77456 19.5937 5.62657 22.6551 5.28284 24.455C2.86995 22.0421 1.37828 18.676 1.37828 15.0018ZM10.4098 13.9672C10.4098 11.4409 12.4755 9.3752 15.0018 9.3752C17.528 9.3752 19.5937 11.4409 19.5937 13.9672C19.5937 16.4934 17.528 18.5591 15.0018 18.5591C12.4755 18.5591 10.4098 16.4934 10.4098 13.9672ZM6.50525 25.6384C6.58319 24.5294 7.1926 20.7772 11.3275 18.6725C12.3621 19.4768 13.6235 19.9339 15.0018 19.9339C16.3801 19.9339 17.6804 19.4378 18.715 18.6335C22.8109 20.7382 23.4593 24.4125 23.5762 25.5994C21.2413 27.4738 18.2579 28.6217 15.0443 28.6217C11.7881 28.6252 8.8402 27.5162 6.50525 25.6384Z" fill="#7B8F9E"/>
     </svg>,
     'title' : 'Account Setting',
-    'url' : 'account'
+    'url' : '/account'
 },{
     'id' : 3,
     'src' : <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +86,7 @@ export const bingwitmenus = [{
     <path d="M26.218 25.1324C26.2059 25.1326 26.1939 25.1329 26.1819 25.1333H24.2728C22.2214 25.0753 20.5123 26.7242 20.4554 28.816C20.4551 28.8283 20.4549 28.8406 20.4546 28.8528V29.409C20.4546 29.7914 20.8296 30 21.2046 30H29.25C29.625 30 30 29.7914 30 29.409V28.8528C29.9632 26.7605 28.2699 25.0948 26.218 25.1324ZM21.8864 28.6094C21.9546 27.5666 23.0114 26.5237 24.2727 26.5237H26.1818C27.4432 26.5237 28.5 27.5665 28.5682 28.6094H21.8864Z" fill="#7B8F9E"/>
     </svg>,
     'title' : 'Manage User',
-    'url' : 'mnguser'
+    'url' : '/mnguser'
 },{
     'id' : 4,
     'src' : <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +97,7 @@ export const bingwitmenus = [{
     <path d="M1.11911 7.50003C1.39017 7.50003 1.6098 7.29802 1.6098 7.0487C1.6098 4.16911 3.4626 3.02294 3.5443 2.974C3.77123 2.83971 3.8378 2.56164 3.69281 2.35198C3.54732 2.14162 3.24398 2.07969 3.01503 2.21352C2.9177 2.27057 0.628174 3.6496 0.628174 7.0487C0.628174 7.29802 0.848049 7.50003 1.11911 7.50003Z" fill="#7B8F9E"/>
     </svg>,
     'title' : 'Notifications',
-    'url' : 'notif'
+    'url' : '/notif'
 },{
     'id' : 5,
     'src' : <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +112,7 @@ export const bingwitmenus = [{
     </svg>
     ,
     'title' : 'Rules',
-    'url' : 'rules'
+    'url' : '/rules'
 }];
 
 export const logout = {
@@ -124,7 +126,7 @@ export const logout = {
     </svg>
     ,
     'title' : 'Logout',
-    'url' : 'logout'
+    'url' : '/logout'
 };
 export const logo = {
     'src' : <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
