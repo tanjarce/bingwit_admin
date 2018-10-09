@@ -52,9 +52,9 @@ class Main extends Component {
         const menus = permissions.getPermission(type)
         const hasAccess = Session.hasAccess()
 
-        return !hasAccess ? (
+        return hasAccess ? (
             <div style={{height: '100vh'}}>   
-                {!hasAccess && (
+                {hasAccess && (
                     <SideBar
                         menus={menus}
                         onexpand={menuexpand}

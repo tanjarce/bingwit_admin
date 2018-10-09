@@ -14,19 +14,42 @@ class Login extends Component {
         
         this.state = {
             onLogin: true,
-            isInvalid: false,
-            isEmailInvalid: false,
-            errorMessage: null
+            // isEmailInvalid: false,
+            isInvalid: {},
+            errorMessage: {},
         }
 
         this.handleSignInSuccess = this.handleSignInSuccess.bind(this)
         this.handleSignInFail = this.handleSignInFail.bind(this)
-        this.reset = this.reset.bind(this)
+        this.handleOnBlur = this.handleOnBlur.bind(this)
+        // this.reset = this.reset.bind(this)
         this.navigateToHome = this.navigateToHome.bind(this)
         this.navigateToForgotPassword = this.navigateToForgotPassword.bind(this)
     }
     
-    
+    handleOnBlur (name, error, value = '') {
+        console.log(name, error, value)
+        if (!value.length){
+            this.setState((oldState)=>({
+                isInvalid: {
+                    ...oldState.isInvalid, [name]: true
+                },
+                errorMessage: {
+                    ...oldState.errorMessage, [name]: error
+                }    
+            }))
+        } else {
+            this.setState((oldState)=>({
+                isInvalid: {
+                    ...oldState.isInvalid, [name]: false
+                },
+                errorMessage: {
+                    ...oldState.errorMessage, [name]: null
+                }    
+            }))    
+        }
+    }
+
     // LOGIN METHODS
     handleSignInSuccess (response, role) {
         Session.saveUser(response, role);
@@ -62,7 +85,7 @@ class Login extends Component {
     render() {
         const { isInvalid, errorMessage, onLogin, isEmailInvalid } = this.state
         const hasAccess = Session.hasAccess()
-        console.log(hasAccess)
+        // console.log(hasAccess)
         return !hasAccess ? (
             <div className="login" style={{'height': '100vh'}}>
                     <Card className="login-window bg-transparent border-0">
@@ -74,6 +97,7 @@ class Login extends Component {
                                 errorMessage={errorMessage}
                                 onSuccess={this.handleSignInSuccess}
                                 onError={this.handleSignInFail}
+                                onBlur={this.handleOnBlur}
                                 />
                         )}
                         {!onLogin && (

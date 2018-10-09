@@ -18,14 +18,14 @@ class LoginForm extends Component {
             loading: false,
             dropdownOpen: false,
             type: 'ADMIN',
-            showPassword: false
+            showPassword: false,
         }
 
         this.handleSignIn = this.handleSignIn.bind(this)
         this.toggleLoading = this.toggleLoading.bind(this)
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
+        
     }
-    
     
     handleSignIn (e) {
         this.toggleLoading()
@@ -56,8 +56,8 @@ class LoginForm extends Component {
         }))
     }
     render() {
-        const {loading, showPassword } = this.state;
-        const {onLogin, isInvalid, errorMessage } = this.props
+        const {loading, showPassword, fields } = this.state;
+        const {onLogin, isInvalid, errorMessage} = this.props
         return (
             <div>
                 <Fade 
@@ -78,8 +78,14 @@ class LoginForm extends Component {
                                 <Input name="username"
                                         placeholder="Username"
                                         type="text"
-                                        invalid={isInvalid}/>
+                                        onBlur={(e)=>{ this.props.onBlur('username', 'required', e.target.value) }}
+                                        onChange={this.handleChange}
+                                        invalid={isInvalid.username}
+                                        
+                                        />
+                                <FormFeedback className="text-capitalize">{errorMessage.username}</FormFeedback>
                             </FormGroup>
+
                             <FormGroup>
                                 <Label for="password">Password</Label>
                                 <Input name="password"
@@ -89,8 +95,10 @@ class LoginForm extends Component {
                                             ? 'text' : 'password'
                                         }
                                         style={{'paddingRight': '40px'}}
-                                        invalid={isInvalid}/>
-                                <FormFeedback className="text-capitalize">{errorMessage}</FormFeedback>
+                                        onBlur={(e)=>{ this.props.onBlur('password', 'required', e.target.value) }}
+                                        onChange={this.handleChange}
+                                        invalid={isInvalid.password}/>
+                                <FormFeedback className="text-capitalize">{errorMessage.password}</FormFeedback>
                                 <span 
                                     className="toggle_show_password" 
                                     onClick={this.toggleShowPassword}
