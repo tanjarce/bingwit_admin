@@ -41,7 +41,7 @@ export function formatRole (type) {
 export const user1 = {
     'name' : 'Alberto Aquino',
     'role' : 'Fisherman',
-    'src' : require('/Users/mera/bingwit_admin/src/assets/ProfileUser.png'),
+    'src' : require('../assets/ProfileUser.png'),
     'address' : '#2381 Bongkok St. Baguio City, Benguet',
     'province' : 'Benguet, Philippines',
     'contact' : '+63 912-345-6776',
