@@ -1,0 +1,42 @@
+ @font-face{
+        font-family: Lato;
+        src: url(Lato.ttf);  
+}
+.main{
+    background: #ECEEEF;
+    padding: 30px;
+    font-family: 'Lato';
+}
+.main .header{
+font-size: 34px;
+color: #373A3C;
+}
+.main .body{
+line-height: 30px;
+font-size: 15px;
+color: #373A3C;    
+}
+.main-body{
+    margin-left: 5%; 
+}
+.main-body .gback{
+    color: #585858;
+}
+.main-card{
+    border: 1px solid black;
+    padding-top: 30px;
+}
+.main-card .card-header{
+}
+.main-card .card-body{
+   padding: 0px 0px 10px 0px;
+}
+.main-card .card-img{
+    width: 250px;
+    height: 350px;
+}
+.main-card .card-footer{
+    width: 250px;
+    background: white;
+    border: 1px solid rgb(233, 233, 233);
+}
