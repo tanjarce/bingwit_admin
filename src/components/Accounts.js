@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Banner from './Banner.js';
-import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import '../styles/Account.css'
 class Accounts extends Component {
     render() {
@@ -45,7 +45,7 @@ class Accounts extends Component {
             <Input type="password" name="password" id="examplePassword" placeholder="Type old password..." />
           </Col>
         </FormGroup>
-        <Button color='success' className='float-right' >Save Changes</Button>
+        <Row><Col sm={10} lg='8'><Button color='success' className='float-right' >Save Changes</Button></Col></Row>
       </Form>
                 </div>
             </div>
