@@ -21,7 +21,7 @@ class Rules extends Component {
     return (
         <div>
             <Banner 
-                header="Rules & List of Products"
+                header="Rules &amp; List of Products"
                 contents="hehehe" 
             />
             <Container>
@@ -43,4 +43,8 @@ class Rules extends Component {
   }
 }
 
+<<<<<<< HEAD
 export default Rules
+=======
+export default Rules
+>>>>>>> 429385634300258191a8dfe28619982d3df3b161

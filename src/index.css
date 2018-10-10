@@ -104,3 +104,6 @@ body {
     padding-left: 0;
   }
 }
+.all_padding{
+    padding: 0 5% 0 5%; 
+}

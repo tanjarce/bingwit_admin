@@ -11,17 +11,6 @@ class Maps extends Component {
                     contents="Hello I'm the map!" 
                 />
             </div>
-            // <Construction
-            //     propFlag={true}
-            //     title="Hey!"
-            //     message={
-            //         (
-            //         <div>
-            //             <p>Page under construction</p>
-            //             <p>Patience is a virtue!</p>
-            //         </div>
-            //         )
-            // }/>
         );
     }
 }

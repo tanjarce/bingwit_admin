@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import React from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom'
@@ -46,3 +48,4 @@ class Tabs extends React.Component {
 }
 
 export default Tabs
+>>>>>>> 429385634300258191a8dfe28619982d3df3b161
