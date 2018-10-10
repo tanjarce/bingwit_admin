@@ -21,7 +21,7 @@ class Rules extends Component {
     return (
         <div>
             <Banner 
-                header="Rules & List of Products"
+                header="Rules &amp; List of Products"
                 contents="hehehe" 
             />
             <Container>
