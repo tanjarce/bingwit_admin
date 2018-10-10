@@ -24,7 +24,9 @@ export const getRole = () => {
 }
 
 export const saveUser = (response, role = 'ADMIN') => {
-    const userData = response.data.items[0]
+    // const userData = response.data.items[0]
+    const userData = {...response}
+
     userData.role = role
     cookie.set('user', userData, {path: '/'})
 }

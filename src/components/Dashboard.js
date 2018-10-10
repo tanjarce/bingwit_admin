@@ -1,54 +1,19 @@
 import React, { Component } from 'react';
+import { Container, Col, Row } from 'reactstrap';
+
 import Banner from './Banner';
-import Area from './Area.js';
+import PieChartCard from './PieChartCard'
+import TopListCard from './TopListCard'
+import LineChartCard from './LineChartCard'
+
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        
         this.state = {
-            items: [
-                {
-                    amt:2400,
-                    name:"Page A",
-                    pv:2400,
-                    uv:4000
-                },
-                {
-                    amt:2210,
-                    name:"Page B",
-                    pv:1398,
-                    uv:3000
-                },
-                {
-                    amt:2290,
-                    name:"Page C",
-                    pv:9800,
-                    uv:2000
-                },
-                {
-                    amt:2000,
-                    name:"Page D",
-                    pv:3908,
-                    uv:2780
-                },
-                {
-                    amt:2181,
-                    name:"Page E",
-                    pv:4800,
-                    uv:1890
-                },
-                {
-                    amt:2400,
-                    name:"Page F",
-                    pv:2400,
-                    uv:4000
-                }
-            ]
         }
         this.repopulate = this.repopulate.bind(this)
     }
-
     repopulate () {
         const { items } = this.state
 
@@ -64,7 +29,6 @@ class Dashboard extends Component {
             items: newArray
         })
     }
-
     random (num, base = 1) {
         return Math.floor(Math.random() * num) + base
     }
@@ -76,7 +40,32 @@ class Dashboard extends Component {
                     header="Dashboard"
                     contents="Sample charts. See http://recharts.org/" 
                 />
-                <Area data={this.state.items} repopulate={this.repopulate}/>
+                <Container>
+                    <Row className="mb-5">
+                        <Col xs="12" lg="7" className="mb-3 mb-lg-0">
+                            <LineChartCard />
+                        </Col>
+                        <Col xs="12" lg="5" className="mb-3 mb-lg-0">
+                            <PieChartCard />
+                        </Col>
+                    </Row>
+                    <Row className="mb-3">
+                        <Col>
+                            <h4>Top List</h4>
+                        </Col>
+                    </Row>
+                    <Row  className="mb-5">
+                        <Col xs="12" md="4" className="mb-3 mb-md-0">
+                            <TopListCard />
+                        </Col>
+                        <Col xs="12" md="4" className="mb-3 mb-md-0">
+                            <TopListCard />
+                        </Col>
+                        <Col xs="12" md="4" className="mb-3 mb-md-0">
+                            <TopListCard />
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }
