@@ -43,8 +43,4 @@ class Rules extends Component {
   }
 }
 
-<<<<<<< HEAD
 export default Rules
-=======
-export default Rules
->>>>>>> 429385634300258191a8dfe28619982d3df3b161
