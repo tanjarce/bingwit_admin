@@ -3,11 +3,14 @@ import { Container, Button } from 'reactstrap';
 import { Route, Switch } from 'react-router-dom'
 import Tabs from './Tabs'
 import Banner from './Banner'
-
+import RulesTables from './RulesTables'
 class Rules extends Component {
     constructor(props){
         super(props)
         this.handleClick = this.handleClick.bind(this)
+        this.state = {
+            'Error' : 'Error'
+        }
     }
     handleClick () {
         console.log('add product')
@@ -30,7 +33,7 @@ class Rules extends Component {
                 </Tabs>
                 <Switch>
                     <Route path="/rules/rules" render={()=>(
-                        <div>Rules</div>
+                        <RulesTables/>
                     )}/>
                     <Route path="/rules/products" render={()=>(
                         <div>Products</div>
