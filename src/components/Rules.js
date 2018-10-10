@@ -7,7 +7,11 @@ import Banner from './Banner'
 class Rules extends Component {
     constructor(props){
         super(props)
+        this.state = {
+            'hehehe': true
+        }
         this.handleClick = this.handleClick.bind(this)
+        
     }
     handleClick () {
         console.log('add product')
