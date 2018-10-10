@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <div>
         <ToastContainer autoClose={3000}/>
-        <Route path="/login" component={Login}/>
+        <Route exact path="/login" component={Login}/>
         <Route path="/" component={Main}/>
       </div>
     );

@@ -49,7 +49,7 @@ class Sidebar extends Component {
                                         src={logo}
                                         alt="Bingwit logo"/>
                                 </i>
-                                <span className="nav-header-text">
+                                <span className="nav-header-text text-muted">
                                     Bingwit
                                 </span>
                             </NavLink>

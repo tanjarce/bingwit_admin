@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import Banner from './Banner';
-
 import CardUser from './CardUser'
-import * as permissions from '../permissions/permissions'
-
+import '../styles/manage.css'
 class Maps extends Component {
     render() {
         return (
@@ -12,17 +10,8 @@ class Maps extends Component {
                 <Banner 
                     header="Manage User"
                     contents="List of Registered Users."/>
-                <div className='main-body'>
-                <NavLink to=''>
-                    <span className='gback'>
-                        &lang; &nbsp; Go Back
-                    </span>
-                </NavLink>
-                <div>
                 <CardUser/>
-                </div>
-                </div>
-                </div>
+            </div>
         );
     }
 }
