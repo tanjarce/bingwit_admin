@@ -38,10 +38,33 @@ export function formatRole (type) {
             return ACC_ADMIN
     }
 }
+
+//TAB
+export const tab = {
+    'rules' : {
+        'tab1' : 'Rules',
+        'tab2' : 'Products'
+        },
+
+    'notif' : {
+        'tab1' : 'Feedback',
+        'tab2' : 'Reports'
+        }
+};
+//TABLE DATA 
+export const data = [{
+    number: 1,
+    description: 'Walang sino man ang pwedeng mag benta ng nanganganib na isda.',
+    date: 'October 3, 2018',
+  }
+]
+
+
+// USER DATA
 export const user1 = {
     'name' : 'Alberto Aquino',
     'role' : 'Fisherman',
-    'src' : require('/Users/mera/bingwit_admin/src/assets/ProfileUser.png'),
+    'src' : require('../assets/ProfileUser.png'),
     'address' : '#2381 Bongkok St. Baguio City, Benguet',
     'province' : 'Benguet, Philippines',
     'contact' : '+63 912-345-6776',
@@ -52,7 +75,7 @@ export const user1 = {
     'sales' : '300,129.50'
 };
 
-
+// SIDEBAR ITEM
 export const bingwitmenus = [{
     'id' : 1,
     'src' : <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

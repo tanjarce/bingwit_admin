@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+import * as permissions from '../permissions/permissions'
+import Banner from './Banner';
 
 class Rules extends Component {
     render() {
         return (
             <div>
-                <h1>Rules</h1>
+                <Banner 
+                header="Rules"
+                contents="List of rules that has been set." />
+                <div className='all_padding'>
+                
             </div>
+        </div>
         );
     }
 }
