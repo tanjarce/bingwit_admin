@@ -7,7 +7,11 @@ import RulesTables from './RulesTables'
 class Rules extends Component {
     constructor(props){
         super(props)
+        this.state = {
+            'hehehe': true
+        }
         this.handleClick = this.handleClick.bind(this)
+
         this.state = {
             'Error' : 'Error'
         }
