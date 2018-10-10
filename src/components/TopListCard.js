@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Col, Row, Button, Card, CardTitle, CardHeader, CardBody, Badge} from 'reactstrap';
+import { Card, CardHeader, CardBody} from 'reactstrap';
 
 const data = [{name: 'Active', value: 6034}, {name: 'Inactive', value: 753},
                       {name: 'Banned', value: 300}];

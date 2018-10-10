@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Card, CardImg} from 'reactstrap';
+import { Card } from 'reactstrap';
 import { withRouter, Redirect } from 'react-router-dom';
 import '../styles/Login.css'
 
 
 import * as Session from '../services/session'
 import LoginForm from './LoginForm.js'
-import LoginForgot from './LoginForgot';
 
 class Login extends Component {
     constructor(props) {
@@ -20,10 +19,10 @@ class Login extends Component {
 
         this.handleSignInSuccess = this.handleSignInSuccess.bind(this)
         this.handleSignInFail = this.handleSignInFail.bind(this)
-        this.handleOnBlur = this.handleOnBlur.bind(this)
         this.reset = this.reset.bind(this)
         this.navigateToHome = this.navigateToHome.bind(this)
         this.navigateToForgotPassword = this.navigateToForgotPassword.bind(this)
+        this.handleValidation = this.handleValidation.bind(this)
     }
     
     handleOnBlur (e) {
@@ -50,18 +49,57 @@ class Login extends Component {
             }))    
         }
     }
+    handleValidation (value) {
+        const fields = ['username', 'password'];
+        const inputedFields = Object.keys(value)
+        let valid = true;
+
+        fields.map(field => {
+            if(!inputedFields.includes(field)){
+                this.setState((oldState)=>({
+                    isInvalid: {
+                        ...oldState.isInvalid, [field]: true
+                    },
+                    errorMessage: {
+                        ...oldState.errorMessage, [field]: `${field} is required.`
+                    }    
+                }))
+                valid = false
+            } else {
+                this.setState((oldState)=>({
+                    isInvalid: {
+                        ...oldState.isInvalid, [field]: false
+                    },
+                    errorMessage: {
+                        ...oldState.errorMessage, [field]: null
+                    }
+                }))    
+            }
+            return false
+        })
+        return valid
+    }
 
     // LOGIN METHODS
     handleSignInSuccess (response, role) {
         Session.saveUser(response, role);
         this.navigateToHome()
     }
+    
     handleSignInFail (error) {
-        this.setState(() => ({
-            isInvalid: true,
-            errorMessage: error.context
+        this.setState(()=>({
+            isInvalid: {
+                'username': true,
+                'password': true
+            },
+            errorMessage: {
+                'username' : null,
+                'password' : 'The username and password you entered did not match our records. Please double-check and try again.'
+            }
         }))
     }
+
+
 
     handleForgotPasswordSubmit (e) {
         e.preventDefault()
@@ -85,41 +123,20 @@ class Login extends Component {
     }
     
     render() {
-        const { isInvalid, errorMessage, onLogin, isEmailInvalid } = this.state
+        const { isInvalid, errorMessage, onLogin } = this.state
         const hasAccess = Session.hasAccess()
         return !hasAccess ? (
             <div className="login" style={{'height': '100vh'}}>
-                    <Card className="login-window bg-transparent border-0">
-                        {onLogin && (
-                            // Login Form
-                            <LoginForm 
-                                onLogin={onLogin}
-                                isInvalid={isInvalid} 
-                                errorMessage={errorMessage}
-                                onSuccess={this.handleSignInSuccess}
-                                onError={this.handleSignInFail}
-                                onBlur={this.handleOnBlur}
-                                />
-                        )}
-                        {!onLogin && (
-                            <LoginForgot 
-                                onLogin={onLogin}
-                                isEmailInvalid={isEmailInvalid}
-                                handleSubmit={this.handleForgotPasswordSubmit}
-                                />
-                        )}
-                        {/* <Button color="link" block onClick={() => {
-                            this.navigateToForgotPassword()
-                        }}>
-                            {onLogin && (
-                                "Forgot Password"
-                            )}
-                            {!onLogin && (
-                                "Go Back"
-                            )}
-                        </Button> */}
-                    </Card>
-                
+                <Card className="login-window bg-transparent border-0">
+                    <LoginForm
+                        onLogin={onLogin}
+                        isInvalid={isInvalid} 
+                        errorMessage={errorMessage}
+                        onSuccess={this.handleSignInSuccess}
+                        onError={this.handleSignInFail}
+                        validation={this.handleValidation}
+                    />
+                </Card>
             </div>
         ) : (
             <Redirect to="/dashboard"/>

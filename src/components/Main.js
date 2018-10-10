@@ -12,11 +12,8 @@ import SideBar from './SideBar';
 //PAGES
 import Dashboard from './Dashboard'
 import ManageUser from './ManageUser'
-import Cart from './Cart'
 import Users from './Users'
 import Accounts from './Accounts'
-import Billings from './Billings'
-import Maps from './Maps'
 
 class Main extends Component {
     constructor(props) {
@@ -52,9 +49,9 @@ class Main extends Component {
         const menus = permissions.getPermission(type)
         const hasAccess = Session.hasAccess()
 
-        return !hasAccess ? (
+        return hasAccess ? (
             <div style={{height: '100vh'}}>   
-                {!hasAccess && (
+                {hasAccess && (
                     <SideBar
                         menus={menus}
                         onexpand={menuexpand}
