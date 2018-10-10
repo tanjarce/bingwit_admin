@@ -29,8 +29,11 @@ class Rules extends Component {
                     <Button color="primary" className="ml-auto" size="sm" onClick={this.handleClick}>Add Product</Button>
                 </Tabs>
                 <Switch>
+                    <Route path="/rules/rules" render={()=>(
+                        <div>Rules</div>
+                    )}/>
                     <Route path="/rules/products" render={()=>(
-                        <div>products</div>
+                        <div>Products</div>
                     )}/>
                 </Switch>
 
