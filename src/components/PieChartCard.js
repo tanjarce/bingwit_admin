@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ResponsiveContainer, Tooltip, Area as AR, Pie, PieChart, Cell} from 'recharts';
+import { ResponsiveContainer, Tooltip, Pie, PieChart, Cell} from 'recharts';
 import { Col, Row, Card, CardHeader, CardBody} from 'reactstrap';
 
 import PieChartLegend from './PieChartLegend'
