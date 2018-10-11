@@ -25,7 +25,7 @@ class Notification extends Component {
                         <Tables 
                             columns={permissions.columnsRules} 
                             data={permissions.data} 
-                        />
+                        /> 
                     )}/>
                     <Route path="/notif/report" render={()=>(
                         <Tables 

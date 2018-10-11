@@ -8,7 +8,7 @@ import CardUser from './CardUser'
 import '../styles/manage.css'
 
 import users from './dummyJSONdata/users.json'
-import * as helpers from '../helpers/helpers'
+import ActionDropdown from './ActionDropdown'
 
 const Users = users.map((user)=>{
     return ({
@@ -42,11 +42,12 @@ const columnsRules = [{
     Header: ' ',
     accessor: 'action',
     width: 50,
-    Cell: rowInfo => helpers.addAction(rowInfo.value, [
-        {'text': 'View', 'func': (info) => {console.log('view', info)}},
-        {'text': 'Suspend', 'func': (info) => {console.log('view', info)}},
-        {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
-    ])
+    Cell: rowInfo =>  
+        <ActionDropdown info={rowInfo.value} options={[
+            {'text': 'View', 'func': (info) => {console.log('view', info)}},
+            {'text': 'Suspend', 'func': (info) => {console.log('view', info)}},
+            {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
+        ]}/>
   }]
 
 class ManageUser extends Component {

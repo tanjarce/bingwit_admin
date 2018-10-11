@@ -1,5 +1,6 @@
 import React from 'react'
-import * as helpers from '../helpers/helpers'
+import ActionDropdown from '../components/ActionDropdown'
+
 
 const ACC_ADMIN = 'ACC_ADMIN'
 const ACC_USER = 'ACC_USER'
@@ -59,10 +60,11 @@ export const columnsRules = [{
         Header: ' ',
         accessor: 'action',
         width: 50,
-        Cell: rowInfo => helpers.addAction(rowInfo.value, [
-            {'text': 'View', 'func': (info) => {console.log('view', info)}},
-            {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
-        ])
+        Cell: rowInfo => 
+            <ActionDropdown info={rowInfo.value} options={[
+                {'text': 'View', 'func': (info) => {console.log('view', info)}},
+                {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
+            ]}/>
       }]
       
 export const columnsReports = [{
