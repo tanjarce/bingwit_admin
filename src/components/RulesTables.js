@@ -4,10 +4,11 @@ import Search from './Search'
 import Table from './Tables'
 class RulesTable extends Component {
     render() {
+        const { columns, data } = this.props; 
         return (
             <div>
                 <Search />
-                <Table />
+                <Table columns={columns} data={data}/>
             </div>
         );
     }

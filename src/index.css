@@ -107,3 +107,6 @@ body {
 .all_padding{
     padding: 0 5% 0 5%; 
 }
+.bottom-pad{
+  padding-bottom: 50px;
+}

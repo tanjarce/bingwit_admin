@@ -40,23 +40,75 @@ export function formatRole (type) {
 }
 
 //TAB
-export const tab = {
-    'rules' : {
-        'tab1' : 'Rules',
-        'tab2' : 'Products'
-        },
-
-    'notif' : {
-        'tab1' : 'Feedback',
-        'tab2' : 'Reports'
-        }
-};
+export const columnsRules = [{
+        Header: 'No:',
+        accessor: 'number', // String-based value accessors!
+        width: 80,
+        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      }, {
+        Header: 'Description',
+        accessor: 'description'
+      },
+      {
+        Header: 'Date Created',
+        accessor: 'date',
+        width: 200
+      },
+      {
+        Header: ' ',
+        accessor: ' ',
+        width: 50
+      }]
+      
+export const columnsReports = [{
+    Header: 'Account User',
+    accessor: 'number', // String-based value accessors!
+    width : 150
+  }, {
+    Header: 'Feedback Description',
+    accessor: 'description'
+  },
+  {
+    Header: 'Sent Date',
+    accessor: 'date',
+    width: 200
+  },
+  {
+    Header: ' ',
+    accessor: ' ',
+    width: 50
+  }]
+  
+export const tabs = [
+    {'text': 'Rules', 'url': '/list/rules'},
+    {'text': 'Products', 'url': '/list/products'},
+]
 //TABLE DATA 
 export const data = [{
     number: 1,
     description: 'Walang sino man ang pwedeng mag benta ng nanganganib na isda.',
     date: 'October 3, 2018',
-  }
+  },{
+    number: 2,
+    description: 'Laging i-prayoridad ang kalidad ng isda.',
+    date: 'October 3, 2018',
+  },{
+    number: 3,
+    description: 'Bawal mangloko ng kapwa.',
+    date: 'October 2, 2018',
+  },{
+    number: 4,
+    description: 'Huwag ibenta ang produkto kapag ito ay 2-3 araw ng nakatambak.',
+    date: 'October 3, 2018',
+  },{
+    number: 5,
+    description: 'Siguraduhing tama ang bilang na ilagay sa bawat produkto.',
+    date: 'October 4, 2018',
+  },{
+    number: 6,
+    description: 'Dapat laging tama ang presyo ng produkto.',
+    date: 'October 5, 2018',
+  },
 ]
 
 
