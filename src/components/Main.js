@@ -7,7 +7,7 @@ import * as API from '../services/API';
 import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
-import SideBar from './Sidebar';
+import SideBar from './SideBar';
 import Accounts from './Accounts'
 //PAGES
 import Dashboard from './Dashboard'
