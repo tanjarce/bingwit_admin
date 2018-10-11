@@ -1,4 +1,5 @@
 import React from 'react'
+import * as helpers from '../helpers/helpers'
 
 const ACC_ADMIN = 'ACC_ADMIN'
 const ACC_USER = 'ACC_USER'
@@ -56,8 +57,12 @@ export const columnsRules = [{
       },
       {
         Header: ' ',
-        accessor: ' ',
-        width: 50
+        accessor: 'action',
+        width: 50,
+        Cell: rowInfo => helpers.addAction(rowInfo.value, [
+            {'text': 'View', 'func': (info) => {console.log('view', info)}},
+            {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
+        ])
       }]
       
 export const columnsReports = [{
@@ -88,26 +93,32 @@ export const data = [{
     number: 1,
     description: 'Walang sino man ang pwedeng mag benta ng nanganganib na isda.',
     date: 'October 3, 2018',
+    action: 'specify the info needed for actions option'
   },{
     number: 2,
     description: 'Laging i-prayoridad ang kalidad ng isda.',
     date: 'October 3, 2018',
+    action: 'specify the info needed for actions option'
   },{
     number: 3,
     description: 'Bawal mangloko ng kapwa.',
     date: 'October 2, 2018',
+    action: 'specify the info needed for actions option'
   },{
     number: 4,
     description: 'Huwag ibenta ang produkto kapag ito ay 2-3 araw ng nakatambak.',
     date: 'October 3, 2018',
+    action: 'specify the info needed for actions option'
   },{
     number: 5,
     description: 'Siguraduhing tama ang bilang na ilagay sa bawat produkto.',
     date: 'October 4, 2018',
+    action: 'specify the info needed for actions option'
   },{
     number: 6,
     description: 'Dapat laging tama ang presyo ng produkto.',
     date: 'October 5, 2018',
+    action: 'specify the info needed for actions option'
   },
 ]
 

@@ -16,11 +16,11 @@ class List extends Component {
     }
 
   render() {
-      console.log('Hello')
     const tabs = [
         {'text': 'Rules', 'url': '/list/rules'},
         {'text': 'Products', 'url': '/list/products'},
     ]
+    
     return (
         <div>
             <Banner 
@@ -33,10 +33,16 @@ class List extends Component {
                 </Tabs>
                 <Switch>
                     <Route path="/list/rules" render={()=>(
-                        <TableSearch columns={permissions.columnsRules} data={permissions.data}/>
+                        <TableSearch 
+                            columns={permissions.columnsRules} 
+                            data={permissions.data}
+                        />
                     )}/>
                     <Route path="/list/products" render={()=>(
-                        <TableSearch columns={permissions.columnsRules} data={permissions.data}/>
+                        <TableSearch 
+                            columns={permissions.columnsRules} 
+                            data={permissions.data}
+                        />
                     )}/>
                         <Route render={()=>(
                             <Redirect to="/list/rules" />

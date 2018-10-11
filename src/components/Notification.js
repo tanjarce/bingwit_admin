@@ -22,10 +22,16 @@ class Notification extends Component {
                 <Tabs links={tabs} />
                 <Switch>
                     <Route path="/notif/feedback" render={()=>(
-                        <Tables columns={permissions.columnsRules} data={permissions.data} />
+                        <Tables 
+                            columns={permissions.columnsRules} 
+                            data={permissions.data} 
+                        />
                     )}/>
                     <Route path="/notif/report" render={()=>(
-                        <Tables columns={permissions.columnsRules} data={permissions.data} />
+                        <Tables 
+                            columns={permissions.columnsRules} 
+                            data={permissions.data} 
+                        />
                     )}/>
                     <Route render={()=>(
                         <Redirect to="/notif/feedback" />
