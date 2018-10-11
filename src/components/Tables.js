@@ -1,38 +1,25 @@
 import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap';
+
 import ReactTable from 'react-table'
-import * as permissions from '../permissions/permissions'
+import '../styles/table.css'
+import Pagination from "./Pagination";
 
 class Tables extends Component {
 render() {
-    
-  const data = permissions.data;
-
-  const columns = [{
-    Header: 'No:',
-    accessor: 'number', // String-based value accessors!
-    width: 80,
-    Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-  }, {
-    Header: 'Description',
-    accessor: 'description'
-  },
-  {
-    Header: 'Date Created',
-    accessor: 'date',
-    width: 200
-  },
-  {
-    Header: ' ',
-    accessor: ' ',
-    width: 50
-  }]
+  const { columns, data } = this.props
 return(
+  <Row>
+    <Col>
   <ReactTable
+  PaginationComponent={Pagination}
   data={data}
   columns={columns}
   defaultPageSize={10}
-  className="-highlight"
-/>
+  className="-highlight text-center"
+  />
+    </Col>
+  </Row>
 );
 }
 }

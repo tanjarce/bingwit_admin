@@ -35,7 +35,7 @@ class Dashboard extends Component {
     
     render() {
         return (
-            <div>
+            <div className='bottom-pad'>
                 <Banner 
                     header="Dashboard"
                     contents="Sample charts. See http://recharts.org/" 

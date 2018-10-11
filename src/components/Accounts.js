@@ -4,7 +4,7 @@ import { Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'react
 class Accounts extends Component {
     render() {
         return (
-            <div>
+            <div className='bottom-pad'>
                 <Banner 
                     header="Account Setting"
                     contents="Informations of Admin." 
