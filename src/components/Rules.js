@@ -3,19 +3,9 @@ import { Container } from 'reactstrap'
 import Tables from './Tables'
 import Search from './Search'
 
-class Rules extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            'hehehe': true
-        }
-        this.handleClick = this.handleClick.bind(this)
-        
-    }
-    handleClick () {
-        console.log('add product')
-    }
 
+
+class Rules extends Component {
   render() {
     return (
         <React.Fragment>
