@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
-import { Row , Col } from 'reactstrap'
+import { Row , Col, Button, Input , CustomInput} from 'reactstrap'
 
 const defaultButton = props => (
   <button type="button" {...props} className="-btn">
@@ -83,56 +83,85 @@ export default class CBReactTablePagination extends Component {
     } = this.props
 
     return (
-      <div
-        className={classnames(className, '-pagination')}
-        style={this.props.style}>
-        <Row style={{width : '100%'}}>
-        <Col></Col>
-        <Col lg='3'>
-        <div className="-previous">
-          <PreviousComponent
+      <div className="pagi_main">
+
+        <div className='pm-d'>
+        {/* Page Previous */}
+        <Row>
+          <Col></Col>
+        <Col xs='auto'>
+          <Button
+            className='button'
             onClick={() => {
               if (!canPrevious) return
-              this.changePage(page - 1)
-            }}
-            disabled={!canPrevious}
-          >
-            {this.props.previousText}
-          </PreviousComponent>
-        </div>
-        </Col>
-        <Col xs='auto'>
+              this.changePage(page - 1)}}
 
-        <div className="-center">
-          <span className="-pageInfo">
-            {this.props.pageText}{' '}
-            {showPageJump
-              ? <div className="-pageJump">
-                <input
-                  type={this.state.page === '' ? 'text' : 'number'}
-                  onChange={e => {
-                    const val = e.target.value
-                    const page = val - 1
-                    if (val === '') {
-                      return this.setState({ page: val })
-                    }
-                    this.setState({ page: this.getSafePage(page) })
-                  }}
-                  value={this.state.page === '' ? '' : this.state.page + 1}
-                  onBlur={this.applyPage}
-                  onKeyPress={e => {
-                    if (e.which === 13 || e.keyCode === 13) {
-                      this.applyPage()
-                    }
-                  }}
-                />
-              </div>
-              : <span className="-currentPage">
-                {page + 1}
-              </span>}{' '}
-            {this.props.ofText}{' '}
-            <span className="-totalPages">{pages || 1}</span>
-          </span>
+            disabled={!canPrevious}>
+
+            {this.props.previousText}
+          </Button>
+
+              </Col>
+              <Col  xs='auto' className='col'>
+              {/* Page Text */}
+              {this.props.pageText}{' '}
+
+              {/* Page Input */}
+              {showPageJump && 
+                  <CustomInput
+                    className='input'
+                    type='text'
+                    onChange={e => {
+                      const val = e.target.value
+                      const page = val - 1
+                      if (val === '') {
+                        return this.setState({ page: val })}
+                      this.setState({ page: this.getSafePage(page) })}}
+                    value={this.state.page === '' ? '' : this.state.page + 1}
+                    onBlur={this.applyPage}
+                    onKeyPress={e => {
+                      if (e.which === 13 || e.keyCode === 13) {
+                        this.applyPage()}}}/>}
+               
+                    {/* of Max Page */}
+                    <span>{this.props.ofText}{' '}{pages || 1}</span>
+
+            {/* Page Select */}
+            {showPageSizeOptions && 
+                <CustomInput
+                  className='input'
+                  type='select'
+                  onChange={e => onPageSizeChange(Number(e.target.value))}
+                  value={pageSize}>
+                  {pageSizeOptions.map((option, i) => (
+                    <option key={i} value={option}>
+                      {option} {this.props.rowsText}
+                    </option>))}
+                </CustomInput>}
+                    
+                    </Col>
+                    <Col  xs='auto'>
+
+        {/* Page Next */}
+          <Button
+            className='button'
+            onClick={() => {
+              if (!canNext) return
+              this.changePage(page + 1)
+            }}
+            disabled={!canNext}>
+
+            {this.props.nextText}
+          </Button>
+          </Col>
+          <Col></Col>
+          </Row>
+          </div>
+      </div>
+    )
+  }
+}
+
 {/*       
           {(typeof this.rowCount !== 'undefined') ?
               <span className="-rowInfo">{"Showing "}
@@ -144,41 +173,3 @@ export default class CBReactTablePagination extends Component {
                   {" total rows"}
               </span>
             : ''} */}
-
-          {showPageSizeOptions &&
-            <span className="select-wrap -pageSizeOptions">
-              <select
-                onChange={e => onPageSizeChange(Number(e.target.value))}
-                value={pageSize}
-              >
-                {pageSizeOptions.map((option, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <option key={i} value={option}>
-                    {option} {this.props.rowsText}
-                  </option>
-                ))}
-              </select>
-            </span>}
-        </div>
-
-        </Col>
-        <Col lg='3'>
-        <div className="-next">
-          <NextComponent
-            onClick={() => {
-              if (!canNext) return
-              this.changePage(page + 1)
-            }}
-            disabled={!canNext}>
-
-            {this.props.nextText}
-          
-          </NextComponent>
-        </div>
-        </Col>
-        <Col></Col>
-        </Row>
-      </div>
-    )
-  }
-}
