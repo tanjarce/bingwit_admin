@@ -8,13 +8,14 @@ class Search extends Component {
                 display : 'inline-flex',
                 alignItems : 'center',
                 margin: '5px 0px',
-                color : '#363636'
-            }}>
-                <Col xs='auto'>Search:</Col><Col><Input type='text' placeholder='Search something...'
-                style={{
-                    width : '300px'
-                }}
-                /></Col>
+                color : '#363636'}}>
+                <Col xs='auto'>Search:</Col>
+                <Col>
+                  <Input type='text' placeholder='Search something...'
+                    style={{
+                        width : '300px'
+                    }/>
+                </Col>
             </Row>
         );
     }

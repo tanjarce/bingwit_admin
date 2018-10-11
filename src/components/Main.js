@@ -12,7 +12,7 @@ import Accounts from './Accounts'
 //PAGES
 import Dashboard from './Dashboard'
 import ManageUser from './ManageUser'
-import Rules from './Rules'
+import List from './List'
 
 class Main extends Component {
     constructor(props) {
@@ -74,7 +74,7 @@ class Main extends Component {
                            <div>Notifications</div>
                         )}/>
                         <Route path="/list" render={()=>(
-                            <Rules />
+                            <List />
                         )}/>
                         <Route render={()=>(
                             <Redirect to="/dashboard" />

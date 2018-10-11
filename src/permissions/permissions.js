@@ -187,7 +187,7 @@ export const bingwitmenus = [{
     </svg>
     ,
     'title' : 'List',
-    'url' : '/list'
+    'url' : '/list/rules'
 }];
 
 export const logout = {
