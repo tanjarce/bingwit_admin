@@ -14,7 +14,7 @@ class Search extends Component {
                   <Input type='text' placeholder='Search something...'
                     style={{
                         width : '300px'
-                    }/>
+                    }}/>
                 </Col>
             </Row>
         );

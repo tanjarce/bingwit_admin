@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Button } from 'reactstrap';
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import Tabs from './Tabs'
-import Rules from './Rules'
+import TableSearch from './TableSearch'
 import Products from './Products'
 import Banner from './Banner'
+import * as permissions from '../permissions/permissions'
 
 class List extends Component {
     constructor(props){
@@ -16,6 +17,7 @@ class List extends Component {
     }
 
   render() {
+      console.log('Hello')
     const tabs = [
         {'text': 'Rules', 'url': '/list/rules'},
         {'text': 'Products', 'url': '/list/products'},
@@ -32,11 +34,14 @@ class List extends Component {
                 </Tabs>
                 <Switch>
                     <Route path="/list/rules" render={()=>(
-                        <Rules />
+                        <TableSearch columns={permissions.columnsRules} data={permissions.data}/>
                     )}/>
                     <Route path="/list/products" render={()=>(
-                        <Products />
+                        <TableSearch columns={permissions.columnsRules} data={permissions.data}/>
                     )}/>
+                        <Route render={()=>(
+                            <Redirect to="/list/rules" />
+                        )}/>
                 </Switch>
 
             </Container>
