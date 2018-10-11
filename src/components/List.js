@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Container, Button } from 'reactstrap';
 import { Route, Switch } from 'react-router-dom'
 import Tabs from './Tabs'
-import Rules from './Rules'
+import RulesTables from './RulesTables'
 import Products from './Products'
 import Banner from './Banner'
+import * as permissions from '../permissions/permissions'
 
 class List extends Component {
     constructor(props){
@@ -32,7 +33,7 @@ class List extends Component {
                 </Tabs>
                 <Switch>
                     <Route path="/list/rules" render={()=>(
-                        <Rules />
+                        <RulesTables columns={permissions.columnsRules} data={permissions.data}/>
                     )}/>
                     <Route path="/list/products" render={()=>(
                         <Products />
