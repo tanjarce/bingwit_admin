@@ -16,7 +16,7 @@ return(
   data={data}
   columns={columns}
   defaultPageSize={10}
-  className="-highlight text-center"
+  className="-highlight table_main"
   />
     </Col>
   </Row>

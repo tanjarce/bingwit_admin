@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { Col, Row, Input } from 'reactstrap'
+import '../styles/search.css'
+import searchIco from '../assets/Search.svg'
 
 class Search extends Component {
     render() {
         return (
-            <Row style={{
-                display : 'inline-flex',
-                alignItems : 'center',
-                margin: '5px 0px',
-                color : '#363636'}}>
+            <Row className='main-search'>
                 <Col xs='auto'>Search:</Col>
-                <Col>
-                  <Input type='text' placeholder='Search something...'
-                    style={{
-                        width : '300px'
-                    }}/>
+                <Col className='rel'>
+                  <Input type='text' placeholder='Search something...' />
+                  <img className='img' src={searchIco} alt='search'/>
                 </Col>
             </Row>
         );

@@ -5,6 +5,7 @@ import '../styles/Sidebar.css'
 import SidebarItemLink from './SideItemLink'
 import * as permissions from '../permissions/permissions'
 import logo from '../assets/Bingwit.svg'
+import * as Session from '../services/session'
 
 class Sidebar extends Component {
     constructor(props) {
@@ -71,7 +72,8 @@ class Sidebar extends Component {
 
                     <ul className="logout">
                         <li>
-                            <NavLink to='/logout' activeClassName="active">
+                            <NavLink to='/logout' activeClassName="active" onClick={()=> {
+                            Session.removeUser(null)}}>
                                 <i className='fa'>
                                 {permissions.logout.src}
                                 </i>

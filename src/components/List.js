@@ -23,7 +23,7 @@ class List extends Component {
         {'text': 'Products', 'url': '/list/products'},
     ]
     return (
-        <div>
+        <div className='bottom-pad'>
             <Banner 
                 header="List of Rules &amp; Products"
                 contents="hehehe" 
