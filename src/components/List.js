@@ -17,6 +17,7 @@ class List extends Component {
     }
 
   render() {
+      console.log('Hello')
     const tabs = [
         {'text': 'Rules', 'url': '/list/rules'},
         {'text': 'Products', 'url': '/list/products'},
