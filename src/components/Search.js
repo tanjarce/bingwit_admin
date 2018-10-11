@@ -10,7 +10,11 @@ class Search extends Component {
                 margin: '5px 0px',
                 color : '#363636'
             }}>
-                <Col xs='auto'>Search:</Col><Col ><Input type='text' placeholder='Search something...'/></Col>
+                <Col xs='auto'>Search:</Col><Col><Input type='text' placeholder='Search something...'
+                style={{
+                    width : '300px'
+                }}
+                /></Col>
             </Row>
         );
     }

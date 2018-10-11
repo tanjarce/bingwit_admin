@@ -73,7 +73,7 @@ class Main extends Component {
                         <Route path="/notif" render={()=>(
                            <div>Notifications</div>
                         )}/>
-                        <Route path="/rules" render={()=>(
+                        <Route path="/list" render={()=>(
                             <Rules />
                         )}/>
                         <Route render={()=>(

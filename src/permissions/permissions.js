@@ -40,23 +40,75 @@ export function formatRole (type) {
 }
 
 //TAB
-export const tab = {
-    'rules' : {
-        'tab1' : 'Rules',
-        'tab2' : 'Products'
-        },
-
-    'notif' : {
-        'tab1' : 'Feedback',
-        'tab2' : 'Reports'
-        }
-};
+export const columnsRules = [{
+        Header: 'No:',
+        accessor: 'number', // String-based value accessors!
+        width: 80,
+        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+      }, {
+        Header: 'Description',
+        accessor: 'description'
+      },
+      {
+        Header: 'Date Created',
+        accessor: 'date',
+        width: 200
+      },
+      {
+        Header: ' ',
+        accessor: ' ',
+        width: 50
+      }]
+      
+export const columnsReports = [{
+    Header: 'Account User',
+    accessor: 'number', // String-based value accessors!
+    width : 150
+  }, {
+    Header: 'Feedback Description',
+    accessor: 'description'
+  },
+  {
+    Header: 'Sent Date',
+    accessor: 'date',
+    width: 200
+  },
+  {
+    Header: ' ',
+    accessor: ' ',
+    width: 50
+  }]
+  
+export const tabs = [
+    {'text': 'Rules', 'url': '/list/rules'},
+    {'text': 'Products', 'url': '/list/products'},
+]
 //TABLE DATA 
 export const data = [{
     number: 1,
     description: 'Walang sino man ang pwedeng mag benta ng nanganganib na isda.',
     date: 'October 3, 2018',
-  }
+  },{
+    number: 2,
+    description: 'Laging i-prayoridad ang kalidad ng isda.',
+    date: 'October 3, 2018',
+  },{
+    number: 3,
+    description: 'Bawal mangloko ng kapwa.',
+    date: 'October 2, 2018',
+  },{
+    number: 4,
+    description: 'Huwag ibenta ang produkto kapag ito ay 2-3 araw ng nakatambak.',
+    date: 'October 3, 2018',
+  },{
+    number: 5,
+    description: 'Siguraduhing tama ang bilang na ilagay sa bawat produkto.',
+    date: 'October 4, 2018',
+  },{
+    number: 6,
+    description: 'Dapat laging tama ang presyo ng produkto.',
+    date: 'October 5, 2018',
+  },
 ]
 
 
@@ -134,8 +186,8 @@ export const bingwitmenus = [{
     <path d="M15.0001 7.5C16.5063 7.5 17.7274 6.60456 17.7274 5.5C17.7274 4.39544 16.5063 3.5 15.0001 3.5C13.4939 3.5 12.2728 4.39544 12.2728 5.5C12.2728 6.60456 13.4939 7.5 15.0001 7.5ZM15.0001 4.5C15.7533 4.5 16.3637 4.94769 16.3637 5.5C16.3637 6.05231 15.7533 6.5 15.0001 6.5C14.2469 6.5 13.6365 6.05231 13.6365 5.5C13.6365 4.94769 14.2469 4.5 15.0001 4.5Z" fill="#7B8F9E"/>
     </svg>
     ,
-    'title' : 'Rules',
-    'url' : '/rules'
+    'title' : 'List',
+    'url' : '/list'
 }];
 
 export const logout = {

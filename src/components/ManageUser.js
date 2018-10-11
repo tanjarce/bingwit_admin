@@ -6,7 +6,7 @@ import '../styles/manage.css'
 class Maps extends Component {
     render() {
         return (
-            <div>
+            <div className='bottom-pad'>
                 <Banner 
                     header="Manage User"
                     contents="List of Registered Users."/>
