@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Container, Button } from 'reactstrap';
 import { Route, Switch, Redirect } from 'react-router-dom'
-import Tabs from './Tabs'
-import TableSearch from './TableSearch'
-import Banner from './Banner'
-import * as permissions from '../permissions/permissions'
+import Tabs from '../Tabs'
+import TableSearch from '../TableSearch'
+import Banner from '../Banner'
+import * as permissions from '../../permissions/permissions'
 
 class List extends Component {
     constructor(props){

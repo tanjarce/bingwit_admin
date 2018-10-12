@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Search from './Search'
 import Table from './Tables'
+import TotalCount from './TotalCount'
 class RulesTable extends Component {
     render() {
         const { columns, data, actions } = this.props; 
@@ -13,5 +14,4 @@ class RulesTable extends Component {
         );
     }
 }
-
 export default RulesTable;

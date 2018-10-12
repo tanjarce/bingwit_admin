@@ -64,39 +64,6 @@ class SimpleForm extends Component {
                                         />
                                     )}
                                 </div>
-                                
-                                // <AvGroup row key={idx}>
-                                //     <Label sm={3} for={input.label}>{input.label}</Label>
-                                //     <Col sm={9}>
-                                //         {input.type === 'select' && (
-                                //             <AvInput 
-                                //                 required={input.isRequired}
-                                //                 id={input.name}
-                                //                 type={input.type} 
-                                //                 name={input.name} 
-                                //                 placeholder={input.label}
-                                //                 autoComplete={input.name} 
-                                //                 value={data[input.name]}
-                                //             >
-                                //                 {input.options.map((option, idx) => (
-                                //                     <option key={idx}>{option}</option>
-                                //                 ))}
-                                //             </AvInput>
-                                //         )}
-                                //         {input.type !== 'select' && (
-                                //             <AvInput 
-                                //                 required={input.isRequired}
-                                //                 id={input.name}
-                                //                 type={input.type} 
-                                //                 name={input.name} 
-                                //                 placeholder={input.label}
-                                //                 autoComplete={input.name} 
-                                //                 value={data[input.name]}
-                                //             />
-                                //         )}
-                                //         <AvFeedback>This is an error!</AvFeedback>
-                                //     </Col>
-                                // </AvGroup>
                             ))}
                         </div>
                     ))}

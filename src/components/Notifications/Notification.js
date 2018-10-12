@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Banner from './Banner'
+import Banner from '../Banner'
 import { Container } from 'reactstrap'
-import Tables from './Tables'
-import Tabs from './Tabs'
+import Tables from '../Tables'
+import Tabs from '../Tabs'
 import { Route, Redirect, Switch } from 'react-router-dom'
-import * as permissions from '../permissions/permissions'
+import * as permissions from '../../permissions/permissions'
 
 class Notification extends Component {
   render() {
