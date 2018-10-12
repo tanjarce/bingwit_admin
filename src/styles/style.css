@@ -18,3 +18,40 @@
 }
 .piechart_colorLegend_li{
 }
+
+/* AccountSetting */
+.all_padding button{
+    border: 0;
+    border-radius: 0;
+    background: #17C1BC !important;
+}
+
+/* SetRules.js */
+.SR_main input{
+    width: 100%;
+    border-radius: 0;
+}
+
+
+.SR_main .SR_add,
+.SR_main .SR_add:hover,
+.SR_main .SR_button,
+.SR_main .SR_button:hover,
+.SR_main .SR_button:focus{
+    border: 0;
+    border-radius: 0;
+    background: #17C1BC;
+    width: 200px;
+}
+.SR_main .SR_cancel,
+.SR_main .SR_add{
+    border: 0;
+    border-radius: 0;
+    width: 200px;
+    margin-left: 20px; 
+}
+.SR_main .SR_cancel span,
+.SR_main .SR_add span{
+    font-weight: bold;
+    margin-left: 40px; 
+}
