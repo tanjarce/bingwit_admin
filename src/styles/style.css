@@ -1,0 +1,20 @@
+.piechart_legends{
+    list-style: none;
+    padding: 0;
+
+}
+.piechart_colorLegend{
+    display: inline-block;
+    border-radius: 2px;
+    min-height: 15px;
+    min-width: 15px;
+    max-height: 15px;
+    max-width: 15px;
+    margin-right: 10px;
+}
+.piechart_colorLegend_li{
+    display: flex;
+    align-items: center;
+}
+.piechart_colorLegend_li{
+}

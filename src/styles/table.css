@@ -1,0 +1,73 @@
+.table_main{
+    font-size: 14px;
+    border: 0;
+}
+.-header{
+    font-weight: bold;
+    text-align: right;
+    -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important;
+}
+.rt-td,
+.rt-tr-group,
+.ReactTable{ 
+    -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0) !important;
+    border-bottom: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+.rt-th:nth-child(3),
+.rt-td:first-child,
+.rt-td:nth-child(3),
+.rt-td:first-child{
+    text-align: center !important;
+}
+.rt-td,
+.rt-th{
+    padding-left: 20px !important;
+    text-align: left !important;
+}
+.rt-tbody{
+    margin-top: 10px;
+}
+.rt-tbody,
+.rt-thead{
+    border: 1px solid #EAEAEA
+}
+
+/* PAGINATION */
+
+.pagi_main{
+    border-top: 1px solid rgb(238, 238, 238); 
+    width: 100%;
+    color: #373737;
+}
+
+.pagi_main .button,
+.pagi_main .button:hover,
+.pagi_main .button:focus{
+    border: 0;
+    border-radius: 0;
+    background: #17C1BC;
+    width: 200px;
+}
+.pagi_main .button:disabled{
+    background: rgb(17, 107, 104);
+}
+
+.pagi_main .input{
+    text-align: center;
+    margin: 0 10px;
+    border-radius: 0;
+    width: 100px;
+    height: 40px;
+}
+.pagi_main .pm-d{
+    margin: 40px
+}
+.pagi_main .col{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

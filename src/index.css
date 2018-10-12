@@ -1,0 +1,120 @@
+@font-face{
+  font-family: Lato;
+  src: url(Lato.ttf);  
+}
+html,
+body,
+body #root,
+#root div.content {
+  height: 100%;
+  font-family: Lato;
+  background-color: rgb(255, 255, 255);
+}
+#root > div {
+  height: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Lato;
+}
+
+.sideBar {
+  height: 100%;
+}
+
+.nav-logo {
+  height: 40px;
+}
+
+.nav-header-text {
+  position:relative;
+  display:table-cell;
+  vertical-align:middle;
+  width:190px;
+  font-family: 'Raleway', sans-serif;
+  color: #fff;
+}
+
+.nav-button {
+  margin: 0 0 0 5px;
+}
+
+.content {
+  padding-left: 60px;
+  -webkit-transition:padding .30s ease;
+  transition: padding 0.3s ease
+}
+
+.content.onexpand {
+  padding-left: 250px;
+}
+
+.food-item {
+  margin-bottom: 10px;
+}
+
+.breadcrumb-item {
+  color: #1b71bd !important;
+  cursor: pointer;
+}
+
+.breadcrumb-item.active {
+  color: #333333 !important;
+}
+
+.product-img {
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  object-fit: contain;
+}
+
+.construction {
+  color: #fff;
+  background-color: #333333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow: auto;
+}
+
+.construction-body {
+  text-align: center;
+}
+
+.construction-body p {
+  margin: 0;
+  color: #bbb;
+}
+
+.img-construction {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 500px) {
+  .content {
+    padding-left: 0;
+    padding-top: 56px;
+  }
+  .content.onexpand {
+    padding-left: 0;
+  }
+}
+.all_padding{
+    padding: 0 5% 0 5%; 
+}
+.bottom-pad{
+  padding-bottom: 50px;
+}
+
+.ReactTable .rt-tbody .rt-td:last-child {
+  overflow: visible;
+}
+
+/* .ReactTable .rt-tr:last-child {
+  background: pink;
+} */
