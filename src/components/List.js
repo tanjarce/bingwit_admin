@@ -22,7 +22,7 @@ class List extends Component {
     ]
     
     return (
-        <div>
+        <div className='bottom-pad'>
             <Banner 
                 header="List of Rules &amp; Products"
                 contents="hehehe" 

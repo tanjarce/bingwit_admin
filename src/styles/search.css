@@ -1,0 +1,22 @@
+.main-search{
+    display : inline-flex;
+    align-items : center;
+    margin: 5px 0px;
+    color : #363636;
+}
+.main-search input{
+    box-sizing: border-box;
+    padding: 0 0 0 40px;
+    border-radius: 0;
+    width: 300px;
+}
+
+.main-search .rel{
+    position: relative;
+}
+
+.main-search .img{
+    position: absolute;
+    top: 10px;
+    left: 25px;
+}
