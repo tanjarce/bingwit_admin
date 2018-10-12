@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 
-import Banner from './Banner';
+import Banner from '../Banner';
 import PieChartCard from './PieChartCard'
 import TopListCard from './TopListCard'
 import LineChartCard from './LineChartCard'

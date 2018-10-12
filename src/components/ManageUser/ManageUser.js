@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom'
 import { Container } from 'reactstrap'
 
-import TableSearch from './TableSearch'
-import Banner from './Banner';
+import TableSearch from '../TableSearch'
+import Banner from '../Banner';
 import CardUser from './CardUser'
-import '../styles/manage.css'
+import '../../styles/manage.css'
 
-import users from './dummyJSONdata/users.json'
-import ActionDropdown from './ActionDropdown'
+import users from '../dummyJSONdata/users.json'
+import ActionDropdown from '../ActionDropdown'
 
 const Users = users.map((user)=>{
     return ({

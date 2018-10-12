@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
 import {Switch, Redirect, Route, NavLink } from 'react-router-dom'
-import * as permissions from '../permissions/permissions'
+import * as permissions from '../../permissions/permissions'
 import PrimaryFact from './PrimaryFact'
 import Biography from './Biography'
 class CardUser extends Component {

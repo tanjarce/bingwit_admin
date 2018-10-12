@@ -8,12 +8,12 @@ import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
 import SideBar from './SideBar';
-import Accounts from './Accounts'
+import Accounts from './AccountSetting/Accounts'
 //PAGES
-import Dashboard from './Dashboard'
-import ManageUser from './ManageUser'
-import List from './List'
-import Notification from './Notification'
+import Dashboard from './Dashboard/Dashboard'
+import ManageUser from './ManageUser/ManageUser'
+import List from './RulesAndProduct/List'
+import Notification from './Notifications/Notification'
 
 class Main extends Component {
     constructor(props) {
