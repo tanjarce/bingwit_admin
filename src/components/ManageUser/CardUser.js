@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
 import {Switch, Redirect, Route, NavLink } from 'react-router-dom'
-import * as permissions from '../permissions/permissions'
+import * as permissions from '../../permissions/permissions'
 import PrimaryFact from './PrimaryFact'
 import Biography from './Biography'
 class CardUser extends Component {
@@ -10,7 +10,7 @@ class CardUser extends Component {
             <div>
                 <Col xs='12' md='12'>
             <div className='main-body'>
-            <NavLink to='' activeClassName='gback'>
+            <NavLink to='/mnguser' activeClassName='gback'>
                     &lang; &nbsp; Go Back
             </NavLink>
             </div>
@@ -38,14 +38,14 @@ class CardUser extends Component {
             <div className='main-side'>
             <Switch>
                 <Route path='/mnguser/prim' render={()=>(
-                            <PrimaryFact user={permissions.user1}/>
-                        )}/>
+                    <PrimaryFact user={permissions.user1}/>
+                )}/>
                 <Route path='/mnguser/bio' render={()=>(
-                            <Biography user={permissions.user1}/>
-                        )}/>
+                    <Biography />
+                )}/>
                 <Route render={()=>(
-                            <Redirect to="/mnguser/prim" />
-                        )}/>
+                    <Redirect to="/mnguser/prim" />
+                )}/>
             </Switch>
             </div>
             </Col>

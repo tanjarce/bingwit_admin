@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Banner from './Banner.js';
+import Banner from '../Banner.js';
 import AccountSetting from './AccountSetting'
 class Accounts extends Component {
     render() {

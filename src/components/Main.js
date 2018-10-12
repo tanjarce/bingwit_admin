@@ -7,12 +7,13 @@ import * as API from '../services/API';
 import * as Session from '../services/session';
 import * as permissions from '../permissions/permissions';
 
-import SideBar from './Sidebar';
-import Accounts from './Accounts'
+import SideBar from './SideBar';
+import Accounts from './AccountSetting/Accounts'
 //PAGES
-import Dashboard from './Dashboard'
-import ManageUser from './ManageUser'
-import List from './List'
+import Dashboard from './Dashboard/Dashboard'
+import ManageUser from './ManageUser/ManageUser'
+import List from './RulesAndProduct/List'
+import Notification from './Notifications/Notification'
 
 class Main extends Component {
     constructor(props) {
@@ -71,7 +72,7 @@ class Main extends Component {
                             <ManageUser />
                         )}/>
                         <Route path="/notif" render={()=>(
-                           <div>Notifications</div>
+                           <Notification />
                         )}/>
                         <Route path="/list" render={()=>(
                             <List />

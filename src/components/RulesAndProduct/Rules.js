@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Container } from 'reactstrap'
-import Tables from './Tables'
-import Search from './Search'
+import Tables from '../Tables'
+import Search from '../Search'
 
-
-
-class Products extends Component {
+class Rules extends Component {
   render() {
+
     return (
         <React.Fragment>
             <Search />
@@ -16,4 +15,4 @@ class Products extends Component {
   }
 }
 
-export default Products
+export default Rules
