@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styles/Sidebar.css'
-
 import SidebarItemLink from './SideItemLink'
 import * as permissions from '../permissions/permissions'
 import logo from '../assets/Bingwit.svg'
@@ -19,7 +18,6 @@ class Sidebar extends Component {
         this.isOpen = this.isOpen.bind(this)
         this.handleMobileLink = this.handleMobileLink.bind(this)
     }
-
     handleMobileLink() {
         const width = window.innerWidth
         || document.documentElement.clientWidth
@@ -66,7 +64,7 @@ class Sidebar extends Component {
                             </span>
                         </li>
                         {permissions.bingwitmenus.map(item => (
-                            <SidebarItemLink menu={item} key={item.title} didNavigate={this.handleMobileLink}/>
+                            <SidebarItemLink menu={item} key={item.title} didNavigate={this.handleMobileLink} notif={item.notif}/>
                         ))}
                     </ul>
 
