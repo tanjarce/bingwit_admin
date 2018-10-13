@@ -1,46 +1,87 @@
 import React, { Component } from 'react';
-import { Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { AvForm, AvInput,AvFeedback,AvGroup } from 'availity-reactstrap-validation';
+import { Row, Col, Button, FormGroup, Label, FormText } from 'reactstrap';
+import '../../styles/style.css'
 class AccountSetting extends Component {
-    
+  constructor(props){
+    super(props);
+    this.state = {
+        password : '',
+        vpassword : ''
+    }
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e){
+    this.setState({[e.target.name] : e.target.value})
+  };
     render() {
+      const { password , vpassword } = this.state;
         return (
                 <div className='all_padding'>
-                <Form>
+                <AvForm>
+                    
                     <FormGroup row>
-                      <Label for="exampleUsername" sm={2}>USERNAME:</Label>
+                      <Label sm={3}>USERNAME:</Label>
                       <Col sm={10} lg='6'>
-                        <Input type="text" name="text" id="exampleEmail" placeholder="Type username..." />
+                      <AvGroup>
+                          <AvInput type='text' name="username" placeholder='Type username...' required />
+                          <AvFeedback>Input valid username!</AvFeedback>
+                      </AvGroup>
                       </Col>
                     </FormGroup>
+
                     <FormGroup row>
-                      <Label for="exampleName" sm={2}>NAME: </Label>
+                      <Label sm={3}>NAME:</Label>
                       <Col sm={10} lg='6'>
-                        <Input type="text" name="text" id="examplePassword" placeholder="Type name..." />
+                      <AvGroup>
+                          <AvInput type='text' name="name" placeholder='Type name...' required />
+                          <AvFeedback>Input valid name!</AvFeedback>
+                      </AvGroup>
                       </Col>
                     </FormGroup>
+
                     <FormGroup row>
-                      <Label for="exampleName" sm={2}>PASSWORD: </Label>
+                      <Label sm={3}>PASSWORD:</Label>
                       <Col sm={10} lg='6'>
-                        <Input type="password" name="password" id="examplePassword" placeholder="Type password..." />
+                      <AvGroup>
+                          <AvInput type='password' name="password" placeholder='Type password...' value={password} onChange={this.handleChange} required />
+                          <AvFeedback>Input valid password!</AvFeedback>
+                      </AvGroup>
                       </Col>
                     </FormGroup>
+
+
                     <FormGroup row>
-                      <Label for="exampleName" sm={2}>VERIFY PASSWORD: </Label>
+                      <Label sm={3}>VERIFY PASSWORD:</Label>
                       <Col sm={10} lg='6'>
-                        <Input type="password" name="password" id="examplePassword" placeholder="Verify Password..." />
-                        <FormText color="muted">
+                      <AvGroup>
+                          <AvInput type='password' name="vpassword" placeholder='Verify password...' value={vpassword} onChange={this.handleChange} required />
+                          <AvFeedback>Input valid password!</AvFeedback>
+                          <FormText color="muted">
                             Re-enter your password to save changes to your account.
-                        </FormText>
+                          </FormText>
+                      </AvGroup>
                       </Col>
                     </FormGroup>
+
+
                     <FormGroup row>
-                      <Label for="exampleName" sm={2}>OLD PASSWORD: </Label>
+                      <Label sm={3}>CONFIRM OLD PASSWORD:</Label>
                       <Col sm={10} lg='6'>
-                        <Input type="password" name="password" id="examplePassword" placeholder="Type old password..." />
+                      <AvGroup>
+                          <AvInput type='password' name="password" placeholder='Confirm old password...' required />
+                          <AvFeedback>Input valid password!</AvFeedback>
+                      </AvGroup>
                       </Col>
                     </FormGroup>
-                  <Row><Col sm={10} lg='8'><Button color='success' className='float-right' >Save Changes</Button></Col></Row>
-                </Form>
+
+                  <Row><Col sm={10} lg='9'>
+                  
+                  <Button color='success' className='float-right' >Save Changes</Button>
+                  
+                  </Col></Row>
+                </AvForm>
                 </div>
         );
     }
