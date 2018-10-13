@@ -3,11 +3,7 @@ import React, { Component } from 'react';
 import Search from './Search'
 import Table from './Tables'
 import TotalCount from './TotalCount'
-<<<<<<< HEAD
-class RulesTable extends Component {
-=======
 class TableSearch extends Component {
->>>>>>> master
     render() {
         const { columns, data, actions } = this.props; 
         return (
@@ -18,8 +14,4 @@ class TableSearch extends Component {
         );
     }
 }
-<<<<<<< HEAD
-export default RulesTable;
-=======
 export default TableSearch;
->>>>>>> master

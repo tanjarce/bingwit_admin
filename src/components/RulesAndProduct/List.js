@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { Container, Button } from 'reactstrap';
 import { Route, Switch, Redirect } from 'react-router-dom'
 import Tabs from '../Tabs'
-import TableSearch from '../TableSearch'
+import Rules from './Rules'
+import Products from './Products'
 import Banner from '../Banner'
 import * as permissions from '../../permissions/permissions'
 
