@@ -33,13 +33,13 @@ class List extends Component {
                 </Tabs>
                 <Switch>
                     <Route path="/list/rules" render={()=>(
-                        <TableSearch 
+                        <Rules 
                             columns={permissions.columnsRules} 
                             data={permissions.data}
                         />
                     )}/>
                     <Route path="/list/products" render={()=>(
-                        <TableSearch 
+                        <Products 
                             columns={permissions.columnsRules} 
                             data={permissions.data}
                         />

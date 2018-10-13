@@ -108,13 +108,15 @@ body {
     padding: 0 5% 0 5%; 
 }
 .bottom-pad{
-  padding-bottom: 50px;
+  padding-bottom: 30px;
 }
 
 .ReactTable .rt-tbody .rt-td:last-child {
   overflow: visible;
 }
 
+
+/*SetRules*/
 /* .ReactTable .rt-tr:last-child {
   background: pink;
 } */

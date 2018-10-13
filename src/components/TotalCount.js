@@ -7,7 +7,11 @@ class TotalCount extends Component {
             count : '6'
         }
         return (
+<<<<<<< HEAD
             <div className='border'>
+=======
+            <div className='mt-auto'>
+>>>>>>> master
                 {rule.text}{':'}{rule.count}
             </div>
         );
