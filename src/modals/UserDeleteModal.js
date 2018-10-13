@@ -25,47 +25,20 @@ class UserDeleteModal extends Component {
         })
     }
     render() {
-        const { isOpen, size, modalTitle, modalBody } = this.props
+        const { isOpen, toggle, userData = null} = this.props
+        console.log(userData)
         return (
             <div>
                 <Modal
-                    size={size}
                     isOpen={isOpen}
-                    toggle={this.props.toggle}
-                    modalTitle={modalTitle}
-                    modalBody={modalBody}
+                    toggle={toggle}
+                    modalTitle={`Delete ${ userData ? userData.username : '' }'s Account`}
+                    modalBody={`Are you sure you want to delete this account?` }
                     modalFooter={
-                        (
-                            <div style={
-                                {
-                                    height: "38px"
-                                }
-                            }>
-                                <Button 
-                                    style={
-                                        {
-                                            "position": "absolute",
-                                            "left": "18px"
-                                        }
-                                    }
-                                    onClick={this.props.toggle}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button 
-                                    color="primary"
-                                    style={
-                                        {
-                                            "position": "absolute",
-                                            "right": "18px"
-                                        }
-                                    }
-                                    onClick={this.onConfirm}
-                                >
-                                    Confirm
-                                </Button>
-                            </div>
-                        )
+                        <React.Fragment>
+                            <Button color="primary" onClick={this.toggle}>Confirm</Button>
+                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        </React.Fragment>
                     }>
                 </Modal>
             </div>
