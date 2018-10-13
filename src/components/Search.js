@@ -6,9 +6,9 @@ import searchIco from '../assets/Search.svg'
 class Search extends Component {
     render() {
         return (
-            <Row className='main-search border'>
+            <Row className='main-search'>
                 <Col xs='auto'>Search:</Col>
-                <Col className='rel'>
+                <Col className='rel' xs='auto' >
                   <Input type='text' placeholder='Search something...' />
                   <img className='img' src={searchIco} alt='search'/>
                 </Col>

@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import { Container } from 'reactstrap'
-import Tables from '../Tables'
-import Search from '../Search'
+import React, { Component } from 'react';
+import Table from '../Tables'
+import SearchCount from '../SearchAndCount'
+import SetRules from './SetRules'
 
-class Rules extends Component {
-  render() {
-
-    return (
-        <React.Fragment>
-            <Search />
-            <Tables />
-        </React.Fragment>
-    )
-  }
+class RulesTable extends Component {
+    render() {
+        const { columns, data, actions } = this.props; 
+        return (
+            <React.Fragment>
+                <SearchCount />
+                <Table columns={columns} data={data} actions={actions}/>
+                <SetRules/>
+                </React.Fragment>
+        );
+    }
 }
-
-export default Rules
+export default RulesTable;
