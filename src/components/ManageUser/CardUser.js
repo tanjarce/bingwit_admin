@@ -41,7 +41,7 @@ class CardUser extends Component {
                     <PrimaryFact user={permissions.user1}/>
                 )}/>
                 <Route path='/mnguser/bio' render={()=>(
-                    <Biography />
+                    <Biography user={permissions.user1}/>
                 )}/>
                 <Route render={()=>(
                     <Redirect to="/mnguser/prim" />

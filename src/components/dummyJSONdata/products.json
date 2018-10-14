@@ -1,0 +1,29 @@
+[
+    {
+        "product_name": "Anchovy",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    },
+    {
+        "product_name": "Basa",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    },    {
+        "product_name": "Blue Fish",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    },    {
+        "product_name": "Bream",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    },    {
+        "product_name": "Catfish",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    },
+    {
+        "product_name": "Milkfish",
+        "alias_name": "Other Name",
+        "date_created": "October 3, 2018"
+    }
+]

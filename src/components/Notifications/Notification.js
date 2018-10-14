@@ -4,7 +4,8 @@ import { Container } from 'reactstrap'
 import TableSearch from '../TableSearch'
 import Tabs from '../Tabs'
 import { Route, Redirect, Switch } from 'react-router-dom'
-import * as permissions from '../../permissions/permissions'
+import Feedback from './Feedback'
+import Report from './Report'
 
 class Notification extends Component {
   render() {
@@ -22,16 +23,10 @@ class Notification extends Component {
                 <Tabs links={tabs} />
                 <Switch>
                     <Route path="/notif/feedback" render={()=>(
-                        <TableSearch 
-                        columns={permissions.columnsRules} 
-                        data={permissions.data} 
-                        /> 
+                        <Feedback /> 
                     )}/>
                     <Route path="/notif/report" render={()=>(
-                        <TableSearch 
-                        columns={permissions.columnsRules} 
-                        data={permissions.data} 
-                        />
+                        <Report />
                     )}/>
                     <Route render={()=>(
                         <Redirect to="/notif/feedback" />

@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import TableSearch from '../TableSearch'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Table from '../Tables'
-import SearchCount from '../SearchAndCount'
-import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 
-import rules from '../dummyJSONdata/rules.json'
+import feedback from '../dummyJSONdata/feedback.json'
 import dots from '../../images/show_more.svg'
 
 
-class RulesTable extends Component {
+class Feedback extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -32,26 +30,26 @@ class RulesTable extends Component {
         }
     )}
     render() {
-        const Rules = rules.map((rule)=>{
+        const Feedback = feedback.map((feed)=>{
             return ({
-                'number': rule.number,
-                'description': rule.description,
-                'date': rule.date,
-                'action': {...rule}
+                'name': feed.name,
+                'feedback_description': feed.feedback_description,
+                'sent_date': feed.sent_date,
+                'action': {...feed}
             })
         })
         const columnsRules = [{
-                Header: 'No.',
-                accessor: 'number',
-                width: 80
+                Header: 'Account User',
+                accessor: 'name',
+                width: 300
             },
             {
-                Header: 'Description',
-                accessor: 'description',
+                Header: 'Feedback Description',
+                accessor: 'feedback_description',
             },
             {
-                Header: 'Date Created',
-                accessor: 'date',
+                Header: 'Sent Date',
+                accessor: 'sent_date',
                 width: 180
             },{
                 Header: ' ',
@@ -59,7 +57,7 @@ class RulesTable extends Component {
                 width: 50,
                 Cell: rowInfo =>  
                     (
-                       <UncontrolledDropdown className="text-muted" size="sm">
+                        <UncontrolledDropdown className="text-muted" size="sm">
                             <DropdownToggle className="bg-transparent border-0 p-0 h-auto d-inline-flex">
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
@@ -70,18 +68,17 @@ class RulesTable extends Component {
                         </UncontrolledDropdown>
                     )
             }]
-
+        
         const { isOpen } = this.state
         return (
-                <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
-                <SearchCount />
-                <Table
+            <React.Fragment>
+                <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+                <TableSearch 
                     columns={columnsRules} 
-                    data={Rules} />
-                <SetRules/>
+                    data={Feedback} />
             </React.Fragment>
-        );
-    }
+        )
+      }
 }
-export default RulesTable;
+
+export default Feedback

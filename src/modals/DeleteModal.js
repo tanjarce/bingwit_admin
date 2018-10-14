@@ -23,7 +23,7 @@ class UserDeleteModal extends Component {
         //     this.props.onDeleteUser()
         //     this.props.toggle()
         // })
-        console.log(`delete User ${this.props.userData.username}`)
+        console.log(`delete`)
         this.props.toggle()
     }
 
@@ -34,8 +34,8 @@ class UserDeleteModal extends Component {
                 <Modal
                     isOpen={isOpen}
                     toggle={toggle}
-                    modalTitle={`Delete ${ userData ? userData.username : '' }'s Account`}
-                    modalBody={<div>{`Are you sure you want to delete this account?` }</div>}
+                    modalTitle={`Delete`}
+                    modalBody={<div>{`Are you sure you want to delete this` }</div>}
                     modalFooter={
                         <React.Fragment>
                             <Button color="primary" onClick={this.onConfirm}>Confirm</Button>

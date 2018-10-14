@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom'
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, Label, Input, FormGroup } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container } from 'reactstrap';
 
-import TableSearch from '../TableSearch'
+import Tables from '../Tables'
+import Search from '../Search'
 import Banner from '../Banner';
 import CardUser from './CardUser'
-import ModalSuspend from '../../modals/SuspensionModal'
 import '../../styles/manage.css'
 
 import users from '../dummyJSONdata/users.json'
@@ -19,27 +19,25 @@ class ManageUser extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            modaltype: 'delete',
+            modalType: 'delete',
             isOpen: false
         }
         this.toggleModal = this.toggleModal.bind(this)
-        this.openModal = this.openModal.bind(this)
+        this.setModal = this.setModal.bind(this)
     }
 
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
 
-    openModal (data, type) {
+    setModal (data, type) {
         this.setState({
-            modaltype: type,
-            UserData: {...data}
-        }, ()=>{
-            this.setState({
-                isOpen: !this.state.isOpen,
-            })
-        })
-    }
+            modalType: type,
+            userData: {...data}
+        }, () => {
+            this.toggleModal()
+        }
+    )}
 
     render() {
         const Users = users.map((user)=>{
@@ -81,18 +79,19 @@ class ManageUser extends Component {
                         </DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                            <DropdownItem onClick={() => {this.openModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem>
-                            <DropdownItem onClick={()=>{this.openModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
+                            <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem>
+                            <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 )
             }]
 
-        const { isOpen, UserData } = this.state
+        const { isOpen, userData, modalType} = this.state
         
-        const modal = (this.state.modaltype === 'suspend') 
-            ? (<SuspensionModal isOpen={isOpen} toggle={this.toggleModal} userData={UserData} />)
-            : (<UserDeleteModal isOpen={isOpen} toggle={this.toggleModal} userData={UserData} />)
+        // checking what modal to be use
+        const modal = (modalType === 'suspend') 
+            ? (<SuspensionModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
+            : (<UserDeleteModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
         
         return (
             <div className='bottom-pad'>
@@ -103,9 +102,12 @@ class ManageUser extends Component {
                 <Container>
                     <Switch>
                         <Route exact path="/mnguser" render={()=>(
-                            <TableSearch 
-                                columns={columnsRules} 
-                                data={Users} />
+                            <React.Fragment>
+                                <Search />
+                                <Tables
+                                    columns={columnsRules} 
+                                    data={Users} />
+                            </React.Fragment>
                         )}/>
                         <Route path="/mnguser/prim" render={()=>(
                             <CardUser />
