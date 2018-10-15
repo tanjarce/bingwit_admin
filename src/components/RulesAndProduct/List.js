@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Button } from 'reactstrap';
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import Tabs from '../Tabs'
 import Rules from './Rules'
 import Products from './Products'
 import Banner from '../Banner'
-import DeleteModal from '../../modals/DeleteModal'
+import AddProductModal from '../../modals/AddProductModal'
 
 import * as permissions from '../../permissions/permissions'
 
@@ -33,16 +33,21 @@ class List extends Component {
     ]
     
     const { isOpen } = this.state
+    const { location: {pathname} } = this.props
+
     return (
         <div className='bottom-pad'>
-            <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+            <AddProductModal isOpen={isOpen} toggle={this.toggleModal}/>
             <Banner 
                 header="List of Rules &amp; Products"
                 contents="hehehe" 
             />
             <Container>
                 <Tabs links={tabs}>
-                    <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
+                    {
+                        (pathname === '/list/products') &&
+                        (<Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>)
+                    }
                 </Tabs>
                 <Switch>
                     <Route path="/list/rules" render={()=>(
@@ -64,4 +69,4 @@ class List extends Component {
   }
 }
 
-export default List
+export default withRouter(List)
