@@ -7,8 +7,6 @@ import Products from './Products'
 import Banner from '../Banner'
 import DeleteModal from '../../modals/DeleteModal'
 
-import * as permissions from '../../permissions/permissions'
-
 class List extends Component {
     constructor(props){
         super(props)
@@ -38,7 +36,7 @@ class List extends Component {
             <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
             <Banner 
                 header="List of Rules &amp; Products"
-                contents="hehehe" 
+                contents="Contains information about rules and products." 
             />
             <Container>
                 <Tabs links={tabs}>
@@ -49,10 +47,7 @@ class List extends Component {
                         <Rules />
                     )}/>
                     <Route path="/list/products" render={()=>(
-                        <Products 
-                            columns={permissions.columnsRules} 
-                            data={permissions.data}
-                        />
+                        <Products />
                     )}/>
                         <Route render={()=>(
                             <Redirect to="/list/rules" />

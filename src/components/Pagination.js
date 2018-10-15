@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
-import classnames from 'classnames'
-import { Row , Col, Button, Input , CustomInput} from 'reactstrap'
-
-const defaultButton = props => (
-  <button type="button" {...props} className="-btn">
-    {props.children}
-  </button>
-)
+import { Row , Col, Button , CustomInput} from 'reactstrap'
 
 export default class CBReactTablePagination extends Component {
   constructor (props) {
@@ -76,10 +69,7 @@ export default class CBReactTablePagination extends Component {
       showPageJump,
       canPrevious,
       canNext,
-      onPageSizeChange,
-      className,
-      PreviousComponent = defaultButton,
-      NextComponent = defaultButton,
+      onPageSizeChange
     } = this.props
 
     return (
@@ -162,7 +152,7 @@ export default class CBReactTablePagination extends Component {
   }
 }
 
-{/*       
+/*       
           {(typeof this.rowCount !== 'undefined') ?
               <span className="-rowInfo">{"Showing "}
                 <span className="-rowMin">{this.rowMin}</span>
@@ -172,4 +162,4 @@ export default class CBReactTablePagination extends Component {
                 <span className="-rowCount">{this.rowCount}</span>
                   {" total rows"}
               </span>
-            : ''} */}
+            : ''} */

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Search from './Search'
 import Table from './Tables'
-import TotalCount from './TotalCount'
 class TableSearch extends Component {
     render() {
         const { columns, data, actions } = this.props; 
