@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'reactstrap'
+import { Col } from 'reactstrap'
 import Search from './Search'
 import TotalCount from './TotalCount'
 

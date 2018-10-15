@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Banner from '../Banner'
 import { Container } from 'reactstrap'
-import TableSearch from '../TableSearch'
 import Tabs from '../Tabs'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Feedback from './Feedback'

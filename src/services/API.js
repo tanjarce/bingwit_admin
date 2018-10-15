@@ -1,16 +1,16 @@
 import * as Session from './session';
-
-const api = process.env.REACT_APP_URL_STAGING;
+// http://192.168.0.125:3000/api/v1/users/verify
+// const api = process.env.REACT_APP_URL_STAGING;
+const api = 'http://192.168.0.125:3000/api/v1';
 let token = Session.getToken()
 
 const headers = {
   'Accept': 'application/json',
   'x-access-token': token
 }
-
-// LOGIN
+//BINGWIT LOGIN
 export const login = (body) =>
-  fetch(`${api}/auth/login`, {
+  fetch(`${api}/users/login`, {
     method: 'POST',
     headers: {
         'Accept': 'application/json',
@@ -24,6 +24,24 @@ export const logout = () =>
     method: 'POST',
     headers
   }).then(res => res.json())
+
+
+// LOGIN
+// export const login = (body) =>
+//   fetch(`${api}/auth/login`, {
+//     method: 'POST',
+//     headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(body)
+//   }).then(res => res.json())
+
+// export const logout = () => 
+//   fetch(`${api}/auth/logout`, {
+//     method: 'POST',
+//     headers
+//   }).then(res => res.json())
 
 // USER
 export const getAllUsers = () =>
