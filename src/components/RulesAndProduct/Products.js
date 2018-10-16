@@ -4,6 +4,7 @@ import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
+import ProductModal from '../../modals/ProductModal'
 
 import products from '../dummyJSONdata/products.json'
 import dots from '../../images/show_more.svg'
@@ -13,6 +14,7 @@ class Products extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            userData: null,
             modalType: 'delete',
             isOpen: false
         }
@@ -45,7 +47,7 @@ class Products extends Component {
             },
             {
                 Header: 'Alias Name',
-                accessor: 'alias_name',
+                accessor: 'alias_names',
             },
             {
                 Header: 'Date Created',
@@ -63,17 +65,22 @@ class Products extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={this.toggleModal}>Edit</DropdownItem>
-                                <DropdownItem onClick={this.toggleModal}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'edit') }}>Edit</DropdownItem>
+                                <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }]
 
-        const { isOpen } = this.state
+        const { isOpen, userData, modalType} = this.state
+        // checking what modal to be use
+        const modal = (modalType === 'edit')
+            ? (<ProductModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} type="edit" />)
+            : (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
+    
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+                    {modal}
                 <SearchCount />
                 <Table
                     columns={columnsRules} 
