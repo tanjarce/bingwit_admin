@@ -40,8 +40,8 @@ class CardUser extends Component {
                 <div className='card-footer'>
                     <ul>
                         <li>Informations</li>
-                        <li><NavLink to='/mnguser/prim' className='link'>Primary Facts</NavLink></li>
-                        <li><NavLink to='/mnguser/bio' className='link'>Biography</NavLink></li>
+                        <li><NavLink to='/mnguser/user/prim' className='link'>Primary Facts</NavLink></li>
+                        <li><NavLink to='/mnguser/user/bio' className='link'>Biography</NavLink></li>
                     </ul>
                 </div>
             </div>
@@ -50,14 +50,14 @@ class CardUser extends Component {
             <Col xs='12' md='7' lg='9'>
             <div className='main-side'>
             <Switch>
-                <Route path='/mnguser/prim' render={()=>(
+                <Route path='/mnguser/user/prim' render={()=>(
                     <PrimaryFact user={user}/>
                 )}/>
-                <Route path='/mnguser/bio' render={()=>(
+                <Route path='/mnguser/user/bio' render={()=>(
                     <Biography user={user}/>
                 )}/>
                 <Route render={()=>(
-                    <Redirect to="/mnguser/prim" />
+                    <Redirect to="/mnguser/user/prim" />
                 )}/>
             </Switch>
             </div>

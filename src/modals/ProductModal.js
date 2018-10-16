@@ -26,6 +26,7 @@ class ProductModal extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.addAlias = this.addAlias.bind(this)
         this.addProduct = this.addProduct.bind(this)
+        this.saveEdit = this.saveEdit.bind(this)
         
     }
     addProduct () {
@@ -34,6 +35,9 @@ class ProductModal extends React.Component {
         // API call here
     }
 
+    saveEdit () {
+        console.log('save changes')
+    }
 
     handleChange(e){
         const target = e.target
@@ -79,7 +83,6 @@ class ProductModal extends React.Component {
             })
             .join(',')
         
-        console.log(copyAlias)
         this.setState((prevState)=>({
             value: {
                 ...prevState.value,
@@ -87,7 +90,7 @@ class ProductModal extends React.Component {
             }
         }))    
     }
-
+    
     // reset() {
     //     this.setState({
     //         alias_name_input: '',
@@ -136,6 +139,22 @@ class ProductModal extends React.Component {
         : <ListGroupItem className="text-muted">Input Alias Names...</ListGroupItem>
 
     const title = type === "add" ? "Add New Product" : "Edit Product";
+
+    const btn = type === "add"
+        ? (
+            <Button
+              color="primary"
+              onClick={this.addProduct}>
+              Add Product
+            </Button>
+        )
+        : (
+            <Button
+              color="primary"
+              onClick={this.saveEdit}>
+              Save
+            </Button>
+        )
 
     return (
       <Modal
@@ -190,12 +209,9 @@ class ProductModal extends React.Component {
         }
         modalFooter={
           <React.Fragment>
-            <Button
-              color="primary"
-              onClick={this.addProduct}
-            >
-              Add Product
-            </Button>
+            {
+                btn
+            }
             <Button color="secondary" onClick={toggle}>
               Cancel
             </Button>
