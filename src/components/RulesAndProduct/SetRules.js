@@ -8,7 +8,8 @@ class SetRules extends Component {
         super(props);
         this.state = {
             toggle : true,
-            InputRules : ''
+            InputRules : '',
+            test : this.props.data
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,15 +23,15 @@ class SetRules extends Component {
     };
 
     addRules(){
+        const { updateTable } = this.props
         const values = this.state.InputRules
-        console.log(values)
         API.addRules({
             'description' : values
         })
-
         this.setState({
             InputRules : ''
         })
+        updateTable();
     }
     
     handleToggle(){

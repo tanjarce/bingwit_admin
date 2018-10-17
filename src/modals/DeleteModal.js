@@ -1,34 +1,24 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-// import * as API from '../services/API';
+import * as API from '../services/API';
 
 import Modal from '../components/Modal';
 
 class UserDeleteModal extends Component {
     constructor(props) {
         super(props);
-        
         this.onConfirm = this.onConfirm.bind(this)
     }
     
-    onConfirm () {
-        // const { userData } = this.props
-        // if (!userData) 
-        //     return
-        // //API CALL
-        // API.deleteUser(userData)
-        // .then( response => {
-        //     if (response.errors)
-        //         return console.error(`ERROR ON UserDeleteModal line: 16 ${response.errors}`);
-        //     this.props.onDeleteUser()
-        //     this.props.toggle()
-        // })
-        console.log(`delete`)
+    onConfirm() {
+        const { id, updateTable } = this.props
+        API.deleteRules(id)
         this.props.toggle()
+        updateTable();
     }
 
     render() {
-        const { isOpen, toggle, userData = null} = this.props
+        const { isOpen, toggle } = this.props
         return (
             <div>
                 <Modal
@@ -47,5 +37,4 @@ class UserDeleteModal extends Component {
         );
     }
 }
-
 export default UserDeleteModal;

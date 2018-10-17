@@ -34,8 +34,7 @@ class CardUser extends Component {
             <Col xs='12' md='5' lg='3'>
             <div className='main-card'>
                 <div className='card-body'>
-                    <img className='card-img' src={user.src} alt={user.name}
-                    />
+                    <img className='card-img' src={user.src} alt={user.name}/>
                 </div>
                 <div className='card-footer'>
                     <ul>

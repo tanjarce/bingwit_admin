@@ -6,6 +6,9 @@ import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
+import Moment from 'react-moment';
+import moment from 'react-moment';
+import 'moment-timezone';
 
 class RulesTable extends Component {
     constructor(props) {
@@ -13,24 +16,49 @@ class RulesTable extends Component {
         this.state = {
             modalType: 'delete',
             isOpen: false,
-            getRule: []
+            getRule: [],
+            count : '',
+            id : ''
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
+        this.updateTable = this.updateTable.bind(this)
     }
     componentDidMount(){
         API.getAllRules()
         .then((response) => {
+            const arr = response.rule.map((item, key) => {
+                return ({
+                    'description' : item.description,
+                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
+                    'no' : key+1,
+                    'action' : {...item}
+                })
+            })
             this.setState({
-                getRule : response.rule
+                getRule : arr,
+                count : arr.length
             })
         })
     }
-
-    toggleModal () {
-        this.setState({isOpen: !this.state.isOpen})
+    updateTable(des){
+        console.log('UPDATING')
+        const { getRule } = this.state
+        const arr = getRule
+        arr.push({
+            'description' : des,
+            'createdAt' : moment(new Date().toISOString()).format('MMMM D, YYYY'),
+            'no' : arr.length,
+            'action' : ''
+        });
+        console.log(arr)
     }
-
+    toggleModal (id) {
+        this.setState({
+            isOpen: !this.state.isOpen,
+            id : id
+        })
+    }
     setModal (data, type) {
         this.setState({
             modalType: type,
@@ -40,14 +68,7 @@ class RulesTable extends Component {
         }
     )}
     render() {
-        const { getRule } = this.state;
-        const arr = getRule.map((item, key) => {
-            return ({
-                ...item,
-                'no' : key+1,
-                'action' : {...item}
-            })
-        })
+        const { getRule, isOpen, count, id } = this.state;
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -73,22 +94,19 @@ class RulesTable extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={this.toggleModal}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => this.toggleModal(rowInfo.value.id)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }]
-
-        const { isOpen } = this.state
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
-                <SearchCount/>
-
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} id={id} updateTable={this.updateTable}/>
+                <SearchCount count={count}/>
                 <Table
                     columns={columnsRules} 
-                    data={arr} />
-                <SetRules/>
+                    data={getRule} />
+                <SetRules updateTable={this.updateTable}/>
             </React.Fragment>
         );
     }
