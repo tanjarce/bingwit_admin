@@ -92,3 +92,21 @@ export const create = (body) =>
     },
     body: JSON.stringify(body)
   }).then(res => res.json())
+
+// GET FEEDBACKS
+
+export const getFeedbacks = () =>
+  fetch(`${api}/users/feedbacks?limit=${10}&offset=${0}`, { headers }) // default GET
+  .then(res => {
+    // console.log(`Bearer ${token}`)
+    return res.json()
+  })
+
+export const getCountFeedbacks = () =>
+  fetch(`${api}/users/feedbacks/total`, { headers }) // default GET
+  .then(res => res.json())
+
+export const viewFeedback = (id) =>
+  fetch(`${api}/users/feedbacks/${id}`, { headers }) // default GET
+  .then(res => res.json())
+

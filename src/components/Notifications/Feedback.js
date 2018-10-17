@@ -4,6 +4,7 @@ import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from
 import DeleteModal from '../../modals/DeleteModal'
 
 import feedback from '../dummyJSONdata/feedback.json'
+import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 
 
@@ -17,6 +18,14 @@ class Feedback extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
     }
+
+    componentDidMount(){
+        API.getFeedbacks()
+        .then((response) => {
+            console.log(response)
+        })
+    }
+
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
