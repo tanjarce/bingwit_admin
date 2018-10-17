@@ -24,21 +24,7 @@ class RulesTable extends Component {
         this.updateTable = this.updateTable.bind(this)
     }
     componentDidMount(){
-        API.getAllRules()
-        .then((response) => {
-            const arr = response.rule.map((item, key) => {
-                return ({
-                    'description' : item.description,
-                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
-                    'no' : key+1,
-                    'action' : {...item}
-                })
-            })
-            this.setState({
-                getRule : arr,
-                count : arr.length
-            })
-        })
+       this.updateTable();
     }
     updateTable(){
         API.getAllRules()

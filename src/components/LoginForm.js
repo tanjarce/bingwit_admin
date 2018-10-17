@@ -29,16 +29,21 @@ class LoginForm extends Component {
         this.toggleLoading()
         e.preventDefault()
         const values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        API.login(values, "ADMIN")
+        API.login(values)
         .then((response) => {
             this.toggleLoading()
-            const error = response.err || ''
-            if (error) {
-                this.props.onError(response.err.message)
-                return
-            } else {
-                this.props.onSuccess(response.token)
-            }            
+                const error = response.err || ''
+                if (error) {
+                    this.props.onError(response.err.message)
+                    return
+                } else {
+                    if(response.status === 'active'){
+                    this.props.onSuccess(response.token)
+                    }
+                    else{
+                    this.props.onError('This user has been suspend.')
+                    }
+                }     
         })        
     }
 

@@ -26,12 +26,19 @@ class SetRules extends Component {
         const { updateTable } = this.props
         const values = this.state.InputRules
         API.addRules({
-            'description' : values
-        })
-        this.setState({
-            InputRules : ''
-        })
-        updateTable();
+            'description' : values})
+            .then((response) => {
+                const error = response.err || ''
+                if (!error) {
+                    this.setState({
+                        InputRules : ''
+                    })
+                    updateTable();
+                    return
+                } else {
+                    this.props.onError(response.err.message)
+                }
+            })
     }
     
     handleToggle(){
