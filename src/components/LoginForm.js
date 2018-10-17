@@ -29,7 +29,7 @@ class LoginForm extends Component {
         this.toggleLoading()
         e.preventDefault()
         const values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        API.login(values)
+        API.login(values, "ADMIN")
         .then((response) => {
             this.toggleLoading()
             const error = response.err || ''

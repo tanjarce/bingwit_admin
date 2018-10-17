@@ -31,6 +31,8 @@ class List extends Component {
     ]
     
     const { isOpen } = this.state
+    const { location: {pathname} } = this.props
+
     return (
         <div className='bottom-pad'>
             <ProductModal isOpen={isOpen} toggle={this.toggleModal} type="add" />
