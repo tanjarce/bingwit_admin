@@ -84,6 +84,7 @@ class RulesTable extends Component {
                 <React.Fragment>
                     <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
                 <SearchCount/>
+
                 <Table
                     columns={columnsRules} 
                     data={arr} />

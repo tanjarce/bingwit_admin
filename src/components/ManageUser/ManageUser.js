@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container } from 'reactstrap';
 
 import Tables from '../Tables'
@@ -24,10 +24,15 @@ class ManageUser extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
+        this.viewUser = this.viewUser.bind(this)
     }
 
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
+    }
+    viewUser (){
+        console.log(this.props)
+        this.props.history.push('/mnguser/user')
     }
 
     setModal (data, type) {
@@ -78,14 +83,14 @@ class ManageUser extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
+                            <DropdownItem onClick={this.viewUser}>View</DropdownItem>
                             <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem>
                             <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 )
             }]
-
+        
         const { isOpen, userData, modalType} = this.state
         
         // checking what modal to be use
@@ -109,7 +114,7 @@ class ManageUser extends Component {
                                     data={Users} />
                             </React.Fragment>
                         )}/>
-                        <Route path="/mnguser/prim" render={()=>(
+                        <Route path="/mnguser/user" render={()=>(
                             <CardUser />
                         )}/>
                     </Switch>
@@ -119,4 +124,4 @@ class ManageUser extends Component {
     }
 }
 
-export default ManageUser;
+export default withRouter(ManageUser);

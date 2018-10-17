@@ -9,8 +9,8 @@ import Report from './Report'
 class Notification extends Component {
   render() {
     const tabs = [
-        {'text': 'Feedback', 'url': '/notif/feedback'},
-        {'text': 'Report', 'url': '/notif/report'},
+        {'text': 'Feedback', 'url': '/notif/feedback', 'notif': 0},
+        {'text': 'Report', 'url': '/notif/report', 'notif': 4},
     ]
     return (
         <div>
