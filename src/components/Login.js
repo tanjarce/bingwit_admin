@@ -82,11 +82,13 @@ class Login extends Component {
 
     // LOGIN METHODS
     handleSignInSuccess (response, role) {
+        console.log(response, role)
         Session.saveUser(response, role);
         this.navigateToHome()
     }
     
     handleSignInFail (error) {
+        // console.log(error)
         this.setState(()=>({
             isInvalid: {
                 'username': true,
@@ -94,7 +96,7 @@ class Login extends Component {
             },
             errorMessage: {
                 'username' : null,
-                'password' : 'The username and password you entered did not match our records. Please double-check and try again.'
+                'password' : error
             }
         }))
     }

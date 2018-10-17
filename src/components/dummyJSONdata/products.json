@@ -1,29 +1,29 @@
 [
     {
         "product_name": "Anchovy",
-        "alias_name": "Other Name",
+        "alias_names": "Anchovy 1, Anchovy 2, Anchovy 3, Anchovy 4",
         "date_created": "October 3, 2018"
     },
     {
         "product_name": "Basa",
-        "alias_name": "Other Name",
+        "alias_names": "Basa 1, Basa 2, Basa 3, Basa 4",
         "date_created": "October 3, 2018"
     },    {
         "product_name": "Blue Fish",
-        "alias_name": "Other Name",
+        "alias_names": "Blue Fish 1, Blue Fish 2, Blue Fish 3, Blue Fish 4",
         "date_created": "October 3, 2018"
     },    {
         "product_name": "Bream",
-        "alias_name": "Other Name",
+        "alias_names": "Bream 1, Bream 2, Bream 3, Bream 4",
         "date_created": "October 3, 2018"
     },    {
         "product_name": "Catfish",
-        "alias_name": "Other Name",
+        "alias_names": "Catfish 1, Catfish 2, Catfish 3, Catfish 4",
         "date_created": "October 3, 2018"
     },
     {
         "product_name": "Milkfish",
-        "alias_name": "Other Name",
+        "alias_names": "Milkfish 1, Milkfish 2, Milkfish 3, Milkfish 4",
         "date_created": "October 3, 2018"
     }
 ]

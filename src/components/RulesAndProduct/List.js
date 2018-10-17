@@ -5,9 +5,8 @@ import Tabs from '../Tabs'
 import Rules from './Rules'
 import Products from './Products'
 import Banner from '../Banner'
-import AddProductModal from '../../modals/AddProductModal'
+import ProductModal from '../../modals/ProductModal'
 
-import * as permissions from '../../permissions/permissions'
 
 class List extends Component {
     constructor(props){
@@ -15,7 +14,6 @@ class List extends Component {
         this.state = {
             isOpen: false
         }
-        this.handleClick = this.handleClick.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
     
     }
@@ -37,16 +35,16 @@ class List extends Component {
 
     return (
         <div className='bottom-pad'>
-            <AddProductModal isOpen={isOpen} toggle={this.toggleModal}/>
+            <ProductModal isOpen={isOpen} toggle={this.toggleModal} type="add" />
             <Banner 
                 header="List of Rules &amp; Products"
-                contents="hehehe" 
+                contents="Contains information about rules and products." 
             />
             <Container>
                 <Tabs links={tabs}>
                     {
-                        (pathname === '/list/products') &&
-                        (<Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>)
+                        (this.props.location.pathname === '/list/products') && 
+                        <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
                     }
                 </Tabs>
                 <Switch>
@@ -54,10 +52,7 @@ class List extends Component {
                         <Rules />
                     )}/>
                     <Route path="/list/products" render={()=>(
-                        <Products 
-                            columns={permissions.columnsRules} 
-                            data={permissions.data}
-                        />
+                        <Products />
                     )}/>
                         <Route render={()=>(
                             <Redirect to="/list/rules" />

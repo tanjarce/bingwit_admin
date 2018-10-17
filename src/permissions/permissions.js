@@ -1,6 +1,4 @@
 import React from 'react'
-import ActionDropdown from '../components/ActionDropdown'
-
 
 const ACC_ADMIN = 'ACC_ADMIN'
 const ACC_USER = 'ACC_USER'
@@ -41,104 +39,6 @@ export function formatRole (type) {
     }
 }
 
-//TAB
-export const columnsRules = [{
-        Header: 'No:',
-        accessor: 'number', // String-based value accessors!
-        width: 80,
-        Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-      }, {
-        Header: 'Description',
-        accessor: 'description'
-      },
-      {
-        Header: 'Date Created',
-        accessor: 'date',
-        width: 200
-      },
-      {
-        Header: ' ',
-        accessor: 'action',
-        width: 50,
-        Cell: rowInfo => 
-            <ActionDropdown info={rowInfo.value} options={[
-                {'text': 'View', 'func': (info) => {console.log('view', info)}},
-                {'text': 'Delete', 'func': (info) => {console.log('view', info)}},
-            ]}/>
-      }]
-      
-export const columnsReports = [{
-    Header: 'Account User',
-    accessor: 'number', // String-based value accessors!
-    width : 150
-  }, {
-    Header: 'Feedback Description',
-    accessor: 'description'
-  },
-  {
-    Header: 'Sent Date',
-    accessor: 'date',
-    width: 200
-  },
-  {
-    Header: ' ',
-    accessor: ' ',
-    width: 50
-  }]
-  
-export const tabs = [
-    {'text': 'Rules', 'url': '/list/rules'},
-    {'text': 'Products', 'url': '/list/products'},
-]
-//TABLE DATA 
-export const data = [{
-    number: 1,
-    description: 'Walang sino man ang pwedeng mag benta ng nanganganib na isda.',
-    date: 'October 3, 2018',
-    action: 'specify the info needed for actions option'
-  },{
-    number: 2,
-    description: 'Laging i-prayoridad ang kalidad ng isda.',
-    date: 'October 3, 2018',
-    action: 'specify the info needed for actions option'
-  },{
-    number: 3,
-    description: 'Bawal mangloko ng kapwa.',
-    date: 'October 2, 2018',
-    action: 'specify the info needed for actions option'
-  },{
-    number: 4,
-    description: 'Huwag ibenta ang produkto kapag ito ay 2-3 araw ng nakatambak.',
-    date: 'October 3, 2018',
-    action: 'specify the info needed for actions option'
-  },{
-    number: 5,
-    description: 'Siguraduhing tama ang bilang na ilagay sa bawat produkto.',
-    date: 'October 4, 2018',
-    action: 'specify the info needed for actions option'
-  },{
-    number: 6,
-    description: 'Dapat laging tama ang presyo ng produkto.',
-    date: 'October 5, 2018',
-    action: 'specify the info needed for actions option'
-  },
-]
-
-
-// USER DATA
-export const user1 = {
-    'name' : 'Alberto Aquino',
-    'role' : 'Fisherman',
-    'src' : require('../assets/ProfileUser.png'),
-    'address' : '#2381 Bongkok St. Baguio City, Benguet',
-    'province' : 'Benguet, Philippines',
-    'contact' : '+63 912-345-6776',
-    'status' : 'Active',
-    'bio' : 'Ako si Alberto. Isang peshirman nangagarap maging wrapper. Marunong ako mag wrap idol ko si Gloc 9, kaso sa hirap ng buhay isa lang akong mangengesda sa benguet. 29 na anak ang aking binubuhay. Panay isda lang ang amin nakakain. Pileng ko nga may hasang na ko. Pero ayos lang. Nakakain naman kami lagi ng Lobster, Lapu-lapu, Salmon. Marami pang iba eh, tuwing umaga Crab, sa tanghali naman Bay Eel .. tapos sa gabi Bluefin Tuna lang nakakain namin. Minsan lang kami nakain ng mamahalin na pagkain... kung susuwertehin tuyo. Paborito ko talaga iyon. ang sarap. *Crying* ang hirap ng buhay T_T.'
-    ,
-    'ratings' : '5.0',
-    'sales' : '300,129.50'
-};
 
 // SIDEBAR ITEM
 export const bingwitmenus = [{

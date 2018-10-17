@@ -74,7 +74,7 @@ class RulesTable extends Component {
         const { isOpen } = this.state
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+                <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
                 <SearchCount />
                 <Table
                     columns={columnsRules} 

@@ -18,9 +18,7 @@
     border-right: 0 !important;
 }
 .rt-th:nth-child(3),
-.rt-td:first-child,
-.rt-td:nth-child(3),
-.rt-td:first-child{
+.rt-td:nth-child(3){
     text-align: center !important;
 }
 .rt-td,

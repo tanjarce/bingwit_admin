@@ -4,8 +4,7 @@ import serializeForm from 'form-serialize'
 import showpassword from '../images/eye-solid.svg'
 import hidepassword from '../images/eye-slash-solid.svg'
 import logo from '../images/bingwit_logo.svg'
-
-// import * as API from '../services/API'
+import * as API from '../services/API'
 
 import LoadingButton from './ButtonSpinner'
 
@@ -30,35 +29,19 @@ class LoginForm extends Component {
         this.toggleLoading()
         e.preventDefault()
         const values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        
-        if(this.props.validation(values)) {
-            if(values.username === 'admin' && values.password === 'secret'){
-                // setTimeout(()=> {
-                    this.props.onSuccess(values, 'ADMIN')
-                    this.toggleLoading()
-                // }, 1000)
-            } else { 
-                this.props.onError()
-                this.toggleLoading()
-            }
-        } else{
+        API.login(values)
+        .then((response) => {
             this.toggleLoading()
-        }
-
-        // console.log(values)
-        // API.login(values)
-        // .then((response) => {
-        //     this.toggleLoading()
-        //     if (response.errors) {
-        //         console.log(response.errors)
-        //         this.props.onError(response.errors[0])
-        //         return
-        //     }
-        //     // go to home page
-        //     // simple way to redirect to a page
-        //     this.props.onSuccess(response, values.type.toUpperCase())
-        // })
+            const error = response.err || ''
+            if (error) {
+                this.props.onError(response.err.message)
+                return
+            } else {
+                this.props.onSuccess(response.token)
+            }            
+        })        
     }
+
     toggleLoading () {
         this.setState((oldState) => ({
             loading: !oldState.loading
