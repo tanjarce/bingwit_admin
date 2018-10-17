@@ -11,7 +11,8 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { id, updateTable } = this.props
+        const { updateTable} = this.props
+        const { id } = this.props
         API.deleteRules(id)
         this.props.toggle()
         updateTable();

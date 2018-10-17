@@ -7,7 +7,6 @@ import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import Moment from 'react-moment';
-import moment from 'react-moment';
 import 'moment-timezone';
 
 class RulesTable extends Component {
@@ -41,17 +40,22 @@ class RulesTable extends Component {
             })
         })
     }
-    updateTable(des){
-        console.log('UPDATING')
-        const { getRule } = this.state
-        const arr = getRule
-        arr.push({
-            'description' : des,
-            'createdAt' : moment(new Date().toISOString()).format('MMMM D, YYYY'),
-            'no' : arr.length,
-            'action' : ''
-        });
-        console.log(arr)
+    updateTable(){
+        API.getAllRules()
+        .then((response) => {
+            const arr = response.rule.map((item, key) => {
+                return ({
+                    'description' : item.description,
+                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
+                    'no' : key+1,
+                    'action' : {...item}
+                })
+            })
+            this.setState({
+                getRule : arr,
+                count : arr.length
+            })
+        })
     }
     toggleModal (id) {
         this.setState({
@@ -101,7 +105,7 @@ class RulesTable extends Component {
             }]
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} id={id} updateTable={this.updateTable}/>
+                    <DeleteModal updateTable={this.updateTable} isOpen={isOpen} toggle={this.toggleModal} id={id} />
                 <SearchCount count={count}/>
                 <Table
                     columns={columnsRules} 
