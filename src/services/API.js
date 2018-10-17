@@ -8,6 +8,27 @@ const headers = {
   'Accept': 'application/json',
   'x-access-token': token
 }
+/* GET ADMIN RULES */
+export const getAllRules = () =>
+  fetch(`${api}/rules/view`, { headers }) // default GET
+  .then(res => res.json())
+
+/* GET TOTAL RULES */
+export const getCountRules = () =>
+  fetch(`${api}/rules/count`, { headers }) // default GET
+  .then(res => res.json())
+
+//BINGWIT SETNREWRULES ADD
+export const addRules = (item) =>
+  fetch(`${api}/rules/create`, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(item)
+  }).then(res => res.json())
+
 //BINGWIT LOGIN
 export const login = (body) =>
   fetch(`${api}/users/login`, {
@@ -18,30 +39,12 @@ export const login = (body) =>
     },
     body: JSON.stringify(body)
   }).then(res => res.json())
-
+  
 export const logout = () => 
   fetch(`${api}/auth/logout`, {
     method: 'POST',
     headers
   }).then(res => res.json())
-
-
-// LOGIN
-// export const login = (body) =>
-//   fetch(`${api}/auth/login`, {
-//     method: 'POST',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(body)
-//   }).then(res => res.json())
-
-// export const logout = () => 
-//   fetch(`${api}/auth/logout`, {
-//     method: 'POST',
-//     headers
-//   }).then(res => res.json())
 
 // USER
 export const getAllUsers = () =>

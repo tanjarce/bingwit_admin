@@ -1,14 +1,38 @@
 import React, { Component } from 'react'
 import { Input , Row , Col , Button } from 'reactstrap'
 import '../../styles/style.css'
+import * as API from '../../services/API'
+
 class SetRules extends Component {
     constructor(props){
         super(props);
         this.state = {
-            toggle : true
+            toggle : true,
+            InputRules : ''
         }
+
+        this.handleChange = this.handleChange.bind(this);
         this.handleToggle = this.handleToggle.bind(this)
+        this.addRules = this.addRules.bind(this)
     }
+
+    handleChange(e){
+        e.preventDefault();
+        this.setState({[e.target.name] : e.target.value})
+    };
+
+    addRules(){
+        const values = this.state.InputRules
+        console.log(values)
+        API.addRules({
+            'description' : values
+        })
+
+        this.setState({
+            InputRules : ''
+        })
+    }
+    
     handleToggle(){
         const { toggle } = this.state;
         this.setState({
@@ -32,9 +56,9 @@ class SetRules extends Component {
         <Col xs='auto'>Set new Rules:</Col>
         <Col xs='auto'>
         <div className='d-inline-flex'>
-            <Input type='text' placeholder='Type something...'/>
+            <Input type='text' placeholder='Type something...' name='InputRules' value={this.state.InputRules} onChange={this.handleChange}/>
             <Button className='SR_cancel' onClick={this.handleToggle}>Cancel<span>X</span></Button>
-            <Button className='SR_add'>Add <span>&#10003;</span></Button>
+            <Button className='SR_add' onClick={this.addRules}>Add <span>&#10003;</span></Button>
         </div>
         </Col>
         </div>}
