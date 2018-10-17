@@ -11,11 +11,19 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { updateTable} = this.props
+        const { updateTable } = this.props
         const { id } = this.props
         API.deleteRules(id)
+        .then((response) => {
+            const error = response.err || ''
+            if (!error) {
+                updateTable();
+                return
+            } else {
+                this.props.onError(response.err.message)
+            }
+        })
         this.props.toggle()
-        updateTable();
     }
 
     render() {
