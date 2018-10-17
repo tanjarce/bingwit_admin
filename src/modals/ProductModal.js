@@ -11,6 +11,7 @@ import {
   ListGroupItem
 } from "reactstrap";
 
+import * as toast from '../toastify/helpers'
 import Modal from "../components/Modal";
 
 class ProductModal extends React.Component {
@@ -20,14 +21,16 @@ class ProductModal extends React.Component {
             alias_name_input: '',
             value: {
                 product_name: "",
-                alias_names: ""
+                alias_names: []
             }
         }
+        this.aliasInput = React.createRef()
         this.handleChange = this.handleChange.bind(this)
         this.addAlias = this.addAlias.bind(this)
         this.addProduct = this.addProduct.bind(this)
         this.saveEdit = this.saveEdit.bind(this)
-        
+        this.reset = this.reset.bind(this)
+        this.toggleOut = this.toggleOut.bind(this)    
     }
     addProduct () {
         const {value: {product_name, alias_names}} = this.state
@@ -36,6 +39,11 @@ class ProductModal extends React.Component {
     }
 
     saveEdit () {
+        toast.toastPop({
+            'message': 'successfully saved the changes',
+            'type': 'success',
+            'autoClose': '3000'
+        })
         console.log('save changes')
     }
 
@@ -59,7 +67,7 @@ class ProductModal extends React.Component {
     addAlias(e){
         e.preventDefault()
         const {alias_name_input, value: {alias_names}} = this.state
-        const arr = alias_names === '' ? [] : alias_names.split(',')
+        const arr = [...alias_names]
         
         if(alias_name_input.trim() !== ''){
             arr.unshift(alias_name_input)
@@ -67,21 +75,21 @@ class ProductModal extends React.Component {
                 alias_name_input: '',
                 value: {
                     ...prevState.value,
-                    alias_names: arr.join(',')
+                    alias_names: arr
                 }
-            }))
+            }), ()=>{
+                this.aliasInput.current.focus()
+            })
         }
     }
     deleteAlias(index){
         const { value: {alias_names}} = this.state
         const copyAlias = alias_names
-            .split(',')
             .filter((name, indx)=> {
                 if(indx !== index){
                     return name
                 }
             })
-            .join(',')
         
         this.setState((prevState)=>({
             value: {
@@ -91,15 +99,21 @@ class ProductModal extends React.Component {
         }))    
     }
     
-    // reset() {
-    //     this.setState({
-    //         alias_name_input: '',
-    //         value: {
-    //             product_name: "",
-    //             alias_names: ""
-    //         }
-    //     })
-    // }
+
+    toggleOut() {
+        this.props.toggle()
+        this.reset()
+    }
+
+    reset() {
+        this.setState({
+            alias_name_input: '',
+            value: {
+                product_name: "",
+                alias_names: ""
+            }
+        })
+    }
 
     componentWillReceiveProps(){
         const { userData, type } = this.props
@@ -119,9 +133,8 @@ class ProductModal extends React.Component {
     const {alias_name_input, value: { product_name, alias_names }} = this.state;
 
 
-    const list_alias = (alias_names !== '')
+    const list_alias = (alias_names.length > 0)
         ? alias_names
-        .split(',')    
         .map((name, index) => (
             <ListGroupItem key={index}>
                 <span>{name}</span>
@@ -159,7 +172,7 @@ class ProductModal extends React.Component {
     return (
       <Modal
         isOpen={isOpen}
-        toggle={toggle}
+        toggle={this.toggleOut}
         modalTitle={title}
         modalBody={
           <div>
@@ -189,6 +202,7 @@ class ProductModal extends React.Component {
                         placeholder="alias name"
                         value={alias_name_input}
                         onChange={this.handleChange}
+                        innerRef={this.aliasInput}
                     />
                     <InputGroupAddon addonType="append">
                     <Button onClick={this.addAlias}>Add Alias</Button>
@@ -212,7 +226,7 @@ class ProductModal extends React.Component {
             {
                 btn
             }
-            <Button color="secondary" onClick={toggle}>
+            <Button color="secondary" onClick={this.toggleOut}>
               Cancel
             </Button>
           </React.Fragment>

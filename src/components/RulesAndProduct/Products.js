@@ -29,7 +29,9 @@ class Products extends Component {
     setModal (data, type) {
         this.setState({
             modalType: type,
-            userData: {...data}
+            userData: {
+                ...data,
+            }
         }, () => {
             this.toggleModal()
         }
@@ -38,7 +40,10 @@ class Products extends Component {
     render() {
         const Products = products.map((product)=>{
             return (
-                {...product, 'action': {...product}}
+                {
+                    ...product, 
+                    'alias_names': product.alias_names.join(', '),
+                    'action': {...product}}
             )
         })
         const columnsRules = [{

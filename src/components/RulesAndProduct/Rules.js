@@ -83,12 +83,12 @@ class RulesTable extends Component {
         return (
                 <React.Fragment>
                     <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
-                <SearchCount/>
+                    <SearchCount/>
 
-                <Table
-                    columns={columnsRules} 
-                    data={arr} />
-                <SetRules/>
+                    <Table
+                        columns={columnsRules} 
+                        data={arr} />
+                    <SetRules/>
             </React.Fragment>
         );
     }
