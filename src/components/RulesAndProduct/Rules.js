@@ -4,21 +4,29 @@ import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
-
-import rules from '../dummyJSONdata/rules.json'
+import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-
 
 class RulesTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
             modalType: 'delete',
-            isOpen: false
+            isOpen: false,
+            getRule: []
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
     }
+    componentDidMount(){
+        API.getAllRules()
+        .then((response) => {
+            this.setState({
+                getRule : response.rule
+            })
+        })
+    }
+
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
@@ -32,17 +40,17 @@ class RulesTable extends Component {
         }
     )}
     render() {
-        const Rules = rules.map((rule)=>{
+        const { getRule } = this.state;
+        const arr = getRule.map((item, key) => {
             return ({
-                'number': rule.number,
-                'description': rule.description,
-                'date': rule.date,
-                'action': {...rule}
+                ...item,
+                'no' : key+1,
+                'action' : {...item}
             })
         })
         const columnsRules = [{
                 Header: 'No.',
-                accessor: 'number',
+                accessor: 'no',
                 width: 80
             },
             {
@@ -51,7 +59,7 @@ class RulesTable extends Component {
             },
             {
                 Header: 'Date Created',
-                accessor: 'date',
+                accessor: 'createdAt',
                 width: 180
             },{
                 Header: ' ',
@@ -74,11 +82,12 @@ class RulesTable extends Component {
         const { isOpen } = this.state
         return (
                 <React.Fragment>
-                <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
-                <SearchCount />
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+                <SearchCount/>
+
                 <Table
                     columns={columnsRules} 
-                    data={Rules} />
+                    data={arr} />
                 <SetRules/>
             </React.Fragment>
         );
