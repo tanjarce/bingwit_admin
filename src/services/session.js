@@ -4,7 +4,7 @@ const cookie = new Cookies();
 export const getToken = () => {
     const user = getUser()
     if (user)
-        return user.token
+        return user
     return null
 }
 
