@@ -17,7 +17,13 @@ export const getAllRules = () =>
 export const getCountRules = () =>
   fetch(`${api}/rules/count`, { headers }) // default GET
   .then(res => res.json())
-
+/* DELETE RULES */
+export const deleteRules = (id) =>
+  fetch(`${api}/rules/delete/${id}`, { 
+    method: 'PUT', 
+    headers })
+  .then(res => res.json())
+    
 //BINGWIT SETNREWRULES ADD
 export const addRules = (item) =>
   fetch(`${api}/rules/create`, {
@@ -30,7 +36,7 @@ export const addRules = (item) =>
   }).then(res => res.json())
 
 //BINGWIT LOGIN
-export const login = (body) =>
+export const login = (body, role='ADMIN') =>
   fetch(`${api}/users/login`, {
     method: 'POST',
     headers: {
