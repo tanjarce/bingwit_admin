@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, NavItem, NavLink } from 'reactstrap';
+import { Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 
 class Tabs extends React.Component {
@@ -11,7 +11,7 @@ class Tabs extends React.Component {
             return(
                 <NavItem key={index}>
                     <NavLink tag={RRNavLink} activeClassName="active" to={link.url} >
-                        {link.text}
+                        {link.text}{link.notif > 0 && <Badge color="danger ml-2">{link.notif}</Badge>}
                     </NavLink>
                 </NavItem>
             )
