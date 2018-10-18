@@ -29,7 +29,7 @@ class SetRules extends Component {
       }
     addRules(){
         const { updateTable } = this.props
-        const values = this.state.InputRules
+        const values = this.state.InputRules.trim()
         if(values === ''){
             Help.toastPop({message: 'Please Input something...', type: 'error'})
         }
