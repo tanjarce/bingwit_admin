@@ -5,7 +5,6 @@ export default class CBReactTablePagination extends Component {
   constructor (props) {
     super()
 
-    this.pageRow = this.pageRow.bind(this)
     this.getSafePage = this.getSafePage.bind(this)
     this.changePage = this.changePage.bind(this)
     this.applyPage = this.applyPage.bind(this)
@@ -13,19 +12,10 @@ export default class CBReactTablePagination extends Component {
     this.updateCurrentRows(props)    
 
     this.state = {
-      page: props.page,
-      tablePage : '',
-      tableRow : ''
+      page: props.page
     }
   }
-  componentDidMount(){
-    this.pageRow()
-  }
-  pageRow(page){
-    this.setState({
-        tablePage : this.props.pageSize,
-    })
-  }
+
   componentWillReceiveProps (nextProps) {
     this.setState({ page: nextProps.page })
 
@@ -52,14 +42,11 @@ export default class CBReactTablePagination extends Component {
 
   changePage (page) {
     page = this.getSafePage(page)
-    this.setState({ 
-      page,
-      tablePage : page + 1,
-      tableRow : this.props.pageSize
-    })
+    this.setState({ page })
     if (this.props.page !== page) {
       this.props.onPageChange(page)
     }
+
     this.updateCurrentRows(page)
   }
 
@@ -68,6 +55,8 @@ export default class CBReactTablePagination extends Component {
     const page = this.state.page
     this.changePage(page === '' ? this.props.page : page)
   }
+ 
+
   render () {
     const {
       // Computed
@@ -82,7 +71,7 @@ export default class CBReactTablePagination extends Component {
       canNext,
       onPageSizeChange
     } = this.props
-    const { tablePage, tableRow } = this.state
+
     return (
       <div className="pagi_main">
 
@@ -96,8 +85,8 @@ export default class CBReactTablePagination extends Component {
             onClick={() => {
               if (!canPrevious) return
               this.changePage(page - 1)}}
-              
-              disabled={!canPrevious}>
+
+            disabled={!canPrevious}>
 
             {this.props.previousText}
           </Button>
@@ -117,11 +106,7 @@ export default class CBReactTablePagination extends Component {
                       const page = val - 1
                       if (val === '') {
                         return this.setState({ page: val })}
-                      this.setState({ 
-                        page: this.getSafePage(page),
-                       })
-                       this.pageRow
-                      }}
+                      this.setState({ page: this.getSafePage(page) })}}
                     value={this.state.page === '' ? '' : this.state.page + 1}
                     onBlur={this.applyPage}
                     onKeyPress={e => {
@@ -136,16 +121,14 @@ export default class CBReactTablePagination extends Component {
                 <CustomInput
                   className='input'
                   type='select'
-                  onChange={e => {
-                    onPageSizeChange(Number(e.target.value))
-                    this.pageRow()
-                  }}
+                  onChange={e => onPageSizeChange(Number(e.target.value))}
                   value={pageSize}>
                   {pageSizeOptions.map((option, i) => (
                     <option key={i} value={option}>
                       {option} {this.props.rowsText}
                     </option>))}
                 </CustomInput>}
+                    
                     </Col>
                     <Col  xs='auto'>
 
@@ -163,11 +146,9 @@ export default class CBReactTablePagination extends Component {
           </Col>
           <Col></Col>
           </Row>
-          {console.log(" Page " + tablePage," Row " +  tableRow)}
           </div>
       </div>
     )
-
   }
 }
 

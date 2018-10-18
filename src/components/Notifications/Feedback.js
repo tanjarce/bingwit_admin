@@ -22,7 +22,7 @@ class Feedback extends Component {
     componentDidMount(){
         API.getFeedbacks()
         .then((response) => {
-            console.log(response)
+            //console.log(response)
         })
     }
 
