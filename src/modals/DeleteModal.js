@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import * as API from '../services/API';
 
+import * as Help from '../toastify/helpers'
 import Modal from '../components/Modal';
 
 class UserDeleteModal extends Component {
@@ -17,6 +18,8 @@ class UserDeleteModal extends Component {
         .then((response) => {
             const error = response.err || ''
             if (!error) {
+
+                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
                 updateTable();
                 return
             } else {

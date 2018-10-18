@@ -5,7 +5,6 @@ import showpassword from '../images/eye-solid.svg'
 import hidepassword from '../images/eye-slash-solid.svg'
 import logo from '../images/bingwit_logo.svg'
 import * as API from '../services/API'
-
 import LoadingButton from './ButtonSpinner'
 
 class LoginForm extends Component {
@@ -29,22 +28,34 @@ class LoginForm extends Component {
         this.toggleLoading()
         e.preventDefault()
         const values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        API.login(values)
+        
+        API.getUserType({
+            'username' : values.username
+        })
         .then((response) => {
-            this.toggleLoading()
-                const error = response.err || ''
-                if (error) {
-                    this.props.onError(response.err.message)
-                    return
-                } else {
-                    if(response.status === 'active'){
-                    this.props.onSuccess(response.token)
-                    }
-                    else{
-                    this.props.onError('This user has been suspend.')
-                    }
-                }     
-        })        
+            if(response.success){
+                if(response.type === 'admin'){
+                    API.login(values)
+                    .then((response) => {
+                     response.success 
+                     ? <div>
+                        {this.toggleLoading()}
+                        {this.props.onSuccess(response.token)}
+                        </div>
+                     : this.props.onError(response.error.message)
+                    })
+                }
+                
+                else{
+                    this.props.onError("Sorry. You must be admin to access this website.")
+                }
+            }
+            else
+            {
+                this.props.onError(response.error.message)
+            }
+        })
+           
     }
 
     toggleLoading () {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card } from 'reactstrap';
 import { withRouter, Redirect } from 'react-router-dom';
 import '../styles/Login.css'
-
+import * as Help from '../toastify/helpers'
 
 import * as Session from '../services/session'
 import LoginForm from './LoginForm.js'
@@ -85,6 +85,8 @@ class Login extends Component {
         console.log(response, role)
         Session.saveUser(response, role);
         this.navigateToHome()
+        Help.toastPop({message: 'Login successfully.', type: 'success'})
+
     }
     
     handleSignInFail (error) {

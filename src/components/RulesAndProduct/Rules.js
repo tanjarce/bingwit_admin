@@ -29,20 +29,28 @@ class RulesTable extends Component {
     updateTable(){
         API.getAllRules()
         .then((response) => {
-            console.log(response)
-            const arr = response.map((item, key) => {
-                return ({
-                    'description' : item.description,
-                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
-                    'no' : key+1,
-                    'action' : {...item}
+            const error = response.error || ''
+            if (!error) {
+                const arr = response.map((item, key) => {
+                    return ({
+                        'description' : item.description,
+                        'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
+                        'no' : key+1,
+                        'action' : {...item}
+                    })
                 })
-            })
-            this.setState({
-                getRule : arr,
-                count : arr.length
-            })
-        })
+                this.setState({
+                    getRule : arr,
+                    count : arr.length
+                })
+                return
+            } else {
+                console.log(response.error.message)
+            }
+
+
+           
+    })
     }
     toggleModal (id) {
         this.setState({

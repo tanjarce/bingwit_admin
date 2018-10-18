@@ -16,7 +16,7 @@ export const getAllRules = () =>
 /* GET TOTAL RULES */
 export const getCountRules = () =>
   fetch(`${api}/rules/count`, { headers }) // default GET
-  .then(res => res.json())
+  .then(res => {res.json()})
 /* DELETE RULES */
 export const deleteRules = (id) =>
   fetch(`${api}/rules/delete/${id}`, { 
@@ -35,7 +35,17 @@ export const addRules = (item) =>
     },
     body: JSON.stringify(item)
   }).then(res => res.json())
-
+/* VERIFY USER ADMIN */
+export const getUserType = (body) =>
+  fetch(`${api}/users/getUserType`, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(res => res.json())
+  
 //BINGWIT LOGIN
 export const login = (body) =>
   fetch(`${api}/users/login`, {
