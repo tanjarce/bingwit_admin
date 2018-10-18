@@ -29,7 +29,6 @@ class RulesTable extends Component {
     updateTable(){
         API.getAllRules()
         .then((response) => {
-<<<<<<< HEAD
             const error = response.error || ''
             if (!error) {
                 const arr = response.map((item, key) => {
@@ -39,15 +38,6 @@ class RulesTable extends Component {
                         'no' : key+1,
                         'action' : {...item}
                     })
-=======
-            console.log(response)
-            const arr = response.map((item, key) => {
-                return ({
-                    'description' : item.description,
-                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
-                    'no' : key+1,
-                    'action' : {...item}
->>>>>>> master
                 })
                 this.setState({
                     getRule : arr,

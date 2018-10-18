@@ -39,9 +39,6 @@ class Feedback extends Component {
     getFeedbacks () {
         API.getFeedbacks()
         .then((response) => {
-<<<<<<< HEAD
-            //console.log(response)
-=======
             console.log(response)
             if(response.success){
                 this.setState(()=>({
@@ -58,7 +55,6 @@ class Feedback extends Component {
             
         }).catch(error =>{
             console.log(error)
->>>>>>> master
         })
     }
 
