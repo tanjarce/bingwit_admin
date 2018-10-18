@@ -8,6 +8,9 @@ import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import Moment from 'react-moment';
 import 'moment-timezone';
+import * as Help from '../../toastify/helpers'
+
+
 
 class RulesTable extends Component {
     constructor(props) {
@@ -22,6 +25,7 @@ class RulesTable extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
+        this.deleteRule = this.deleteRule.bind(this)
     }
     componentDidMount(){
        this.updateTable();
@@ -56,6 +60,20 @@ class RulesTable extends Component {
         this.setState({
             isOpen: !this.state.isOpen,
             id : id
+        })
+    }
+    deleteRule (id) {
+        API.deleteRules(id)
+        .then((response) => {
+            const error = response.err || ''
+            if (!error) {
+
+                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
+                this.updateTable();
+                return
+            } else {
+                this.props.onError(response.err.message)
+            }
         })
     }
     setModal (data, type) {
@@ -100,7 +118,7 @@ class RulesTable extends Component {
             }]
         return (
                 <React.Fragment>
-                    <DeleteModal updateTable={this.updateTable} isOpen={isOpen} toggle={this.toggleModal} id={id} />
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} id={id} deleteRule={this.deleteRule}/>
                 <SearchCount count={count} text="Rules"/>
                 <Table
                     columns={columnsRules} 

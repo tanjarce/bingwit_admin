@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import * as API from '../services/API';
 
-import * as Help from '../toastify/helpers'
 import Modal from '../components/Modal';
 
 class UserDeleteModal extends Component {
@@ -12,20 +11,8 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { updateTable } = this.props
-        const { id } = this.props
-        API.deleteRules(id)
-        .then((response) => {
-            const error = response.err || ''
-            if (!error) {
-
-                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
-                updateTable();
-                return
-            } else {
-                this.props.onError(response.err.message)
-            }
-        })
+        const { id, deleteRule } = this.props
+        deleteRule(id)
         this.props.toggle()
     }
 
