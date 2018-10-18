@@ -24,26 +24,13 @@ class RulesTable extends Component {
         this.updateTable = this.updateTable.bind(this)
     }
     componentDidMount(){
-        API.getAllRules()
-        .then((response) => {
-            const arr = response.rule.map((item, key) => {
-                return ({
-                    'description' : item.description,
-                    'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
-                    'no' : key+1,
-                    'action' : {...item}
-                })
-            })
-            this.setState({
-                getRule : arr,
-                count : arr.length
-            })
-        })
+        this.updateTable()
     }
     updateTable(){
         API.getAllRules()
         .then((response) => {
-            const arr = response.rule.map((item, key) => {
+            console.log(response)
+            const arr = response.map((item, key) => {
                 return ({
                     'description' : item.description,
                     'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
@@ -106,7 +93,7 @@ class RulesTable extends Component {
         return (
                 <React.Fragment>
                     <DeleteModal updateTable={this.updateTable} isOpen={isOpen} toggle={this.toggleModal} id={id} />
-                <SearchCount count={count}/>
+                <SearchCount count={count} text="Rules"/>
                 <Table
                     columns={columnsRules} 
                     data={getRule} />

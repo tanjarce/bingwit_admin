@@ -1,29 +1,65 @@
 import React, { Component } from 'react'
-import TableSearch from '../TableSearch'
+import Tables from '../Tables'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import DeleteModal from '../../modals/DeleteModal'
-
-import feedback from '../dummyJSONdata/feedback.json'
+import SearchAndCount from '../SearchAndCount'
+// import feedback from '../dummyJSONdata/feedback.json'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-
+// import userDefafult from '../../assets/userDefault.svg'
+import moment from 'moment'
 
 class Feedback extends Component {
     constructor(props) {
         super(props)
         this.state = {
             modalType: 'delete',
-            isOpen: false
+            isOpen: false,
+            feedbacks: [],
+            feedbackCount: 0
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
+        this.getFeedbacks = this.getFeedbacks.bind(this)
+        this.getFeedbacksCount = this.getFeedbacksCount.bind(this)
     }
 
-    componentDidMount(){
+    getFeedbacksCount () {
+        API.getCountFeedbacks()
+        .then((response)=>{
+            // console.log(response)
+            if(response.success){
+                this.setState(()=>({
+                    feedbackCount: response.totalFeedbacks.count
+                }))
+            }
+        })
+    }
+
+    getFeedbacks () {
         API.getFeedbacks()
         .then((response) => {
             console.log(response)
+            if(response.success){
+                this.setState(()=>({
+                    feedbacks: [...response.feedback]
+                }), ()=>{
+                    this.getFeedbacksCount()        
+                    // const { feedbacks } = this.state
+                    // const keys = Object.keys(feedbacks[0])
+                    // console.log(keys)
+                    // console.log(feedbacks)
+                    // console.log(feedbacks[0]['Sent Date'])
+                })
+            }
+            
+        }).catch(error =>{
+            console.log(error)
         })
+    }
+
+    componentWillMount(){
+        this.getFeedbacks()
     }
 
     toggleModal () {
@@ -38,27 +74,47 @@ class Feedback extends Component {
             this.toggleModal()
         }
     )}
+
     render() {
-        const Feedback = feedback.map((feed)=>{
+        const { feedbacks } = this.state
+        const Feedback = feedbacks.map((feed)=>{
+            // console.log(feed)
+            // console.log(feed['Sent Date'])
+            // console.log(feed['User']['Account User'])
+
             return ({
-                'name': feed.name,
-                'feedback_description': feed.feedback_description,
-                'sent_date': feed.sent_date,
+                ...feed,
+                'Sent Date': moment(feed['Sent Date']).format('MMMM D, YYYY'),
                 'action': {...feed}
             })
         })
         const columnsRules = [{
                 Header: 'Account User',
-                accessor: 'name',
-                width: 300
+                accessor: 'User',
+                width: 300,
+                Cell: rowInfo =>  {
+                    const { value } = rowInfo
+                    return (
+                        <div>
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px', 'background': 'pink'}}>
+                                {/* <img 
+                                with="25px" height="25px" 
+                                src={value['image_url'] ? value['image_url'] : userDefafult} 
+                                className="m-auto"/> */}
+                            </span>
+                            {value['Account User']}
+                            
+                        </div>
+                    )
+                }
             },
             {
                 Header: 'Feedback Description',
-                accessor: 'feedback_description',
+                accessor: 'Feedback Description',
             },
             {
                 Header: 'Sent Date',
-                accessor: 'sent_date',
+                accessor: 'Sent Date',
                 width: 180
             },{
                 Header: ' ',
@@ -78,16 +134,17 @@ class Feedback extends Component {
                     )
             }]
         
-        const { isOpen } = this.state
+        const { isOpen, feedbackCount } = this.state
         return (
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
-                <TableSearch 
-                    columns={columnsRules} 
+                <SearchAndCount text="Feedback" count={feedbackCount}/>
+                <Tables
+                    columns={columnsRules}
                     data={Feedback} />
             </React.Fragment>
         )
-      }
+    }
 }
 
 export default Feedback
