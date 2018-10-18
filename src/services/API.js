@@ -98,9 +98,8 @@ export const create = (body) =>
 export const getFeedbacks = () =>
   fetch(`${api}/users/feedbacks?limit=${10}&offset=${0}`, { headers }) // default GET
   .then(res => {
-    // console.log(`Bearer ${token}`)
     return res.json()
-  })
+})
 
 export const getCountFeedbacks = () =>
   fetch(`${api}/users/feedbacks/total`, { headers }) // default GET
@@ -110,3 +109,12 @@ export const viewFeedback = (id) =>
   fetch(`${api}/users/feedbacks/${id}`, { headers }) // default GET
   .then(res => res.json())
 
+// GET REPORTS
+
+// export const getReports = () =>
+//   fetch(`${api}/users/reports?limit=${10}&offset=${0}`, { headers }) // default GET
+//   .then(res => {
+//     // console.log(token)
+//     return res.json()
+// })
+  

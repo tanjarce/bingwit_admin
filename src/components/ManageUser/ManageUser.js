@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect,withRouter, NavLink } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container } from 'reactstrap';
 
 import Tables from '../Tables'
-import Search from '../Search'
 import Banner from '../Banner';
 import CardUser from './CardUser'
+import SearchAndCount from '../SearchAndCount'
 import '../../styles/manage.css'
 
 import users from '../dummyJSONdata/users.json'
@@ -22,7 +22,6 @@ class ManageUser extends Component {
             modalType: 'delete',
             isOpen: false
         }
-        this.userView = this.userView.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.viewUser = this.viewUser.bind(this)
@@ -44,10 +43,6 @@ class ManageUser extends Component {
             this.toggleModal()
         }
     )}
-    userView(){
-        <Redirect to='/dashboard' />
-        console.log('VIEW');
-    }
     render() {
         const Users = users.map((user, index)=>{
             return ({
@@ -113,7 +108,7 @@ class ManageUser extends Component {
                     <Switch>
                         <Route exact path="/mnguser" render={()=>(
                             <React.Fragment>
-                                <Search />
+                                <SearchAndCount text="Users" count="10" />
                                 <Tables
                                     columns={columnsRules} 
                                     data={Users} />

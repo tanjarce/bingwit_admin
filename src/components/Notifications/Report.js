@@ -3,6 +3,7 @@ import TableSearch from '../TableSearch'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import DeleteModal from '../../modals/DeleteModal'
 
+// import * as API from '../../services/API'
 import reports from '../dummyJSONdata/reports.json'
 import dots from '../../images/show_more.svg'
 
@@ -16,6 +17,18 @@ class Report extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
     }
+    // componentWillMount(){
+    //     API.getReports()
+    //     .then((response) => {
+    //         if(response.success){
+    //             console.log(response)
+    //         }
+            
+    //     }).catch(error => {
+    //         console.log(error)
+    //     })
+    // }
+
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }

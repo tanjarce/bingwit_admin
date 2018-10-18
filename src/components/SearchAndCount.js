@@ -5,12 +5,12 @@ import TotalCount from './TotalCount'
 
 class SearchAndCount extends Component {
     render() {
-        const { count } = this.props
+        const { text, count } = this.props
         return (
                 <div className='d-flex'>
                 <Search />
                 <Col></Col>
-                <TotalCount count={count}/>      
+                <TotalCount text={text} count={count}/>      
                 </div>
         );
     }
