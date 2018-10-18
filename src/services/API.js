@@ -30,13 +30,14 @@ export const addRules = (item) =>
     method: 'POST',
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(item)
   }).then(res => res.json())
 
 //BINGWIT LOGIN
-export const login = (body, role='ADMIN') =>
+export const login = (body) =>
   fetch(`${api}/users/login`, {
     method: 'POST',
     headers: {

@@ -24,7 +24,7 @@ class RulesTable extends Component {
         this.updateTable = this.updateTable.bind(this)
     }
     componentDidMount(){
-        this.updateTable()
+       this.updateTable();
     }
     updateTable(){
         API.getAllRules()
