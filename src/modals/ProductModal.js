@@ -6,7 +6,6 @@ import {
   FormGroup,
   InputGroup,
   InputGroupAddon,
-  Card,
   ListGroup,
   ListGroupItem
 } from "reactstrap";
@@ -86,9 +85,7 @@ class ProductModal extends React.Component {
         const { value: {alias_names}} = this.state
         const copyAlias = alias_names
             .filter((name, indx)=> {
-                if(indx !== index){
-                    return name
-                }
+                return indx !== index && name
             })
         
         this.setState((prevState)=>({
@@ -129,7 +126,7 @@ class ProductModal extends React.Component {
     }
 
   render() {
-    const { isOpen, toggle, type, userData } = this.props;
+    const { isOpen, type } = this.props;
     const {alias_name_input, value: { product_name, alias_names }} = this.state;
 
 

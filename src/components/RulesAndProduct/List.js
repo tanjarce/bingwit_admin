@@ -31,7 +31,7 @@ class List extends Component {
     ]
     
     const { isOpen } = this.state
-    const { location: {pathname} } = this.props
+    // const { location } = this.props
 
     return (
         <div className='bottom-pad'>
