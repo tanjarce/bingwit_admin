@@ -82,6 +82,7 @@ class Login extends Component {
 
     // LOGIN METHODS
     handleSignInSuccess (response) {
+        console.log(response)
         Session.saveUser(response);
         this.navigateToHome()
         Help.toastPop({message: 'Login successfully.', type: 'success'})

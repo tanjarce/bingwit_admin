@@ -12,14 +12,11 @@ class LoginForm extends Component {
         super(props);
         
         this.state = {
-            id: '',
             loading: false,
             dropdownOpen: false,
             type: 'ADMIN',
             showPassword: false,
         }
-
-        this.saveId = this.saveId.bind(this)
         this.handleSignIn = this.handleSignIn.bind(this)
         this.toggleLoading = this.toggleLoading.bind(this)
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
@@ -58,13 +55,6 @@ class LoginForm extends Component {
             }
         })
            
-    }
-
-    saveId (id) {
-        console.log(id)
-        this.setState({
-            id : id
-        })
     }
     toggleLoading () {
         this.setState((oldState) => ({

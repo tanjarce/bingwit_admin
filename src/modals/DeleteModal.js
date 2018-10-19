@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import * as API from '../services/API';
 
-import * as Help from '../toastify/helpers'
 import Modal from '../components/Modal';
 
 class UserDeleteModal extends Component {
@@ -12,36 +11,26 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { updateTable } = this.props
-        const { id } = this.props
-        API.deleteRules(id)
-        .then((response) => {
-            const error = response.err || ''
-            if (!error) {
-
-                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
-                updateTable();
-                return
-            } else {
-                this.props.onError(response.err.message)
-            }
-        })
-        this.props.toggle()
+        const { selectedRow, deleteRule } = this.props
+        deleteRule(selectedRow.id)
+        this.props.toggle(null)
     }
 
     render() {
-        const { isOpen, toggle } = this.props
+        const { isOpen, toggle, selectedRow } = this.props
+        let message = selectedRow ? selectedRow.message : ''
+        console.log(message)
         return (
             <div>
                 <Modal
                     isOpen={isOpen}
-                    toggle={toggle}
+                    toggle={()=>{toggle(null)}}
                     modalTitle={`Delete`}
-                    modalBody={<div>{`Are you sure you want to delete this` }</div>}
+                    modalBody={<div>{message}</div>}
                     modalFooter={
                         <React.Fragment>
                             <Button color="primary" onClick={this.onConfirm}>Confirm</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={()=>{toggle(null)}}>Cancel</Button>
                         </React.Fragment>
                     }>
                 </Modal>
