@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 import Banner from '../Banner';
 import PieChartCard from './PieChartCard'
@@ -38,7 +40,7 @@ class Dashboard extends Component {
             <div className='bottom-pad'>
                 <Banner 
                     header="Dashboard"
-                    contents="Sample charts. See http://recharts.org/" 
+                    contents={<Moment format='MMMM D, YYYY' />} 
                 />
                 <Container>
                     <Row className="mb-5">

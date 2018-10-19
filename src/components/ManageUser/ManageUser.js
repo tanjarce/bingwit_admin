@@ -47,7 +47,9 @@ class ManageUser extends Component {
         const Users = users.map((user, index)=>{
             return ({
                 'id' : index,
+                'name': user.name,
                 'username': user.username,
+                'role': user.role,
                 'address': `${user.address.street}, ${user.address.suite}, ${user.address.city}`,
                 'ratings': user.ratings,
                 'account_status': (user.account_status)? 'active': 'inactive',
@@ -58,7 +60,12 @@ class ManageUser extends Component {
         const columnsRules = [{
                 Header: 'Account User',
                 accessor: 'username',
-                width: 300
+                width: 200
+            },
+            {
+                Header: 'Full Name',
+                accessor: 'name',
+                width: 200
             },
             {
                 Header: 'Address',
@@ -67,11 +74,15 @@ class ManageUser extends Component {
             {
                 accessor: 'ratings',
                 Header: 'Ratings',
-                width: 100
+                width: 120
             },{
                 Header: 'Account Status',
                 accessor: 'account_status',
-                width: 220
+                width: 150
+            },{
+                Header: 'Role',
+                accessor: 'role',
+                width: 120
             },{
                 Header: ' ',
                 accessor: 'action',

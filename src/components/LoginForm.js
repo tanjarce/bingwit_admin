@@ -17,7 +17,6 @@ class LoginForm extends Component {
             type: 'ADMIN',
             showPassword: false,
         }
-
         this.handleSignIn = this.handleSignIn.bind(this)
         this.toggleLoading = this.toggleLoading.bind(this)
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
@@ -40,7 +39,7 @@ class LoginForm extends Component {
                      response.success 
                      ? <div>
                         {this.toggleLoading()}
-                        {this.props.onSuccess(response.token)}
+                        {this.props.onSuccess(response)}
                         </div>
                      : this.props.onError(response.error.message)
                     })
@@ -57,7 +56,6 @@ class LoginForm extends Component {
         })
            
     }
-
     toggleLoading () {
         this.setState((oldState) => ({
             loading: !oldState.loading

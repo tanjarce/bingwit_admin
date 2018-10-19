@@ -5,10 +5,10 @@ const api = 'http://192.168.0.126:3000/api/v1';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.1.132:3000/api/v1';
 let token = Session.getToken()
-
+console.log(token)
 const headers = {
   'Accept': 'application/json',
-  'Authorization': `Bearer ${token}`
+  'Authorization': `Bearer ${token ? token.token : null}`
 }
 /* GET ADMIN RULES */
 export const getAllRules = () =>
@@ -31,9 +31,8 @@ export const addRules = (item) =>
   fetch(`${api}/rules/create`, {
     method: 'POST',
     headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+      ...headers,
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(item)
   }).then(res => res.json())
