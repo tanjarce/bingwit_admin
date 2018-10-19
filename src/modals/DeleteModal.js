@@ -11,24 +11,26 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { id, deleteRule } = this.props
-        deleteRule(id)
-        this.props.toggle()
+        const { selectedRow, deleteRule } = this.props
+        deleteRule(selectedRow.id)
+        this.props.toggle(null)
     }
 
     render() {
-        const { isOpen, toggle } = this.props
+        const { isOpen, toggle, selectedRow } = this.props
+        let message = selectedRow ? selectedRow.message : ''
+        console.log(message)
         return (
             <div>
                 <Modal
                     isOpen={isOpen}
-                    toggle={toggle}
+                    toggle={()=>{toggle(null)}}
                     modalTitle={`Delete`}
-                    modalBody={<div>{`Are you sure you want to delete this` }</div>}
+                    modalBody={<div>{message}</div>}
                     modalFooter={
                         <React.Fragment>
                             <Button color="primary" onClick={this.onConfirm}>Confirm</Button>
-                            <Button color="secondary" onClick={toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={()=>{toggle(null)}}>Cancel</Button>
                         </React.Fragment>
                     }>
                 </Modal>
