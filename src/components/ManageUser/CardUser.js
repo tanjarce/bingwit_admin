@@ -8,7 +8,8 @@ class CardUser extends Component {
 // USER DATA
     const user = {
             'name' : 'Alberto Aquino',
-            'role' : 'Fisherman',
+            'username' : 'Berto',
+            'role' : 'Producer',
             'src' : require('../../assets/ProfileUser.png'),
             'address' : '#2381 Bongkok St. Baguio City, Benguet',
             'province' : 'Benguet, Philippines',

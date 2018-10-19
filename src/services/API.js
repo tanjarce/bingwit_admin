@@ -1,12 +1,12 @@
 import * as Session from './session';
 // http://192.168.0.125:3000/api/v1/users/verify
 // const api = process.env.REACT_APP_URL_STAGING;
-const api = 'http://192.168.0.125:3000/api/v1';
-let token = Session.getToken()
+const api = 'http://192.168.0.126:3000/api/v1';
+let response = Session.getToken()
 
 const headers = {
   'Accept': 'application/json',
-  'Authorization': `Bearer ${token}`
+  'Authorization': `Bearer ${response.token}`
 }
 /* GET ADMIN RULES */
 export const getAllRules = () =>
@@ -31,7 +31,7 @@ export const addRules = (item) =>
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${response.token}`
     },
     body: JSON.stringify(item)
   }).then(res => res.json())

@@ -25,8 +25,8 @@
       left:0;
       width:60px;
       overflow:hidden;
-      -webkit-transition:all .1s ease;
-      transition:all .1s ease;
+      -webkit-transition:all .1s ease-in-out;
+      transition:all .1s ease-in-out;
       transform:translateZ(0) scale(1,1);
       -webkit-transform:translateZ(0) scale(1,1);
       z-index:998;
@@ -200,7 +200,7 @@
       margin: 0px;
       font-weight: 600;
       font-size: 15px;
-      color: #fff;
+      color: #7B8F9E;
       width: 190px;
     }
     li.head .rights {
@@ -263,7 +263,7 @@
         padding: 0;
       }
       .main-menu .bars > div {
-        background-color: #fff;
+        background-color: #7B8F9E;
         height: 2px;
         margin: 4px 0px;
       }

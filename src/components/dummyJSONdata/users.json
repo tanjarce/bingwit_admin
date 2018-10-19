@@ -4,6 +4,7 @@
       "name": "Leanne Graham",
       "username": "Bret",
       "email": "Sincere@april.biz",
+      "role": "Producer",
       "address": {
         "street": "Kulas Light",
         "suite": "Apt. 556",
@@ -23,6 +24,7 @@
       "name": "Ervin Howell",
       "username": "Antonette",
       "email": "Shanna@melissa.tv",
+      "role": "Producer",
       "address": {
         "street": "Victor Plains",
         "suite": "Suite 879",
@@ -42,6 +44,7 @@
       "name": "Clementine Bauch",
       "username": "Samantha",
       "email": "Nathan@yesenia.net",
+      "role": "Producer",
       "address": {
         "street": "Douglas Extension",
         "suite": "Suite 847",
@@ -61,6 +64,7 @@
       "name": "Patricia Lebsack",
       "username": "Karianne",
       "email": "Julianne.OConner@kory.org",
+      "role": "Producer",
       "address": {
         "street": "Hoeger Mall",
         "suite": "Apt. 692",
@@ -80,6 +84,7 @@
       "name": "Chelsey Dietrich",
       "username": "Kamren",
       "email": "Lucio_Hettinger@annie.ca",
+      "role": "Consumer",
       "address": {
         "street": "Skiles Walks",
         "suite": "Suite 351",
@@ -99,6 +104,7 @@
       "name": "Mrs. Dennis Schulist",
       "username": "Leopoldo_Corkery",
       "email": "Karley_Dach@jasper.info",
+      "role": "Consumer",
       "address": {
         "street": "Norberto Crossing",
         "suite": "Apt. 950",
@@ -118,6 +124,7 @@
       "name": "Kurtis Weissnat",
       "username": "Elwyn.Skiles",
       "email": "Telly.Hoeger@billy.biz",
+      "role": "Consumer",
       "address": {
         "street": "Rex Trail",
         "suite": "Suite 280",
@@ -137,6 +144,7 @@
       "name": "Nicholas Runolfsdottir V",
       "username": "Maxime_Nienow",
       "email": "Sherwood@rosamond.me",
+      "role": "Consumer",
       "address": {
         "street": "Ellsworth Summit",
         "suite": "Suite 729",
@@ -155,6 +163,7 @@
       "id": 9,
       "name": "Glenna Reichert",
       "username": "Delphine",
+      "role": "Admin",
       "address": {
         "street": "Dayna Park",
         "suite": "Suite 449",
@@ -173,6 +182,7 @@
       "id": 10,
       "name": "Clementina DuBuque",
       "username": "Moriah.Stanton",
+      "role": "Admin",
       "address": {
         "street": "Kattie Turnpike",
         "suite": "Suite 198",
