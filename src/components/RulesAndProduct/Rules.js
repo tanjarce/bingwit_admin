@@ -8,6 +8,11 @@ import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import Moment from 'react-moment';
 import 'moment-timezone';
+import * as Help from '../../toastify/helpers'
+import moment from 'moment'
+
+
+
 
 class RulesTable extends Component {
     constructor(props) {
@@ -17,11 +22,12 @@ class RulesTable extends Component {
             isOpen: false,
             getRule: [],
             count : '',
-            id : ''
+            selectedRow : null
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
+        this.deleteRule = this.deleteRule.bind(this)
     }
     componentDidMount(){
        this.updateTable();
@@ -34,7 +40,7 @@ class RulesTable extends Component {
                 const arr = response.map((item, key) => {
                     return ({
                         'description' : item.description,
-                        'createdAt' : <Moment format="MMMM D, YYYY">{item.createdAt}</Moment>,
+                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                         'no' : key+1,
                         'action' : {...item}
                     })
@@ -52,10 +58,27 @@ class RulesTable extends Component {
            
     })
     }
-    toggleModal (id) {
-        this.setState({
+    toggleModal (rowInfo) {
+        console.log(rowInfo)
+        this.setState((prevState)=>({
             isOpen: !this.state.isOpen,
-            id : id
+            selectedRow : rowInfo ? {...rowInfo} : prevState.selected
+        }), ()=>{
+            console.log(this.state.selectedRow)
+        })
+    }
+    deleteRule (id) {
+        API.deleteRules(id)
+        .then((response) => {
+            const error = response.err || ''
+            if (!error) {
+
+                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
+                this.updateTable();
+                return
+            } else {
+                this.props.onError(response.err.message)
+            }
         })
     }
     setModal (data, type) {
@@ -67,7 +90,7 @@ class RulesTable extends Component {
         }
     )}
     render() {
-        const { getRule, isOpen, count, id } = this.state;
+        const { getRule, isOpen, count, selectedRow } = this.state;
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -93,14 +116,22 @@ class RulesTable extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={() => this.toggleModal(rowInfo.value.id)}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => this.toggleModal(rowInfo.row)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }]
+
+        
+        const rowInfo = selectedRow 
+        ? { 
+            'message': `Are you sure you want to delete rule no. ${selectedRow.no}.`,
+            'id': selectedRow.action.id
+        } : null
+
         return (
                 <React.Fragment>
-                    <DeleteModal updateTable={this.updateTable} isOpen={isOpen} toggle={this.toggleModal} id={id} />
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteRule={this.deleteRule}/>
                 <SearchCount count={count} text="Rules"/>
                 <Table
                     columns={columnsRules} 

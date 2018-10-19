@@ -32,6 +32,8 @@ class Feedback extends Component {
                 this.setState(()=>({
                     feedbackCount: response.totalFeedbacks.count
                 }))
+            } else {
+                console.log()
             }
         })
     }
@@ -41,6 +43,7 @@ class Feedback extends Component {
         .then((response) => {
             console.log(response)
             if(response.success){
+                console.log(response)
                 this.setState(()=>({
                     feedbacks: [...response.feedback]
                 }), ()=>{
