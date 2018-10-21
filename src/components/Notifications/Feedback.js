@@ -16,26 +16,11 @@ class Feedback extends Component {
             modalType: 'delete',
             isOpen: false,
             feedbacks: [],
-            feedbackCount: 0
+            feedbackCount: 0,
+            selectedRow: null
         }
         this.toggleModal = this.toggleModal.bind(this)
-        this.setModal = this.setModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)
-        this.getFeedbacksCount = this.getFeedbacksCount.bind(this)
-    }
-
-    getFeedbacksCount () {
-        API.getCountFeedbacks()
-        .then((response)=>{
-            // console.log(response)
-            if(response.success){
-                this.setState(()=>({
-                    feedbackCount: response.totalFeedbacks.count
-                }))
-            } else {
-                console.log()
-            }
-        })
     }
 
     getFeedbacks () {
@@ -45,15 +30,9 @@ class Feedback extends Component {
             if(response.success){
                 console.log(response)
                 this.setState(()=>({
-                    feedbacks: [...response.feedback]
-                }), ()=>{
-                    this.getFeedbacksCount()        
-                    // const { feedbacks } = this.state
-                    // const keys = Object.keys(feedbacks[0])
-                    // console.log(keys)
-                    // console.log(feedbacks)
-                    // console.log(feedbacks[0]['Sent Date'])
-                })
+                    feedbacks: [...response.feedback.rows],
+                    feedbackCount: response.feedback.count
+                }))
             }
             
         }).catch(error =>{
@@ -61,37 +40,44 @@ class Feedback extends Component {
         })
     }
 
+    deleteFeedback (id) {
+        console.log(id)
+        // API.deleteRules(id)
+        // .then((response) => {
+        //     const error = response.err || ''
+        //     if (!error) {
+
+        //         Help.toastPop({message: 'Deleted successfully...', type: 'error'})
+        //         this.updateTable();
+        //         return
+        //     } else {
+        //         this.props.onError(response.err.message)
+        //     }
+        // })
+    }
+
     componentWillMount(){
         this.getFeedbacks()
     }
 
-    toggleModal () {
-        this.setState({isOpen: !this.state.isOpen})
+    toggleModal (rowInfo) {
+        this.setState((prevState)=>({
+            isOpen: !this.state.isOpen,
+            selectedRow : rowInfo ? {...rowInfo} : prevState.selectedRow
+        }))
     }
 
-    setModal (data, type) {
-        this.setState({
-            modalType: type,
-            userData: {...data}
-        }, () => {
-            this.toggleModal()
-        }
-    )}
-
     render() {
-        const { feedbacks } = this.state
+        const { feedbacks, isOpen, feedbackCount, selectedRow } = this.state
         const Feedback = feedbacks.map((feed)=>{
-            // console.log(feed)
-            // console.log(feed['Sent Date'])
-            // console.log(feed['User']['Account User'])
-
             return ({
                 ...feed,
                 'Sent Date': moment(feed['Sent Date']).format('MMMM D, YYYY'),
                 'action': {...feed}
             })
         })
-        const columnsRules = [{
+        const columnsRules = [
+            {
                 Header: 'Account User',
                 accessor: 'User',
                 width: 300,
@@ -119,7 +105,8 @@ class Feedback extends Component {
                 Header: 'Sent Date',
                 accessor: 'Sent Date',
                 width: 180
-            },{
+            },
+            {
                 Header: ' ',
                 accessor: 'action',
                 width: 50,
@@ -131,16 +118,20 @@ class Feedback extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={this.toggleModal}>Delete</DropdownItem>
+                                <DropdownItem onClick={this.toggleModal.rowInfo(rowInfo.value)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
-            }]
-        
-        const { isOpen, feedbackCount } = this.state
+            }
+        ]
+        const rowInfo = selectedRow 
+        ? { 
+            'message': `Are you sure you want to delete ${selectedRow['User Name']}'s feedback.`,
+            'id': selectedRow.id
+        } : null
         return (
             <React.Fragment>
-                <DeleteModal isOpen={isOpen} toggle={this.toggleModal}/>
+                <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteItem={this.deleteFeedback} />
                 <SearchAndCount text="Feedback" count={feedbackCount}/>
                 <Tables
                     columns={columnsRules}

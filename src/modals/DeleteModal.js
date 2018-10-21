@@ -11,8 +11,8 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { selectedRow, deleteRule } = this.props
-        deleteRule(selectedRow.id)
+        const { selectedRow, deleteItem } = this.props
+        deleteItem(selectedRow.id)
         this.props.toggle(null)
     }
 

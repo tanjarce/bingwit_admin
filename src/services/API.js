@@ -107,17 +107,13 @@ export const create = (body) =>
 // GET FEEDBACKS
 
 export const getFeedbacks = () =>
-  fetch(`${api}/users/feedbacks?limit=${10}&offset=${0}`, { headers }) // default GET
+  fetch(`${api}/feedbacks?limit=${10}&offset=${0}`, { headers }) // default GET
   .then(res => {
     return res.json()
 })
 
-export const getCountFeedbacks = () =>
-  fetch(`${api}/users/feedbacks/total`, { headers }) // default GET
-  .then(res => res.json())
-
 export const viewFeedback = (id) =>
-  fetch(`${api}/users/feedbacks/${id}`, { headers }) // default GET
+  fetch(`${api}/feedbacks/${id}`, { headers }) // default GET
   .then(res => res.json())
 
 // GET REPORTS

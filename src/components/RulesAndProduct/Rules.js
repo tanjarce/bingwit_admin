@@ -25,13 +25,13 @@ class RulesTable extends Component {
             selectedRow : null
         }
         this.toggleModal = this.toggleModal.bind(this)
-        this.setModal = this.setModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
         this.deleteRule = this.deleteRule.bind(this)
     }
     componentDidMount(){
        this.updateTable();
     }
+
     updateTable(){
         API.getAllRules()
         .then((response) => {
@@ -53,16 +53,14 @@ class RulesTable extends Component {
             } else {
                 console.log(response.error.message)
             }
-
-
-           
-    })
+        })
     }
+
     toggleModal (rowInfo) {
         console.log(rowInfo)
         this.setState((prevState)=>({
             isOpen: !this.state.isOpen,
-            selectedRow : rowInfo ? {...rowInfo} : prevState.selected
+            selectedRow : rowInfo ? {...rowInfo} : prevState.selectedRow
         }), ()=>{
             console.log(this.state.selectedRow)
         })
@@ -81,14 +79,7 @@ class RulesTable extends Component {
             }
         })
     }
-    setModal (data, type) {
-        this.setState({
-            modalType: type,
-            userData: {...data}
-        }, () => {
-            this.toggleModal()
-        }
-    )}
+    
     render() {
         const { getRule, isOpen, count, selectedRow } = this.state;
         const columnsRules = [{
@@ -121,22 +112,19 @@ class RulesTable extends Component {
                         </UncontrolledDropdown>
                     )
             }]
-
-        
         const rowInfo = selectedRow 
         ? { 
             'message': `Are you sure you want to delete rule no. ${selectedRow.no}.`,
             'id': selectedRow.action.id
         } : null
-
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteRule={this.deleteRule}/>
-                <SearchCount count={count} text="Rules"/>
-                <Table
-                    columns={columnsRules} 
-                    data={getRule} />
-                <SetRules updateTable={this.updateTable}/>
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteItem={this.deleteRule}/>
+                    <SearchCount count={count} text="Rules"/>
+                    <Table
+                        columns={columnsRules} 
+                        data={getRule} />
+                    <SetRules updateTable={this.updateTable}/>
             </React.Fragment>
         );
     }
