@@ -17,10 +17,6 @@
     border-left: 0 !important;
     border-right: 0 !important;
 }
-.rt-th:nth-child(3),
-.rt-td:nth-child(3){
-    text-align: center !important;
-}
 .rt-td,
 .rt-th{
     padding-left: 20px !important;

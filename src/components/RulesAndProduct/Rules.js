@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import moment from 'moment'
+import 'moment-timezone'
+
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-import Moment from 'react-moment';
-import 'moment-timezone';
 import * as Help from '../../toastify/helpers'
-import moment from 'moment'
 
 
 
@@ -27,7 +27,7 @@ class RulesTable extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
-        this.deleteRule = this.deleteRule.bind(this)
+        this.deleteItem = this.deleteItem.bind(this)
     }
     componentDidMount(){
        this.updateTable();
@@ -67,7 +67,7 @@ class RulesTable extends Component {
             console.log(this.state.selectedRow)
         })
     }
-    deleteRule (id) {
+    deleteItem (id) {
         API.deleteRules(id)
         .then((response) => {
             const error = response.err || ''
@@ -131,7 +131,7 @@ class RulesTable extends Component {
 
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteRule={this.deleteRule}/>
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteItem={this.deleteItem}/>
                 <SearchCount count={count} text="Rules"/>
                 <Table
                     columns={columnsRules} 

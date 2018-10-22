@@ -36,6 +36,7 @@ class LoginForm extends Component {
                 if(response.type === 'admin'){
                     API.login(values)
                     .then((response) => {
+                        
                      response.success 
                      ? <div>
                         {this.toggleLoading()}

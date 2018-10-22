@@ -1,9 +1,9 @@
 import * as Session from './session';
 // http://192.168.0.125:3000/api/v1/users/verify
 // const api = process.env.REACT_APP_URL_STAGING;
-const api = 'http://192.168.0.126:3000/api/v1';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.1.132:3000/api/v1';
+const api = 'http://192.168.0.126:3000/api/v1';
 let token = Session.getToken()
 console.log(token)
 const headers = {
@@ -18,7 +18,32 @@ export const getAllRules = () =>
 /* GET TOTAL RULES */
 export const getCountRules = () =>
   fetch(`${api}/rules/count`, { headers }) // default GET
-  .then(res => {res.json()})
+  .then(res => res.json())
+
+/* GET USER ID */
+export const getUserId = (id) =>
+  fetch(`${api}/users/${id}`, { 
+  headers }) // default GET
+  .then(res => res.json())
+
+/* GET ALL USERS */
+export const getAllUser = () =>
+  fetch(`${api}/users`, { 
+  headers }) // default GET
+  .then(res => res.json())
+
+/* ADMIN CHANGE PASSWORD */
+export const changePassword = (body) =>
+  fetch(`${api}/users/changePassword`, {
+    method: 'PUT',
+    headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(res => res.json())
+  
+
 /* DELETE RULES */
 export const deleteRules = (id) =>
   fetch(`${api}/rules/delete/${id}`, { 
@@ -36,6 +61,7 @@ export const addRules = (item) =>
     },
     body: JSON.stringify(item)
   }).then(res => res.json())
+
 /* VERIFY USER ADMIN */
 export const getUserType = (body) =>
   fetch(`${api}/users/getUserType`, {
