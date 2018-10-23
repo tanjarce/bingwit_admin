@@ -1,34 +1,38 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
-import {Switch, Redirect, Route, NavLink } from 'react-router-dom'
+import {Switch, Redirect, Route, NavLink, withRouter } from 'react-router-dom'
 import PrimaryFact from './PrimaryFact'
-import Biography from './Biography'
 import * as API from '../../services/API'
 
 class CardUser extends Component {
     constructor(props){
         super(props)
         this.state = {
-            userInfo : []
+            userInfo : ''
         }
     }
     componentDidMount(){
         const id = this.props.match.params.id
+        console.log(id)
+        console.log('LOAD')
         API.getUserId(id)
         .then((response) => {
+            response.success === 'false' ?
+            alert(response.error.message)
+            :
             this.setState({
                 userInfo : response.user
             })
         })
     }
     render() {
-        const { userInfo } = this.state;
+    const { userInfo } = this.state;
     console.log(userInfo)
     const user = {
             'name' : userInfo.full_name,
             'username' : userInfo.username,
             'role' : userInfo.type,
-            'src' : userInfo.image_url === null ? require('../../assets/NoImage.png') : require('../../assets/ProfileUser.png'),
+            'src' : userInfo.image_url === null ? require('../../assets/NoImage.png') : userInfo.image_url,
             'address' : userInfo.address,
             'contact' :  userInfo.contact_number,
             'status' :  userInfo.status,
@@ -39,50 +43,42 @@ class CardUser extends Component {
         };
         return (
             <div>
-                <Col xs='12' md='12'>
-            <div className='main-body'>
-            <NavLink to='/mnguser' activeClassName='gback'>
-                    &lang; &nbsp; Go Back
-            </NavLink>
-            </div>
-                </Col>
-
-            <Row className='main'>
-
-            <Col xs='12' md='5' lg='3'>
-            <div className='main-card'>
-                <div className='card-body'>
-                    <img className='card-img' src={user.src} alt={user.full_name}/>
-                </div>
-                <div className='card-footer'>
-                    <ul>
-                        <li>Informations</li>
-                        <li><NavLink to={'/mnguser/user/' + userInfo.id} className='link'>Primary Facts</NavLink></li>
-                        <li><NavLink to={'/mnguser/user/' +'bio/'+ userInfo.id } className='link'>Biography</NavLink></li>
-                    </ul>
-                </div>
-            </div>
+            <Col xs='12' md='12'>
+        <div className='main-body'>
+        <NavLink to='/mnguser' activeClassName='gback'>
+                &lang; &nbsp; Go Back
+        </NavLink>
+        </div>
             </Col>
 
-            <Col xs='12' md='7' lg='9'>
-            <div className='main-side'>
-            <Switch>
-                <Route path={'/mnguser/user/' + userInfo.id} render={()=>(
-                    <PrimaryFact user={user}/>
-                )}/>
-                <Route path={'/mnguser/user/' +'bio/'+ userInfo.id } render={()=>(
-                    <Biography user={user}/>
-                )}/>
-                <Route render={()=>(
-                    <Redirect to={'/mnguser/user/' + userInfo.id} />
-                )}/>
-            </Switch>
-            </div>
-            </Col>
+        <Row className='main'>
 
-            </Row>
-
+        <Col xs='12' md='5' lg='3'>
+        <div className='main-card'>
+            <div className='card-body'>
+                <img className='card-img' src={user.src} alt={user.full_name}/>
             </div>
+            <div className='card-footer'>
+                <ul>
+                    <li>Informations</li>
+                    <li><NavLink to={'/mnguser/' + userInfo.id} className='link'>Primary Facts</NavLink></li>
+                </ul>
+            </div>
+        </div>
+        </Col>
+        <Col xs='12' md='7' lg='9'>
+        <div className='main-side'>
+        <Switch>
+            <Route path={'/mnguser/' + userInfo.id} render={()=>(
+                <PrimaryFact user={user}/>
+            )}/> 
+        </Switch>
+        </div>
+        </Col>
+
+        </Row>
+
+        </div> 
         );
     }
 }

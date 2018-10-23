@@ -3,7 +3,6 @@ import * as Session from './session';
 // const api = 'http://192.168.1.132:3000/api/v1';
 const api = 'http://192.168.0.126:3000/api/v1';
 let token = Session.getToken()
-
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': `Bearer ${token ? token.token : null}`
@@ -23,12 +22,7 @@ function toFormURLEncode (data) {
 
 /* GET ADMIN RULES */
 export const getAllRules = () =>
-  fetch(`${api}/rules?offset=${0}&limit=${100}`, { headers }) // default GET
-  .then(res => res.json())
-
-/* GET TOTAL RULES */
-export const getCountRules = () =>
-  fetch(`${api}/rules/count`, { headers }) // default GET
+  fetch(`${api}/rules?offset=0&limit=999`, { headers }) // default GET
   .then(res => res.json())
 
 /* GET USER ID */
@@ -164,14 +158,14 @@ export const viewFeedback = (id) =>
 
 // get all product types
 export const getAllProductTypes = () =>
-  fetch(`${api}/product_type?offset=${0}&limit=${100}`, { headers }) // default GET
+  fetch(`${api}/product_types?offset=${0}&limit=${100}`, { headers }) // default GET
     .then(res => res.json())
 
 //  add product type
 export const addProductType = (data) =>{
   console.log(data)
 
-  return fetch(`${api}/product_type`, {
+  return fetch(`${api}/product_types`, {
     method: 'POST', 
     body: toFormURLEncode(data),
     headers,
@@ -180,7 +174,7 @@ export const addProductType = (data) =>{
 }
 
 export const deleteProductType = (id) =>
-  fetch(`${api}/product_type/${id}`, { 
+  fetch(`${api}/product_types/${id}`, { 
     method: 'DELETE', 
     headers })
   .then(res => res.json())
@@ -189,5 +183,5 @@ export const deleteProductType = (id) =>
 
 //get all alias name
 export const getAlias = () =>
-  fetch(`${api}/product_type/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { headers }) // default GET
+  fetch(`${api}/product_types/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { headers }) // default GET
     .then(res => res.json())

@@ -36,7 +36,7 @@ class RulesTable extends Component {
     updateTable(){
         API.getAllRules()
         .then((response) => {
-            const error = response.error || ''
+          const error = response.error || ''
             if (!error) {
                 const arr = response.rule.rows.map((item, key) => {
                     return ({
