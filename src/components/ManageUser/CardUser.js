@@ -63,7 +63,6 @@ class CardUser extends Component {
                 </div>
             </div>
             </Col>
-
             <Col xs='12' md='7' lg='9'>
             <div className='main-side'>
             <Switch>
