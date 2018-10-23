@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
-import Moment from 'react-moment';
-import 'moment-timezone';
 
 import Banner from '../Banner';
 import PieChartCard from './PieChartCard'
 import TopListCard from './TopListCard'
 import LineChartCard from './LineChartCard'
+import moment from 'moment'
 
 
 class Dashboard extends Component {
@@ -40,7 +39,7 @@ class Dashboard extends Component {
             <div className='bottom-pad'>
                 <Banner 
                     header="Dashboard"
-                    contents={<Moment format='MMMM D, YYYY' />} 
+                    contents={moment().format('MMMM D, YYYY')} 
                 />
                 <Container>
                     <Row className="mb-5">

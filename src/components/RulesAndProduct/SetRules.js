@@ -37,18 +37,14 @@ class SetRules extends Component {
             API.addRules({
                 'description' : values})
                 .then((response) => {
-                    const error = response.err || ''
-                    if (!error) {
+                    if (response.success) {
                         this.setState({
                             InputRules : ''
                         })
                         Help.toastPop({message: 'New rule added.', type: 'success'})
                         updateTable();
-                        return
-                    } else {
-                        this.props.onError(response.err.message)
                     }
-                })
+                }).catch(err => console.log(err))
         }
         
     }

@@ -10,14 +10,14 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { selectedRow, deleteItem } = this.props
-        deleteItem(selectedRow.id)
+        const { deleteFunc } = this.props
+        deleteFunc()
         this.props.toggle(null)
     }
 
     render() {
-        const { isOpen, toggle, selectedRow } = this.props
-        let message = selectedRow ? selectedRow.message : ''
+        const { isOpen, toggle, message } = this.props
+
         return (
             <div>
                 <Modal

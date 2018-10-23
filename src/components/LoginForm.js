@@ -36,24 +36,27 @@ class LoginForm extends Component {
                 if(response.type === 'admin'){
                     API.login(values)
                     .then((response) => {
-                        
-                     response.success 
-                     ? <div>
-                        {this.toggleLoading()}
-                        {this.props.onSuccess(response)}
-                        </div>
-                     : this.props.onError(response.error.message)
+                        if(response.success){
+                            this.toggleLoading() 
+                            this.props.onSuccess(response) 
+                        } else {
+                            this.props.onError(response.error.message)
+                        }
                     })
                 }
-                
                 else{
+                    this.toggleLoading()
                     this.props.onError("Sorry. You must be admin to access this website.")
                 }
             }
             else
             {
+                this.toggleLoading()
                 this.props.onError(response.error.message)
             }
+        }).catch(err => {
+            this.toggleLoading()
+            console.log(err)
         })
            
     }
