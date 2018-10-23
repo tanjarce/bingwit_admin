@@ -41,7 +41,6 @@ class Feedback extends Component {
     }
 
     deleteFeedback (id) {
-        console.log(id)
         // API.deleteRules(id)
         // .then((response) => {
         //     const error = response.err || ''
@@ -91,7 +90,7 @@ class Feedback extends Component {
                                 src={value['image_url'] ? value['image_url'] : userDefafult} 
                                 className="m-auto"/> */}
                             </span>
-                            {value['Account User']}
+                            {value.full_name}
                             
                         </div>
                     )
@@ -118,7 +117,7 @@ class Feedback extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={this.toggleModal.rowInfo(rowInfo.value)}>Delete</DropdownItem>
+                                <DropdownItem onClick={console.log('hi')}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import * as API from '../services/API';
 
 import Modal from '../components/Modal';
 
@@ -11,15 +10,14 @@ class UserDeleteModal extends Component {
     }
     
     onConfirm() {
-        const { selectedRow, deleteItem } = this.props
-        deleteItem(selectedRow.id)
+        const { deleteFunc } = this.props
+        deleteFunc()
         this.props.toggle(null)
     }
 
     render() {
-        const { isOpen, toggle, selectedRow } = this.props
-        let message = selectedRow ? selectedRow.message : ''
-        console.log(message)
+        const { isOpen, toggle, message } = this.props
+
         return (
             <div>
                 <Modal

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import moment from 'moment'
+import 'moment-timezone'
+
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-import Moment from 'react-moment';
-import 'moment-timezone';
 import * as Help from '../../toastify/helpers'
-import moment from 'moment'
 
 
 
@@ -28,6 +28,7 @@ class RulesTable extends Component {
         this.updateTable = this.updateTable.bind(this)
         this.deleteRule = this.deleteRule.bind(this)
     }
+    
     componentDidMount(){
        this.updateTable();
     }
@@ -37,17 +38,17 @@ class RulesTable extends Component {
         .then((response) => {
             const error = response.error || ''
             if (!error) {
-                const arr = response.map((item, key) => {
+                const arr = response.rule.rows.map((item, key) => {
                     return ({
+                        'no' : key+1,
                         'description' : item.description,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                        'no' : key+1,
-                        'action' : {...item}
+                        'action' : {...item, 'no': key+1}
                     })
                 })
                 this.setState({
-                    getRule : arr,
-                    count : arr.length
+                    ruleRow : arr,
+                    count : response.rule.count
                 })
                 return
             } else {
@@ -57,31 +58,28 @@ class RulesTable extends Component {
     }
 
     toggleModal (rowInfo) {
-        console.log(rowInfo)
         this.setState((prevState)=>({
             isOpen: !this.state.isOpen,
             selectedRow : rowInfo ? {...rowInfo} : prevState.selectedRow
-        }), ()=>{
-            console.log(this.state.selectedRow)
-        })
+        }))
     }
-    deleteRule (id) {
-        API.deleteRules(id)
-        .then((response) => {
-            const error = response.err || ''
-            if (!error) {
 
-                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
+    deleteRule () {
+        const { selectedRow } = this.state
+
+        API.deleteRules(selectedRow.id)
+        .then((response) => {
+            if (response.success) {
+                Help.toastPop({message: `Rule no. ${selectedRow.no} deleted.`, type: 'error'})
                 this.updateTable();
-                return
-            } else {
-                this.props.onError(response.err.message)
             }
+        }).catch(err => {
+            Help.toastPop({message: err , type: 'error'})
         })
     }
     
     render() {
-        const { getRule, isOpen, count, selectedRow } = this.state;
+        const { ruleRow, isOpen, count, selectedRow } = this.state;
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -107,24 +105,20 @@ class RulesTable extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={() => this.toggleModal(rowInfo.row)}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => this.toggleModal(rowInfo.value)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }]
-        const rowInfo = selectedRow 
-        ? { 
-            'message': `Are you sure you want to delete rule no. ${selectedRow.no}.`,
-            'id': selectedRow.action.id
-        } : null
+        const message = selectedRow ? `Are you sure you want to delete rule no. ${selectedRow.no}.` : ''
         return (
                 <React.Fragment>
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteItem={this.deleteRule}/>
-                    <SearchCount count={count} text="Rules"/>
-                    <Table
-                        columns={columnsRules} 
-                        data={getRule} />
-                    <SetRules updateTable={this.updateTable}/>
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
+                <SearchCount count={count} text="Rules"/>
+                <Table
+                    columns={columnsRules} 
+                    data={ruleRow} />
+                <SetRules updateTable={this.updateTable}/>
             </React.Fragment>
         );
     }

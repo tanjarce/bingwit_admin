@@ -7,8 +7,8 @@ import Banner from '../Banner';
 import CardUser from './CardUser'
 import SearchAndCount from '../SearchAndCount'
 import '../../styles/manage.css'
+import * as API from '../../services/API'
 
-import users from '../dummyJSONdata/users.json'
 import dots from '../../images/show_more.svg'
 import SuspensionModal from '../../modals/SuspensionModal'
 import UserDeleteModal from '../../modals/UserDeleteModal'
@@ -20,7 +20,10 @@ class ManageUser extends Component {
         super(props)
         this.state = {
             modalType: 'delete',
-            isOpen: false
+            isOpen: false,
+            dataUsers : [],
+            count : '',
+            userInfo : []
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
@@ -30,11 +33,24 @@ class ManageUser extends Component {
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
-    viewUser (){
-        console.log(this.props)
-        this.props.history.push('/mnguser/user')
+    viewUser (id){
+        console.log(id)
+        this.props.history.push(`/mnguser/user/${id}`)
+        
     }
+    componentDidMount(){
+        API.getAllUser()
+        .then((response) => {
+            response.success === true ?
 
+            this.setState({
+                dataUsers : response.users.rows,
+                count : response.users.count,
+            })
+            :
+            console.log(response.error.message)
+        })
+    }
     setModal (data, type) {
         this.setState({
             modalType: type,
@@ -44,15 +60,17 @@ class ManageUser extends Component {
         }
     )}
     render() {
-        const Users = users.map((user, index)=>{
+        const { dataUsers, count, userInfo } = this.state;
+        
+        const Users = dataUsers.map((user)=>{
             return ({
-                'id' : index,
-                'name': user.name,
+                'id' : user.id,
+                'name': user.full_name,
                 'username': user.username,
-                'role': user.role,
-                'address': `${user.address.street}, ${user.address.suite}, ${user.address.city}`,
-                'ratings': user.ratings,
-                'account_status': (user.account_status)? 'active': 'inactive',
+                'role': user.type,
+                'address': user.address,
+                'ratings': user.rating === null ? '- -' : user.rating,
+                'account_status': user.status,
                 'action': {...user}
             })
         })
@@ -75,15 +93,13 @@ class ManageUser extends Component {
                 accessor: 'ratings',
                 Header: 'Ratings',
                 width: 120
-            },{
+            },
+            {
                 Header: 'Account Status',
                 accessor: 'account_status',
                 width: 150
-            },{
-                Header: 'Role',
-                accessor: 'role',
-                width: 120
-            },{
+            },
+            {
                 Header: ' ',
                 accessor: 'action',
                 width: 50,
@@ -94,7 +110,7 @@ class ManageUser extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={this.viewUser}>View</DropdownItem>
+                            <DropdownItem onClick={() => {this.viewUser(rowInfo.value.id)}}>View</DropdownItem>
                             <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem>
                             <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
                         </DropdownMenu>
@@ -119,15 +135,13 @@ class ManageUser extends Component {
                     <Switch>
                         <Route exact path="/mnguser" render={()=>(
                             <React.Fragment>
-                                <SearchAndCount text="Users" count="10" />
+                                <SearchAndCount text="Users" count={count}/>
                                 <Tables
                                     columns={columnsRules} 
                                     data={Users} />
                             </React.Fragment>
                         )}/>
-                        <Route path="/mnguser/user" render={()=>(
-                            <CardUser />
-                        )}/>
+                        <Route path="/mnguser/user/:id" component={CardUser}/>
                     </Switch>
                 </Container>
             </div>

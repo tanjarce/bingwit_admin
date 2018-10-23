@@ -12,6 +12,8 @@ import {
 
 import * as toast from '../toastify/helpers'
 import Modal from "../components/Modal";
+import * as API from '../services/API'
+import * as Help from '../toastify/helpers'
 
 class ProductModal extends React.Component {
     constructor(props) {
@@ -32,9 +34,20 @@ class ProductModal extends React.Component {
         this.toggleOut = this.toggleOut.bind(this)    
     }
     addProduct () {
-        const {value: {product_name, alias_names}} = this.state
-        console.log(product_name, alias_names)   
+        const {value: {product_name}} = this.state
+        this.props.getAllProduct()
         // API call here
+        API.addProductType({'name': product_name})
+            .then(res => {
+                if(res.success){
+                    this.toggleOut()
+                    this.props.getAllProduct()
+                    Help.toastPop({message: 'Product added successfully', type: 'success'})
+                }
+
+            })
+            .catch(err => console.log(err))
+    
     }
 
     saveEdit () {

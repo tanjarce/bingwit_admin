@@ -10,6 +10,7 @@ class Tables extends Component {
     
     return(
           <ReactTable
+          noDataText="No Database Found!"
           PaginationComponent={Pagination}
           data={data}
           columns={columns}
