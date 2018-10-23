@@ -82,7 +82,6 @@ export default class CBReactTablePagination extends Component {
       canNext,
       onPageSizeChange
     } = this.props
-    const { tablePage, tableRow } = this.state
     return (
       <div className="pagi_main">
 
@@ -110,6 +109,7 @@ export default class CBReactTablePagination extends Component {
               {/* Page Input */}
               {showPageJump && 
                   <CustomInput
+                    id=''
                     className='input'
                     type='text'
                     onChange={e => {
@@ -120,8 +120,8 @@ export default class CBReactTablePagination extends Component {
                       this.setState({ 
                         page: this.getSafePage(page),
                        })
-                       this.pageRow
-                      }}
+                       this.pageRow}}
+                       
                     value={this.state.page === '' ? '' : this.state.page + 1}
                     onBlur={this.applyPage}
                     onKeyPress={e => {
@@ -134,6 +134,7 @@ export default class CBReactTablePagination extends Component {
             {/* Page Select */}
             {showPageSizeOptions && 
                 <CustomInput
+                  id=''
                   className='input'
                   type='select'
                   onChange={e => {
@@ -163,7 +164,7 @@ export default class CBReactTablePagination extends Component {
           </Col>
           <Col></Col>
           </Row>
-          {console.log(" Page " + tablePage," Row " +  tableRow)}
+          {/* {console.log(" Page " + tablePage," Row " +  tableRow)} */}
           </div>
       </div>
     )

@@ -34,8 +34,7 @@ class ManageUser extends Component {
         this.setState({isOpen: !this.state.isOpen})
     }
     viewUser (id){
-        console.log(id)
-        this.props.history.push(`/mnguser/user/${id}`)
+        this.props.history.push(`/mnguser/${id}`)
         
     }
     componentDidMount(){
@@ -60,7 +59,7 @@ class ManageUser extends Component {
         }
     )}
     render() {
-        const { dataUsers, count, userInfo } = this.state;
+        const { dataUsers, count } = this.state;
         
         const Users = dataUsers.map((user)=>{
             return ({
@@ -141,7 +140,7 @@ class ManageUser extends Component {
                                     data={Users} />
                             </React.Fragment>
                         )}/>
-                        <Route path="/mnguser/user/:id" component={CardUser}/>
+                        <Route path="/mnguser/:id" component={CardUser}/>
                     </Switch>
                 </Container>
             </div>
