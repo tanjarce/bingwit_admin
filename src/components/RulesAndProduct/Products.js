@@ -6,20 +6,23 @@ import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import ProductModal from '../../modals/ProductModal'
 
-import products from '../dummyJSONdata/products.json'
 import dots from '../../images/show_more.svg'
+import * as API from '../../services/API'
+import * as Help from '../../toastify/helpers'
+import moment from 'moment'
 
 
 class Products extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            userData: null,
+            selectedRow: null,
             modalType: 'delete',
-            isOpen: false
+            isOpen: false,
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
+        this.deleteProduct = this.deleteProduct.bind(this)
     }
 
     toggleModal () {
@@ -29,34 +32,54 @@ class Products extends Component {
     setModal (data, type) {
         this.setState({
             modalType: type,
-            userData: {
+            selectedRow: {
                 ...data,
             }
         }, () => {
             this.toggleModal()
+            console.log(this.state.selectedRow)
         }
     )}
 
+    deleteProduct () {
+        API.deleteProductType(this.state.selectedRow.id)
+            .then(res => {
+                if(res.success){
+                    this.props.getAllProduct()
+                    Help.toastPop({message: `${res.product_type.name} Deleted`, type: 'error'})
+                }
+            }).catch(err => Help.toastPop({message: err, type: 'error'}))
+            
+   
+    }
+
+    
+
+
     render() {
-        const Products = products.map((product)=>{
+        const { isOpen, selectedRow, modalType } = this.state
+        const { productRow, productCount } = this.props
+
+        const Products = productRow.map((product)=>{
             return (
                 {
                     ...product, 
-                    'alias_names': product.alias_names.join(', '),
+                    'alias_names': '--',
+                    'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
                     'action': {...product}}
             )
         })
         const columnsRules = [{
                 Header: 'Product Name',
-                accessor: 'product_name',
+                accessor: 'name',
             },
             {
                 Header: 'Alias Name',
                 accessor: 'alias_names',
             },
             {
-                Header: 'Date Created',
-                accessor: 'date_created',
+                Header: 'Date Created/Updated',
+                accessor: 'updatedAt',
                 width: 180
             },{
                 Header: ' ',
@@ -71,22 +94,23 @@ class Products extends Component {
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
                                 <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'edit') }}>Edit</DropdownItem>
-                                <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'delete') }}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }]
 
-        const { isOpen, userData, modalType} = this.state
+        const deleteMessage = (selectedRow) ? `Are you sure you want to delete ${selectedRow.name}?` : ''
+        
         // checking what modal to be use
-        const modal = (modalType === 'edit')
-            ? (<ProductModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} type="edit" />)
-            : (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
+        const modal = (modalType === 'delete')
+            ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
+            : (<ProductModal isOpen={isOpen} toggle={this.toggleModal}  type="edit" />)
     
         return (
                 <React.Fragment>
                     {modal}
-                <SearchCount />
+                <SearchCount text="Product" count={productCount}/>
                 <Table
                     columns={columnsRules} 
                     data={Products} />
