@@ -35,9 +35,9 @@ class RulesTable extends Component {
     updateTable(){
         API.getAllRules()
         .then((response) => {
-            const error = response.error || ''
+          const error = response.error || ''
             if (!error) {
-                const arr = response.map((item, key) => {
+                const arr = response.rule.rows.map((item, key) => {
                     return ({
                         'description' : item.description,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
@@ -47,27 +47,22 @@ class RulesTable extends Component {
                 })
                 this.setState({
                     getRule : arr,
-                    count : arr.length
+                    count : response.rule.count
                 })
                 return
             } else {
                 console.log(response.error.message)
             }
-
-
-           
     })
     }
     toggleModal (rowInfo) {
-        console.log(rowInfo)
         this.setState((prevState)=>({
             isOpen: !this.state.isOpen,
             selectedRow : rowInfo ? {...rowInfo} : prevState.selected
-        }), ()=>{
-            console.log(this.state.selectedRow)
-        })
+        }))
     }
     deleteItem (id) {
+        console.log(id)
         API.deleteRules(id)
         .then((response) => {
             const error = response.err || ''

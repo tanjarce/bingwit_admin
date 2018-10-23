@@ -5,19 +5,13 @@ import * as Session from './session';
 // const api = 'http://192.168.1.132:3000/api/v1';
 const api = 'http://192.168.0.126:3000/api/v1';
 let token = Session.getToken()
-console.log(token)
 const headers = {
   'Accept': 'application/json',
   'Authorization': `Bearer ${token ? token.token : null}`
 }
 /* GET ADMIN RULES */
 export const getAllRules = () =>
-  fetch(`${api}/rules/view`, { headers }) // default GET
-  .then(res => res.json())
-
-/* GET TOTAL RULES */
-export const getCountRules = () =>
-  fetch(`${api}/rules/count`, { headers }) // default GET
+  fetch(`${api}/rules?offset=0&limit=999`, { headers }) // default GET
   .then(res => res.json())
 
 /* GET USER ID */
@@ -46,14 +40,14 @@ export const changePassword = (body) =>
 
 /* DELETE RULES */
 export const deleteRules = (id) =>
-  fetch(`${api}/rules/delete/${id}`, { 
-    method: 'PUT', 
+  fetch(`${api}/rules/${id}`, { 
+    method: 'DELETE', 
     headers })
   .then(res => res.json())
     
 //BINGWIT SETNREWRULES ADD
 export const addRules = (item) =>
-  fetch(`${api}/rules/create`, {
+  fetch(`${api}/rules`, {
     method: 'POST',
     headers: {
       ...headers,

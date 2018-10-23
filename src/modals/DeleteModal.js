@@ -18,7 +18,6 @@ class UserDeleteModal extends Component {
     render() {
         const { isOpen, toggle, selectedRow } = this.props
         let message = selectedRow ? selectedRow.message : ''
-        console.log(message)
         return (
             <div>
                 <Modal
