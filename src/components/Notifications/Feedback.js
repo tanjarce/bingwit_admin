@@ -98,7 +98,7 @@ class Feedback extends Component {
             },
             {
                 Header: 'Feedback Description',
-                accessor: 'Feedback Description',
+                accessor: 'feedback',
             },
             {
                 Header: 'Sent Date',

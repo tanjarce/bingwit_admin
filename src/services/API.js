@@ -161,10 +161,14 @@ export const getAllProductTypes = () =>
   fetch(`${api}/product_types?offset=${0}&limit=${100}`, { headers }) // default GET
     .then(res => res.json())
 
+// get product type
+
+export const getProductType = (id) =>
+  fetch(`${api}/product_types/${id}`, { headers }) // default GET
+    .then(res => res.json())
+
 //  add product type
 export const addProductType = (data) =>{
-  console.log(data)
-
   return fetch(`${api}/product_types`, {
     method: 'POST', 
     body: toFormURLEncode(data),
@@ -173,15 +177,48 @@ export const addProductType = (data) =>{
   .then(res => res.json())
 }
 
-export const deleteProductType = (id) =>
+export const updateProductType = (id, data) => {
+  return fetch(`${api}/product_types/${id}`, {
+    method: 'PUT', 
+    body: toFormURLEncode(data),
+    headers,
+  })
+  .then(res => res.json())
+}
+
+export const deleteProductType = (id) => 
   fetch(`${api}/product_types/${id}`, { 
     method: 'DELETE', 
     headers })
   .then(res => res.json())
 
+
+
 // ALIAS NAME
 
 //get all alias name
-export const getAlias = () =>
-  fetch(`${api}/product_types/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { headers }) // default GET
+export const getAliasName = (id) =>
+  fetch(`${api}/product_types/${id}/alias`, { headers }) // default GET
     .then(res => res.json())
+
+// add alias name
+
+export const addAliasName = (id, aliases) => {
+  const body = {
+    'aliases': aliases
+  }
+
+  return fetch(`${api}/product_types/${id}/alias`, {
+    method: 'POST', 
+    body: toFormURLEncode(body),
+    headers,
+  })
+  .then(res => res.json())
+}
+
+export const deleteAliasName = (productTypeId, aliasId) => 
+  fetch(`${api}/product_types/${productTypeId}/alias/${aliasId}`, { 
+    method: 'DELETE', 
+    headers })
+  .then(res => res.json())
+
