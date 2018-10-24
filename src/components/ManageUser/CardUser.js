@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
-import {Switch, Redirect, Route, NavLink, withRouter } from 'react-router-dom'
+import {Switch, Redirect, Route, NavLink } from 'react-router-dom'
 import PrimaryFact from './PrimaryFact'
+//import Biography from './Biography'
 import * as API from '../../services/API'
 
 class CardUser extends Component {
@@ -18,7 +19,7 @@ class CardUser extends Component {
         API.getUserId(id)
         .then((response) => {
             response.success === 'false' ?
-            alert(response.error.message)
+            console.log(response.error.message)
             :
             this.setState({
                 userInfo : response.user
@@ -71,13 +72,15 @@ class CardUser extends Component {
         <Switch>
             <Route path={'/mnguser/' + userInfo.id} render={()=>(
                 <PrimaryFact user={user}/>
-            )}/> 
+                )}/>
+            {/* <Route path={'/mnguser/bio/' + userInfo.id}render={()=>(
+                <Biography user={user}/>
+            )}/> */}            
+
         </Switch>
         </div>
         </Col>
-
         </Row>
-
         </div> 
         );
     }

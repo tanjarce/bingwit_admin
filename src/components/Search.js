@@ -5,18 +5,38 @@ import '../styles/search.css'
 import searchIco from '../assets/Search.svg'
 
 class Search extends Component {
-
-    _handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            alert("Search Processed");
+    constructor(props){
+        super(props)
+        this.state = {
+            searchValue : ''
         }
-      }
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange(e){
+        e.preventDefault();
+        this.setState({
+            [e.target.name] : e.target.value
+            }, () => this.update()
+        );
+        
+    };
+    update(){
+        const { updateTable } = this.props
+        updateTable(this.state.searchValue)
+    }
+
     render() {
+        
         return (
             <Row className='main-search'>
                 <Col xs='auto'>Search:</Col>
                 <Col className='rel' xs='auto' >
-                  <Input type='text' placeholder='Search something...' onKeyPress={this._handleKeyPress}/>
+                  <Input type='text' placeholder='Search something...' 
+                  name='searchValue'
+                  onChange={this.handleChange}
+                  value={this.state.searchValue}
+                  />
                   <img className='img' src={searchIco} alt='search'/>
                 </Col>
             </Row>
