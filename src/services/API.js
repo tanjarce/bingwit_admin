@@ -8,7 +8,7 @@ const headers = {
   'Authorization': `Bearer ${token ? token.token : null}`
 }
 
-// convert to form url encode
+// convert to form url encode 
 
 function toFormURLEncode (data) {
   var formBody = [];
@@ -20,52 +20,22 @@ function toFormURLEncode (data) {
   return formBody.join("&"); 
 }
 
-/* GET ADMIN RULES */
-export const getAllRules = () =>
-  fetch(`${api}/rules?offset=0&limit=999`, { headers }) // default GET
-  .then(res => res.json())
 
-/* GET USER ID */
-export const getUserId = (id) =>
+/* USERS */ //=--------------------------------------
+
+export const getUserId = (id) =>   // GET USER ID
   fetch(`${api}/users/${id}`, { 
-  headers }) // default GET
+  headers })
   .then(res => res.json())
 
-/* GET ALL USERS */
-export const getAllUser = () =>
-  fetch(`${api}/users`, { 
-  headers }) // default GET
+
+export const getAllUser = (search) =>  // GET ALL USERS
+  fetch(`${api}/users?offset=${0}&limit=${10}&q=${search}`, { 
+  headers })
   .then(res => res.json())
 
-/* ADMIN CHANGE PASSWORD */
-export const changePassword = (body) =>
-  fetch(`${api}/users/changePassword`, {
-    method: 'PUT',
-    headers: {
-        ...headers,
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  }).then(res => res.json())
-  
 
-/* DELETE RULES */
-export const deleteRules = (id) =>
-  fetch(`${api}/rules/${id}`, { 
-    method: 'DELETE', 
-    headers })
-  .then(res => res.json())
-    
-//BINGWIT SETNREWRULES ADD
-export const addRules = (data) =>
-  fetch(`${api}/rules`, {
-    method: 'POST',
-    headers,
-    body: toFormURLEncode(data)
-  }).then(res => res.json())
-
-/* VERIFY USER ADMIN */
-export const getUserType = (body) =>
+export const getUserType = (body) =>   // GET USER TYPE
   fetch(`${api}/users/getUserType`, {
     method: 'POST',
     headers: {
@@ -75,8 +45,19 @@ export const getUserType = (body) =>
     body: JSON.stringify(body)
   }).then(res => res.json())
   
-//BINGWIT LOGIN
-export const login = (body) =>
+
+export const changePassword = (body) =>   // CHANGE PASSWORD USER
+fetch(`${api}/users/changePassword`, {
+  method: 'PUT',
+  headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(body)
+}).then(res => res.json())
+
+
+export const login = (body) =>   // USER LOGIN
   fetch(`${api}/users/login`, {
     method: 'POST',
     headers: {
@@ -86,83 +67,45 @@ export const login = (body) =>
     body: JSON.stringify(body)
   }).then(res => res.json())
   
-export const logout = () => 
+export const logout = () =>   // USER LOGOUT
   fetch(`${api}/auth/logout`, {
     method: 'POST',
     headers
   }).then(res => res.json())
 
-// USER
-export const getAllUsers = () =>
-  fetch(`${api}/user`, { headers }) // default GET
-    .then(res => res.json())
 
-export const createUser = (body) => 
-  fetch(`${api}/user`, {
-    method: 'POST',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json' 
-    },
-    body: JSON.stringify(body)
-  }).then(res => res.json())
+/* RULES */ //=--------------------------------------
 
-export const deleteUser = (user) =>
-  fetch(`${api}/user/${user.id}`, { method: 'DELETE', headers })
-  .then(res => res.json())
-  
-
-// PRODUCT
-export const getAllProducts = () =>
-  fetch(`${api}/product`, { headers }) // default GET
-    .then(res => res.json())
-
-export const remove = (contact) =>
-  fetch(`${api}/contacts/${contact.id}`, { method: 'DELETE', headers })
-    .then(res => res.json())
-    .then(data => data.contact)
-
-export const create = (body) =>
-  fetch(`${api}/contacts`, {
-    method: 'POST',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  }).then(res => res.json())
-
-// GET FEEDBACKS
-
-export const getFeedbacks = () =>
-  fetch(`${api}/feedbacks?limit=${10}&offset=${0}`, { headers }) // default GET
-  .then(res => {
-    return res.json()
-})
-
-export const viewFeedback = (id) =>
-  fetch(`${api}/feedbacks/${id}`, { headers }) // default GET
+export const getAllRules = () =>  // GET ALL RULES
+  fetch(`${api}/rules?offset=${0}&limit=${10}`, {
+  headers })
   .then(res => res.json())
 
-// GET REPORTS
 
-// export const getReports = () =>
-//   fetch(`${api}/users/reports?limit=${10}&offset=${0}`, { headers }) // default GET
-//   .then(res => {
-//     // console.log(token)
-//     return res.json()
-// })
-  
+export const deleteRules = (id) =>  // DELETE RULES
+  fetch(`${api}/rules/${id}`, { 
+    method: 'DELETE', 
+    headers })
+  .then(res => res.json())
+    
 
-// PRODUCT TYPES
+export const addRules = (data) =>   // ADD RULES
+  fetch(`${api}/rules`, {
+    method: 'POST',
+    headers,
+    body: toFormURLEncode(data)
+  }).then(res => res.json())
 
-// get all product types
-export const getAllProductTypes = () =>
-  fetch(`${api}/product_types?offset=${0}&limit=${100}`, { headers }) // default GET
+
+/* PRODUCT TYPE */ //=--------------------------------------
+
+export const getAllProductTypes = () => // GET ALL PRODUCT TYPES
+  fetch(`${api}/product_types?offset=${0}&limit=${100}`, { 
+    headers })
     .then(res => res.json())
 
-//  add product type
-export const addProductType = (data) =>{
+
+export const addProductType = (data) => { //  ADD PRODUCT TYPES
   console.log(data)
 
   return fetch(`${api}/product_types`, {
@@ -173,15 +116,89 @@ export const addProductType = (data) =>{
   .then(res => res.json())
 }
 
-export const deleteProductType = (id) =>
+export const deleteProductType = (id) => //  DELETE PRODUCT TYPES
   fetch(`${api}/product_types/${id}`, { 
     method: 'DELETE', 
     headers })
   .then(res => res.json())
 
-// ALIAS NAME
 
-//get all alias name
-export const getAlias = () =>
-  fetch(`${api}/product_types/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { headers }) // default GET
-    .then(res => res.json())
+/* ALIAS NAME */ //=--------------------------------------
+
+export const getAlias = () =>  // GET ALL ALIAS NAME
+  fetch(`${api}/product_types/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { 
+  headers })
+  .then(res => res.json())
+
+// GET FEEDBACKS //=--------------------------------------
+
+export const getFeedbacks = () => // GET FEEDBACKS
+  fetch(`${api}/feedbacks?limit=${10}&offset=${0}`, { headers }) 
+  .then(res => {
+    return res.json()
+})
+
+
+// GET REPORTS //=--------------------------------------
+
+export const getReports = () =>
+  fetch(`${api}/reports?limit=${10}&offset=${0}`, { headers }) // default GET
+  .then(res => {
+    return res.json()
+})
+  
+
+
+
+
+
+
+
+
+
+
+
+// // PRODUCT
+// export const getAllProducts = () =>
+//   fetch(`${api}/product`, { headers }) // default GET
+//     .then(res => res.json())
+
+// export const remove = (contact) =>
+//   fetch(`${api}/contacts/${contact.id}`, { method: 'DELETE', headers })
+//     .then(res => res.json())
+//     .then(data => data.contact)
+
+// export const create = (body) =>
+//   fetch(`${api}/contacts`, {
+//     method: 'POST',
+//     headers: {
+//       ...headers,
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(body)
+//   }).then(res => res.json())
+
+
+    
+    // USER
+// export const getAllUsers = () =>
+// fetch(`${api}/user`, { headers }) // default GET
+//   .then(res => res.json())
+
+// export const createUser = (body) => 
+// fetch(`${api}/user`, {
+//   method: 'POST',
+//   headers: {
+//     ...headers,
+//     'Content-Type': 'application/json' 
+//   },
+//   body: JSON.stringify(body)
+// }).then(res => res.json())
+
+// export const deleteUser = (user) =>
+// fetch(`${api}/user/${user.id}`, { method: 'DELETE', headers })
+// .then(res => res.json())
+
+// export const viewFeedback = (id) =>
+//   fetch(`${api}/feedbacks/${id}`, { headers }) // default GET
+//   .then(res => res.json())

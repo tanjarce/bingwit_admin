@@ -3,8 +3,8 @@ import TableSearch from '../TableSearch'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import DeleteModal from '../../modals/DeleteModal'
 
-// import * as API from '../../services/API'
-import reports from '../dummyJSONdata/reports.json'
+import moment from 'moment'
+import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 
 class Report extends Component {
@@ -12,27 +12,68 @@ class Report extends Component {
         super(props)
         this.state = {
             modalType: 'delete',
-            isOpen: false
+            isOpen: false,
+            userReport : [],
+            arr : [1,2,3]
         }
+        this.getUser = this.getUser.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
     }
-    // componentWillMount(){
-    //     API.getReports()
-    //     .then((response) => {
-    //         if(response.success){
-    //             console.log(response)
-    //         }
+
+    componentWillMount(){
+        this.getReport();
+    }
+
+    getReport(){
+        API.getReports()
+        .then((response) => {
+                response.report.rows.map(item => {
+
+                
+                    API.getUserId(item.consumer_id)
+                                .then((res) => {
+                                    var joined = this.state.userReport.concat({
+                                        'consumer' : res.user.full_name,
+                                        'report_description' : item.feedback,
+                                        'reported_seller' : item.User.full_name,
+                                        'sent_date' : moment(item.createdAt).format('MMMM D, YYYY'),
+                                    })
+                                    this.setState({
+                                        userReport : joined
+                                    })
+                                })
+
+                })
+            }
+        )
+        
+            // if(response.success){
+            //     this.setState({
+            //         userReport : response.report.rows
+            //     })
+            // }
             
-    //     }).catch(error => {
-    //         console.log(error)
-    //     })
-    // }
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
+    }    
 
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
-
+    getUser(id){
+        API.getUserId(id)
+        .then((response) => {
+          if(response.success){
+            return response.user.full_name
+          }
+          else{
+            alert(response.error.message);
+          }
+        })
+    }
     setModal (data, type) {
         this.setState({
             modalType: type,
@@ -42,13 +83,16 @@ class Report extends Component {
         }
     )}
   render() {
-    const Reports = reports.map((report)=>{
+    const { userReport, arr } = this.state;
+    console.log(userReport)
+
+    const Reports = userReport.map((report)=>{
         return ({
-            'consumer': report.consumer_name,
+            'consumer': report.consumer,
             'report_description': report.report_description,
             'reported_seller': report.reported_seller,
-            'sent_date': report.sent_date,
-            'action': {...report}
+            'sent_date':  report.sent_date,
+            'action': "{...report}"
         })
     })
     const columnsRules = [{

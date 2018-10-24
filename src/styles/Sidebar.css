@@ -130,7 +130,7 @@
     .main-menu>ul.logout {
     position:absolute;
     left:0;
-    bottom:0;
+    bottom:14px;
     transition: all 0.2s ease;
     }
     
