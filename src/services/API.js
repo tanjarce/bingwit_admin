@@ -184,5 +184,12 @@ export const getFeedbacks = () =>
 export const getReports = () =>
   fetch(`${api}/reports?limit=${10}&offset=${0}`, { headers }) 
   .then(res => res.json())
-    
   
+ 
+ // DELETE REPORTS
+export const deleteReport = (id) => 
+  fetch(`${api}/reports/${id}`, { 
+  method: 'DELETE', 
+  headers })
+.then(res => res.json())
+

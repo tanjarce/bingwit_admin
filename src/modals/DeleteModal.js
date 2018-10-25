@@ -24,7 +24,7 @@ class UserDeleteModal extends Component {
                     isOpen={isOpen}
                     toggle={()=>{toggle(null)}}
                     modalTitle={`Delete`}
-                    modalBody={<div>{message}</div>}
+                    modalBody={<span className="d-inline-block text-truncate" style={{maxWidth : '450px'}}>{message}</span>}
                     modalFooter={
                         <React.Fragment>
                             <Button color="primary" onClick={this.onConfirm}>Confirm</Button>
