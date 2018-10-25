@@ -36,20 +36,18 @@ class Products extends Component {
             }
         }, () => {
             this.toggleModal()
-            console.log(this.state.selectedRow)
+            // console.log(this.state.selectedRow)
         }
     )}
 
     deleteProduct () {
         API.deleteProductType(this.state.selectedRow.id)
-            .then(res => {
-                if(res.success){
-                    this.props.getAllProduct()
-                    Help.toastPop({message: `${res.product_type.name} Deleted`, type: 'error'})
-                }
-            }).catch(err => Help.toastPop({message: err, type: 'error'}))
-            
-   
+        .then(res => {
+            if(res.success){
+                this.props.getAllProduct()
+                Help.toastPop({message: `${res.product_type.name} Deleted`, type: 'error'})
+            }
+        }).catch(err => console.log(err))
     }
 
     
@@ -104,7 +102,7 @@ class Products extends Component {
         // checking what modal to be use
         const modal = (modalType === 'delete')
             ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
-            : (<ProductModal isOpen={isOpen} toggle={this.toggleModal}  type="edit" />)
+            : (<ProductModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
     
         return (
                 <React.Fragment>

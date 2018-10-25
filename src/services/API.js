@@ -23,19 +23,19 @@ function toFormURLEncode (data) {
 
 /* USERS */ //=--------------------------------------
 
-export const getUserId = (id) =>   // GET USER ID
-  fetch(`${api}/users/${id}`, { 
-  headers })
-  .then(res => res.json())
+// GET USER ID
+export const getUserId = (id) =>   
+  fetch(`${api}/users/${id}`, {headers})
+    .then(res => res.json())
 
-
-export const getAllUser = (search) =>  // GET ALL USERS
+// GET ALL USERS
+export const getAllUser = (search) =>  
   fetch(`${api}/users?offset=${0}&limit=${10}&q=${search}`, { 
   headers })
   .then(res => res.json())
 
-
-export const getUserType = (body) =>   // GET USER TYPE
+// GET USER TYPE
+export const getUserType = (body) =>   
   fetch(`${api}/users/getUserType`, {
     method: 'POST',
     headers: {
@@ -45,9 +45,9 @@ export const getUserType = (body) =>   // GET USER TYPE
     body: JSON.stringify(body)
   }).then(res => res.json())
   
-
-export const changePassword = (body) =>   // CHANGE PASSWORD USER
-fetch(`${api}/users/changePassword`, {
+// CHANGE PASSWORD USER
+export const changePassword = (body) =>   
+  fetch(`${api}/users/changePassword`, {
   method: 'PUT',
   headers: {
       ...headers,
@@ -56,8 +56,8 @@ fetch(`${api}/users/changePassword`, {
   body: JSON.stringify(body)
 }).then(res => res.json())
 
-
-export const login = (body) =>   // USER LOGIN
+// USER LOGIN
+export const login = (body) =>   
   fetch(`${api}/users/login`, {
     method: 'POST',
     headers: {
@@ -67,7 +67,8 @@ export const login = (body) =>   // USER LOGIN
     body: JSON.stringify(body)
   }).then(res => res.json())
   
-export const logout = () =>   // USER LOGOUT
+// USER LOGOUT
+export const logout = () =>   
   fetch(`${api}/auth/logout`, {
     method: 'POST',
     headers
@@ -76,20 +77,21 @@ export const logout = () =>   // USER LOGOUT
 
 /* RULES */ //=--------------------------------------
 
-export const getAllRules = () =>  // GET ALL RULES
+// GET ALL RULES
+export const getAllRules = () =>  
   fetch(`${api}/rules?offset=${0}&limit=${10}`, {
   headers })
   .then(res => res.json())
 
-
-export const deleteRules = (id) =>  // DELETE RULES
+// DELETE RULES
+export const deleteRules = (id) =>  
   fetch(`${api}/rules/${id}`, { 
     method: 'DELETE', 
     headers })
   .then(res => res.json())
     
-
-export const addRules = (data) =>   // ADD RULES
+// ADD RULES
+export const addRules = (data) =>   
   fetch(`${api}/rules`, {
     method: 'POST',
     headers,
@@ -99,15 +101,19 @@ export const addRules = (data) =>   // ADD RULES
 
 /* PRODUCT TYPE */ //=--------------------------------------
 
-export const getAllProductTypes = () => // GET ALL PRODUCT TYPES
+// GET ALL PRODUCT TYPES
+export const getAllProductTypes = () => 
   fetch(`${api}/product_types?offset=${0}&limit=${100}`, { 
     headers })
     .then(res => res.json())
 
+// GET PRODUCT TYPE BY ID
+export const getProductType = (id) =>
+  fetch(`${api}/product_types/${id}`, { headers }) // default GET
+    .then(res => res.json())
 
-export const addProductType = (data) => { //  ADD PRODUCT TYPES
-  console.log(data)
-
+//  ADD PRODUCT TYPE
+export const addProductType = (data) =>{
   return fetch(`${api}/product_types`, {
     method: 'POST', 
     body: toFormURLEncode(data),
@@ -116,89 +122,67 @@ export const addProductType = (data) => { //  ADD PRODUCT TYPES
   .then(res => res.json())
 }
 
-export const deleteProductType = (id) => //  DELETE PRODUCT TYPES
+// UPDATE PRODUCT TYPE
+export const updateProductType = (id, data) => {
+  return fetch(`${api}/product_types/${id}`, {
+    method: 'PUT', 
+    body: toFormURLEncode(data),
+    headers,
+  })
+  .then(res => res.json())
+}
+
+// DELETE PRODUCT TYPE
+export const deleteProductType = (id) => 
   fetch(`${api}/product_types/${id}`, { 
     method: 'DELETE', 
     headers })
   .then(res => res.json())
 
 
-/* ALIAS NAME */ //=--------------------------------------
+/* ALIASES */ //=--------------------------------------
 
-export const getAlias = () =>  // GET ALL ALIAS NAME
-  fetch(`${api}/product_types/cb58c3a2-c15b-4cee-ba30-69a004b47a16/alias`, { 
-  headers })
+//GET ALL ALIASES BY ID
+export const getAliasName = (id) =>
+  fetch(`${api}/product_types/${id}/alias`, { headers }) // default GET
+    .then(res => res.json())
+
+// ADD ALIAS
+export const addAliasName = (id, aliases) => {
+  const body = {
+    'aliases': aliases
+  }
+
+  return fetch(`${api}/product_types/${id}/alias`, {
+    method: 'POST', 
+    body: toFormURLEncode(body),
+    headers,
+  })
   .then(res => res.json())
+}
+
+// DELETE ALIAS BY PRODUCT TYPE ID & ALIAS ID
+export const deleteAliasName = (productTypeId, aliasId) => 
+  fetch(`${api}/product_types/${productTypeId}/alias/${aliasId}`, { 
+    method: 'DELETE', 
+    headers })
+  .then(res => res.json())
+
 
 // GET FEEDBACKS //=--------------------------------------
 
-export const getFeedbacks = () => // GET FEEDBACKS
+ // GET FEEDBACKS
+export const getFeedbacks = () =>
   fetch(`${api}/feedbacks?limit=${10}&offset=${0}`, { headers }) 
-  .then(res => {
-    return res.json()
-})
+  .then(res => res.json()
+)
 
 
 // GET REPORTS //=--------------------------------------
 
+// default GET
 export const getReports = () =>
-  fetch(`${api}/reports?limit=${10}&offset=${0}`, { headers }) // default GET
-  .then(res => {
-    return res.json()
-})
-  
-
-
-
-
-
-
-
-
-
-
-
-// // PRODUCT
-// export const getAllProducts = () =>
-//   fetch(`${api}/product`, { headers }) // default GET
-//     .then(res => res.json())
-
-// export const remove = (contact) =>
-//   fetch(`${api}/contacts/${contact.id}`, { method: 'DELETE', headers })
-//     .then(res => res.json())
-//     .then(data => data.contact)
-
-// export const create = (body) =>
-//   fetch(`${api}/contacts`, {
-//     method: 'POST',
-//     headers: {
-//       ...headers,
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(body)
-//   }).then(res => res.json())
-
-
+  fetch(`${api}/reports?limit=${10}&offset=${0}`, { headers }) 
+  .then(res => res.json())
     
-    // USER
-// export const getAllUsers = () =>
-// fetch(`${api}/user`, { headers }) // default GET
-//   .then(res => res.json())
-
-// export const createUser = (body) => 
-// fetch(`${api}/user`, {
-//   method: 'POST',
-//   headers: {
-//     ...headers,
-//     'Content-Type': 'application/json' 
-//   },
-//   body: JSON.stringify(body)
-// }).then(res => res.json())
-
-// export const deleteUser = (user) =>
-// fetch(`${api}/user/${user.id}`, { method: 'DELETE', headers })
-// .then(res => res.json())
-
-// export const viewFeedback = (id) =>
-//   fetch(`${api}/feedbacks/${id}`, { headers }) // default GET
-//   .then(res => res.json())
+  

@@ -35,7 +35,7 @@ class List extends Component {
             }
             return res.product_type.rows
         })
-        .then(res => console.log(res))
+        // .then(res => console.log(res))
         .catch(err => {
             Help.toastPop({message: err, type: 'error'})
         })

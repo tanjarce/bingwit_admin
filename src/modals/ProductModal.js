@@ -10,7 +10,6 @@ import {
   ListGroupItem
 } from "reactstrap";
 
-import * as toast from '../toastify/helpers'
 import Modal from "../components/Modal";
 import * as API from '../services/API'
 import * as Help from '../toastify/helpers'
@@ -23,7 +22,9 @@ class ProductModal extends React.Component {
             value: {
                 product_name: "",
                 alias_names: []
-            }
+            },
+            addedAliases : [],
+            deletedAliases : [],
         }
         this.aliasInput = React.createRef()
         this.handleChange = this.handleChange.bind(this)
@@ -32,17 +33,75 @@ class ProductModal extends React.Component {
         this.saveEdit = this.saveEdit.bind(this)
         this.reset = this.reset.bind(this)
         this.toggleOut = this.toggleOut.bind(this)    
+        this.addAliasNames = this.addAliasNames.bind(this)
+        this.AddedSuccessfully = this.AddedSuccessfully.bind(this)
     }
-    addProduct () {
-        const {value: {product_name}} = this.state
+
+    componentWillReceiveProps(){
+        const { selectedRow, type } = this.props
+        console.log(selectedRow)
+        if(type === 'edit'){
+            this.setState({
+                value: {
+                    product_name: selectedRow.name
+                }
+            })
+            API.getAliasName(selectedRow.id)
+                .then(res => {
+                    if(res.success){
+                        this.setState((prevState)=>({
+                            value: {
+                               ...prevState.value,
+                                // product_name: selectedRow.name,
+                                alias_names: res.aliases || []
+                            }
+                        }), ()=>{
+                            // console.log(this.state.value)
+                        })
+                    }
+                }).catch(err => console.log(err))
+        
+        }
+    }   
+
+    // add aliases integrated to backend
+    addAliasNames (id, aliases) {
+        return API.addAliasName(id, aliases)
+            .then(res => {
+                if(res.success){
+                    return {success: true}
+                }
+            })
+    }
+
+    AddedSuccessfully () {
+        this.toggleOut()
         this.props.getAllProduct()
-        // API call here
+        Help.toastPop({message: 'Product added successfully', type: 'success'})
+    }
+
+    addProduct () {
+        const {value: {product_name, alias_names}} = this.state
+
+        // add product type
         API.addProductType({'name': product_name})
             .then(res => {
                 if(res.success){
-                    this.toggleOut()
-                    this.props.getAllProduct()
-                    Help.toastPop({message: 'Product added successfully', type: 'success'})
+                    // checked if there is inputed aliases
+                    if(alias_names.length > 0){
+                        const id = res.product_type.id
+                        const aliases = alias_names.map( alias => alias.alias).join(',') 
+
+                        this.addAliasNames(id, aliases)
+                            .then(res => {
+                                if(res.success){
+                                    this.AddedSuccessfully()
+                                }
+                            }).catch(err => console.log(err))
+                    }
+                    else{
+                        this.AddedSuccessfully()
+                    }
                 }
 
             })
@@ -51,12 +110,41 @@ class ProductModal extends React.Component {
     }
 
     saveEdit () {
-        toast.toastPop({
-            'message': 'successfully saved the changes',
-            'type': 'success',
-            'autoClose': '3000'
-        })
-        console.log('save changes')
+        const { deletedAliases, addedAliases} = this.state
+        const { selectedRow: {id} } = this.props
+
+        console.log(deletedAliases)
+        console.log(addedAliases)
+
+        if(addedAliases.length > 0){
+            const addedAliasesString = addedAliases.map(alias => alias.alias).join(',')
+            
+            this.addAliasNames(id, addedAliasesString)
+            .then(res => {
+                if(res.success){
+                    this.toggleOut()
+                    this.reset()
+                    this.props.getAllProduct()
+                    console.log(res)
+                    Help.toastPop({message: 'Edit Save', type: 'success'})
+                }
+            }).catch(err => console.log(err))
+        }
+        // toast.toastPop({
+        //     'message': 'successfully saved the changes',
+        //     'type': 'success',
+        //     'autoClose': '3000'
+        // })
+        // console.log('save changes')
+        // this.toggleOut()
+    }
+
+    getProductType(){
+
+    }
+
+    getAliases(){
+        
     }
 
     handleChange(e){
@@ -76,39 +164,81 @@ class ProductModal extends React.Component {
             }))
         }
     }
+
+    // adding aliases in state only
     addAlias(e){
         e.preventDefault()
-        const {alias_name_input, value: {alias_names}} = this.state
-        const arr = [...alias_names]
+        const {alias_name_input, addedAliases} = this.state
         
+        const copyAddedAliases = addedAliases ? [...addedAliases] : []
+
         if(alias_name_input.trim() !== ''){
-            arr.unshift(alias_name_input)
+            const addedAlias = {'alias': alias_name_input, 'index': addedAliases.length}
+            copyAddedAliases.push(addedAlias)
             this.setState((prevState)=>({
-                alias_name_input: '',
                 value: {
                     ...prevState.value,
-                    alias_names: arr
-                }
+                    alias_names: [ addedAlias, ...prevState.value.alias_names ]
+                },
+                addedAliases: copyAddedAliases,
+                alias_name_input: ''
             }), ()=>{
                 this.aliasInput.current.focus()
             })
         }
     }
-    deleteAlias(index){
-        const { value: {alias_names}} = this.state
+
+    // deleting aliases in state only
+    deleteAlias(index, data){
+        const { value: {alias_names}, addedAliases} = this.state
+
         const copyAlias = alias_names
             .filter((name, indx)=> {
-                return indx !== index && name
+                return index !== indx
             })
         
         this.setState((prevState)=>({
             value: {
                 ...prevState.value,
-               alias_names: copyAlias 
+                alias_names: copyAlias 
             }
         }))    
+        
+        if(data.id){
+            // console.log('push to pending deleted')
+            // console.log(data)
+            this.setState((prevState)=>({
+               deletedAliases: [...prevState.deletedAliases, {'alias_id': data.id, 'productType_id': data.product_typeId }]
+            }),()=>{
+                // console.log(this.state.deletedAliases)
+            })
+        } else{
+            const copyAddedAliases = addedAliases.filter((aliases, indx) => {
+                return indx !== data.index
+            })
+            this.setState(()=>({
+                addedAliases: copyAddedAliases
+            }), () => {
+                // console.log(this.state.addedAliases)
+            })
+        }
+
+        // console.log(copyAlias)
+        
+        // console.log(index, data.index)
+
+        // if(this.props.type === 'edit' && data.id & data.product_typeId){
+        //     // console.log(data)
+        //     const aliasId = data.id
+        //     const productTypeId = data.product_typeId
+
+        //     console.log(aliasId)
+        //     console.log(productTypeId)
+        //     API.deleteAliasName(productTypeId, aliasId)
+        //         .then(res => console.log(res))
+        // }
+        
     }
-    
 
     toggleOut() {
         this.props.toggle()
@@ -121,44 +251,33 @@ class ProductModal extends React.Component {
             value: {
                 product_name: "",
                 alias_names: ""
-            }
+            },
+            addedAliases : [],
+            deletedAliases : []
         })
-    }
-
-    componentWillReceiveProps(){
-        const { userData, type } = this.props
-
-        if(type === 'edit'){
-            this.setState(()=>({
-                value: { 
-                    ...userData,
-                } 
-            }))
-        }
-        
     }
 
   render() {
     const { isOpen, type } = this.props;
     const {alias_name_input, value: { product_name, alias_names }} = this.state;
 
-
-    const list_alias = (alias_names.length > 0)
+    const list_alias = (alias_names)
         ? alias_names
-        .map((name, index) => (
+        .map((name, index) => {
+            return(
             <ListGroupItem key={index}>
-                <span>{name}</span>
+                <span>{name.alias}</span>
                 <span
                 className="float-right text-muted"
                 style={{ fontSize: "25px", cursor: "pointer", lineHeight: "100%" }}
                 onClick={() => {
-                    this.deleteAlias(index);
+                    this.deleteAlias(index, name);
                 }}
                 >
                 &times;
                 </span>
             </ListGroupItem>
-        ))
+        )})
         : <ListGroupItem className="text-muted">Input Alias Names...</ListGroupItem>
 
     const title = type === "add" ? "Add New Product" : "Edit Product";
