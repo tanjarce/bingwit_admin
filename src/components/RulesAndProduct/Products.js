@@ -65,10 +65,11 @@ class Products extends Component {
         const { productRow, productCount } = this.props
 
         const Products = productRow.map((product)=>{
+            const aliases = product.product_type_alias.map(alias => alias.alias).join(", ")
             return (
                 {
-                    ...product, 
-                    'alias_names': '--',
+                    ...product,
+                    'alias_names': aliases,
                     'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
                     'action': {...product}}
             )

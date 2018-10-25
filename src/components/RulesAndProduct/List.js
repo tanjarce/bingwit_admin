@@ -28,12 +28,13 @@ class List extends Component {
         API.getAllProductTypes()
         .then(res => {
             if(res.success){
+                console.log(res)
                 this.setState(()=>({
                     productCount: res.product_type.count,
                     productRow: res.product_type.rows
                 }))
             }
-            console.log(res)
+            // console.log(res)
             return res.product_type.rows
         })
         // .then(res => console.log(res))
