@@ -8,9 +8,9 @@ class SearchAndCount extends Component {
         const { text, count } = this.props
         return (
                 <div className='d-flex'>
-                <Search />
+                <Search updateTable={this.props.updateTable} />
                 <Col></Col>
-                <TotalCount text={text} count={count}/>      
+                <TotalCount text={text}  count={count}/>      
                 </div>
         );
     }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
-import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import ProductModal from '../../modals/ProductModal'
 
@@ -112,7 +111,6 @@ class Products extends Component {
                 <Table
                     columns={columnsRules} 
                     data={Products} />
-                <SetRules/>
             </React.Fragment>
         );
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { withRouter } from 'react-router-dom'
 import moment from 'moment'
-import 'moment-timezone'
 
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
@@ -30,9 +30,8 @@ class RulesTable extends Component {
     }
     
     componentDidMount(){
-       this.updateTable();
-    }
-
+        this.updateTable();
+     }
     updateTable(){
         API.getAllRules()
         .then((response) => {
@@ -113,14 +112,17 @@ class RulesTable extends Component {
         const message = selectedRow ? `Are you sure you want to delete rule no. ${selectedRow.no}.` : ''
         return (
                 <React.Fragment>
+                    
                     <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
-                <SearchCount count={count} text="Rules"/>
+                <SearchCount updateTable={this.updateTable} count={count} text="Rules"/>
                 <Table
                     columns={columnsRules} 
                     data={ruleRow} />
                 <SetRules updateTable={this.updateTable}/>
+                
+                
             </React.Fragment>
         );
     }
 }
-export default RulesTable;
+export default withRouter(RulesTable)

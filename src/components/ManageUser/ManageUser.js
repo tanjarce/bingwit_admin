@@ -25,6 +25,7 @@ class ManageUser extends Component {
             count : '',
             userInfo : []
         }
+        this.updateTable = this.updateTable.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.viewUser = this.viewUser.bind(this)
@@ -38,10 +39,21 @@ class ManageUser extends Component {
         
     }
     componentDidMount(){
-        API.getAllUser()
+        this.updateTable();
+    }
+
+    updateTable(search){
+        var tmp = ''
+        if(search === undefined){
+            tmp = ' ' 
+        }
+        else{
+            tmp = search
+        }
+        API.getAllUser(tmp)
         .then((response) => {
             response.success === true ?
-
+            
             this.setState({
                 dataUsers : response.users.rows,
                 count : response.users.count,
@@ -57,7 +69,8 @@ class ManageUser extends Component {
         }, () => {
             this.toggleModal()
         }
-    )}
+    )
+    }
     render() {
         const { dataUsers, count } = this.state;
         
@@ -134,7 +147,7 @@ class ManageUser extends Component {
                     <Switch>
                         <Route exact path="/mnguser" render={()=>(
                             <React.Fragment>
-                                <SearchAndCount text="Users" count={count}/>
+                                <SearchAndCount updateTable={this.updateTable} text="Users" count={count}/>
                                 <Tables
                                     columns={columnsRules} 
                                     data={Users} />
