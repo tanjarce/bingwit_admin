@@ -1,6 +1,6 @@
 import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
-// const api = 'http://192.168.1.132:3000/api/v1';
+// const api = 'http://192.168.0.125:3000/api/v1';
 const api = 'http://192.168.0.126:3000/api/v1';
 let token = Session.getToken()
 const headers = {

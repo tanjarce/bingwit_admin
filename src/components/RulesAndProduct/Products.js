@@ -24,8 +24,16 @@ class Products extends Component {
         this.deleteProduct = this.deleteProduct.bind(this)
     }
 
-    toggleModal () {
-        this.setState({isOpen: !this.state.isOpen})
+    toggleModal (close) {
+        if(close){
+            this.setState(()=>({
+                selectedRow: null
+            }))
+        }
+        this.setState(()=>({
+            isOpen: !this.state.isOpen,
+            
+        }))
     }
 
     setModal (data, type) {
@@ -33,10 +41,9 @@ class Products extends Component {
             modalType: type,
             selectedRow: {
                 ...data,
-            }
+            },
         }, () => {
             this.toggleModal()
-            // console.log(this.state.selectedRow)
         }
     )}
 
@@ -58,10 +65,11 @@ class Products extends Component {
         const { productRow, productCount } = this.props
 
         const Products = productRow.map((product)=>{
+            const aliases = product.product_type_alias.map(alias => alias.alias).join(", ")
             return (
                 {
-                    ...product, 
-                    'alias_names': '--',
+                    ...product,
+                    'alias_names': aliases,
                     'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
                     'action': {...product}}
             )
@@ -105,8 +113,10 @@ class Products extends Component {
             : (<ProductModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
     
         return (
-                <React.Fragment>
-                    {modal}
+            <React.Fragment>
+                    {
+                        modal
+                    }
                 <SearchCount text="Product" count={productCount}/>
                 <Table
                     columns={columnsRules} 
