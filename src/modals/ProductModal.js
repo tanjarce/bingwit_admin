@@ -25,6 +25,7 @@ class ProductModal extends React.Component {
             },
             addedAliases : [],
             deletedAliases : [],
+            productNameInput: '',
         }
         this.aliasInput = React.createRef()
         this.handleChange = this.handleChange.bind(this)
@@ -33,46 +34,41 @@ class ProductModal extends React.Component {
         this.saveEdit = this.saveEdit.bind(this)
         this.reset = this.reset.bind(this)
         this.toggleOut = this.toggleOut.bind(this)    
-        this.addAliasNames = this.addAliasNames.bind(this)
         this.AddedSuccessfully = this.AddedSuccessfully.bind(this)
     }
 
     componentWillReceiveProps(){
-        const { selectedRow, type } = this.props
-        console.log(selectedRow)
-        if(type === 'edit'){
-            this.setState({
-                value: {
-                    product_name: selectedRow.name
+        const { selectedRow, type, isOpen } = this.props
+        // console.log(selectedRow)
+
+        // checking if there is value in selectedRow
+        if(type === 'edit' && !isOpen && selectedRow){
+            this.setState((prevState)=>(
+                {
+                    value: {
+                        ...prevState.value,
+                        product_name: selectedRow.name
+                    },
+                    productNameInput: selectedRow.name
                 }
-            })
-            API.getAliasName(selectedRow.id)
-                .then(res => {
-                    if(res.success){
-                        this.setState((prevState)=>({
-                            value: {
-                               ...prevState.value,
-                                // product_name: selectedRow.name,
-                                alias_names: res.aliases || []
-                            }
-                        }), ()=>{
-                            // console.log(this.state.value)
-                        })
-                    }
-                }).catch(err => console.log(err))
-        
+            ))
+                API.getAliasName(selectedRow.id)
+                    .then(res => {
+                        if(res.success){
+                            // console.log(res)
+                            this.setState((prevState)=>({
+                                value: {
+                                   ...prevState.value,
+                                    // product_name: selectedRow.name,
+                                    alias_names: res.aliases || []
+                                }
+                            }), ()=>{
+                                // console.log(this.state.value)
+                            })
+                        }
+                    }).catch(err => console.log(err))
         }
     }   
-
-    // add aliases integrated to backend
-    addAliasNames (id, aliases) {
-        return API.addAliasName(id, aliases)
-            .then(res => {
-                if(res.success){
-                    return {success: true}
-                }
-            })
-    }
 
     AddedSuccessfully () {
         this.toggleOut()
@@ -81,10 +77,10 @@ class ProductModal extends React.Component {
     }
 
     addProduct () {
-        const {value: {product_name, alias_names}} = this.state
+        const {value: {alias_names}, productNameInput} = this.state
 
         // add product type
-        API.addProductType({'name': product_name})
+        API.addProductType({'name': productNameInput})
             .then(res => {
                 if(res.success){
                     // checked if there is inputed aliases
@@ -92,12 +88,12 @@ class ProductModal extends React.Component {
                         const id = res.product_type.id
                         const aliases = alias_names.map( alias => alias.alias).join(',') 
 
-                        this.addAliasNames(id, aliases)
-                            .then(res => {
-                                if(res.success){
-                                    this.AddedSuccessfully()
-                                }
-                            }).catch(err => console.log(err))
+                        API.addAliasName(id, aliases)
+                        .then(res => {
+                            if(res.success){
+                                this.AddedSuccessfully()
+                            }
+                        }).catch(err => console.log(err))
                     }
                     else{
                         this.AddedSuccessfully()
@@ -109,34 +105,57 @@ class ProductModal extends React.Component {
     
     }
 
-    saveEdit () {
-        const { deletedAliases, addedAliases} = this.state
+    async saveEdit () {
+        const { deletedAliases, addedAliases, value: {product_name}, productNameInput} = this.state
         const { selectedRow: {id} } = this.props
 
-        console.log(deletedAliases)
-        console.log(addedAliases)
-
-        if(addedAliases.length > 0){
-            const addedAliasesString = addedAliases.map(alias => alias.alias).join(',')
-            
-            this.addAliasNames(id, addedAliasesString)
-            .then(res => {
-                if(res.success){
-                    this.toggleOut()
-                    this.reset()
-                    this.props.getAllProduct()
-                    console.log(res)
-                    Help.toastPop({message: 'Edit Save', type: 'success'})
+        if(productNameInput.trim() !== ''){
+            await new Promise((resolve) => {
+                if(addedAliases.length > 0){
+                    const addedAliasesString = addedAliases.map(alias => alias.alias).join(',')
+                    
+                    API.addAliasName(id, addedAliasesString)
+                    .then(res => {
+                        if(res.success){
+                            return {success: true}
+                        }
+                    })
+                    .catch(err => console.log(err))
+                }   
+                resolve(console.log('addedAliases'))
+            });
+    
+            await new Promise((resolve) => {
+                if(deletedAliases.length > 0){
+                    deletedAliases.map(alias =>{
+                        console.log(alias)
+                        API.deleteAliasName(alias.productType_id, alias.alias_id)
+                            .then(res => {
+                                console.log('hi')
+                                console.log(res)
+                            })
+                    })
                 }
-            }).catch(err => console.log(err))
+                resolve(console.log('deletedAliases'))
+            });
+    
+            // Await for the promise to resolve
+            await new Promise((resolve) => {
+                const productName = {'name': productNameInput.trim()} 
+
+                API.updateProductType(id, productName)
+                .then(res => {
+                    console.log(productName)
+                    if(res.success){
+                        this.toggleOut()
+                        this.reset()
+                        this.props.getAllProduct()
+                        Help.toastPop({message: 'Changes Saved!', type: 'success'})
+                    }
+                }).catch(err => console.log(err))
+                resolve(console.log('this is the end.'))
+            });
         }
-        // toast.toastPop({
-        //     'message': 'successfully saved the changes',
-        //     'type': 'success',
-        //     'autoClose': '3000'
-        // })
-        // console.log('save changes')
-        // this.toggleOut()
     }
 
     getProductType(){
@@ -149,14 +168,17 @@ class ProductModal extends React.Component {
 
     handleChange(e){
         const target = e.target
-        
+        // console.log(target.value)
         if(target.name === 'product_name'){
             this.setState((prevState)=>({
-                value:{
-                    ...prevState.value,
-                    product_name: target.value
-                }
-            }))
+                // value:{
+                //     ...prevState.value,
+                //     product_name: target.value
+                // },
+                productNameInput: target.value
+            }), ()=>{
+                // console.log(this.state.value.product_name)
+            })
         }
         else{
             this.setState(()=>({
@@ -241,7 +263,7 @@ class ProductModal extends React.Component {
     }
 
     toggleOut() {
-        this.props.toggle()
+        this.props.toggle(true)
         this.reset()
     }
 
@@ -259,9 +281,22 @@ class ProductModal extends React.Component {
 
   render() {
     const { isOpen, type } = this.props;
-    const {alias_name_input, value: { product_name, alias_names }} = this.state;
+    const {alias_name_input, value: { product_name, alias_names }, addedAliases, deletedAliases, productNameInput } = this.state;
 
-    const list_alias = (alias_names)
+    console.log(product_name)
+
+    const noProductType = (productNameInput.trim().length === 0) ? true : false
+
+    console.log(noProductType)
+
+    const disabledSaveBtn = (
+        product_name === productNameInput
+        && addedAliases.length <= 0 
+        && deletedAliases.length <= 0
+    )
+        ? true : false
+
+    const list_alias = (alias_names.length > 0)
         ? alias_names
         .map((name, index) => {
             return(
@@ -278,7 +313,7 @@ class ProductModal extends React.Component {
                 </span>
             </ListGroupItem>
         )})
-        : <ListGroupItem className="text-muted">Input Alias Names...</ListGroupItem>
+        : <ListGroupItem className="text-muted">Aliases will be shown here.</ListGroupItem>
 
     const title = type === "add" ? "Add New Product" : "Edit Product";
 
@@ -286,6 +321,7 @@ class ProductModal extends React.Component {
         ? (
             <Button
               color="primary"
+              disabled={noProductType}
               onClick={this.addProduct}>
               Add Product
             </Button>
@@ -293,6 +329,7 @@ class ProductModal extends React.Component {
         : (
             <Button
               color="primary"
+              disabled={noProductType || disabledSaveBtn}
               onClick={this.saveEdit}>
               Save
             </Button>
@@ -314,7 +351,7 @@ class ProductModal extends React.Component {
                 name="product_name"
                 id="product_name"
                 placeholder="product name"
-                defaultValue={product_name}
+                defaultValue={productNameInput}
                 onChange={this.handleChange}
               />
             </FormGroup>

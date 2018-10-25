@@ -33,6 +33,7 @@ class List extends Component {
                     productRow: res.product_type.rows
                 }))
             }
+            console.log(res)
             return res.product_type.rows
         })
         // .then(res => console.log(res))
