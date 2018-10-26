@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import DeleteModal from '../../modals/DeleteModal'
@@ -22,6 +23,16 @@ class Products extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
+        this.viewProduct = this.viewProduct.bind(this)
+
+    }
+
+    viewProduct (rowInfo) {
+        const { id } = rowInfo
+        console.log(rowInfo)
+        const { history: { push, goBack } , location: { pathname } } = this.props
+
+        this.props.history.push(`${pathname}/view/${id}`)
     }
 
     toggleModal (close) {
@@ -57,6 +68,10 @@ class Products extends Component {
         }).catch(err => console.log(err))
     }
 
+    componentDidMount(){
+        console.log('get all product')
+        this.props.getAllProduct()
+    }
     
 
 
@@ -65,7 +80,7 @@ class Products extends Component {
         const { productRow, productCount } = this.props
 
         const Products = productRow.map((product)=>{
-            const aliases = product.product_type_alias.map(alias => alias.alias).join(", ")
+            const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
             return (
                 {
                     ...product,
@@ -97,7 +112,7 @@ class Products extends Component {
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
+                                <DropdownItem onClick={()=>{this.viewProduct(rowInfo.value)}}>View</DropdownItem>
                                 <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'edit') }}>Edit</DropdownItem>
                                 <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'delete') }}>Delete</DropdownItem>
                             </DropdownMenu>
@@ -125,4 +140,4 @@ class Products extends Component {
         );
     }
 }
-export default Products;
+export default withRouter(Products)
