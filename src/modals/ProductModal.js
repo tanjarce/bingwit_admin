@@ -80,7 +80,11 @@ class ProductModal extends React.Component {
         const {value: {alias_names}, productNameInput} = this.state
 
         // add product type
-        API.addProductType({'name': productNameInput})
+        const name = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
+        
+        console.log(name)
+
+        API.addProductType({'name': name})
             .then(res => {
                 if(res.success){
                     // checked if there is inputed aliases
@@ -141,7 +145,12 @@ class ProductModal extends React.Component {
     
             // Await for the promise to resolve
             await new Promise((resolve) => {
-                const productName = {'name': productNameInput.trim()} 
+                const name = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
+                
+                
+                const productName = {'name': name} 
+
+
 
                 API.updateProductType(id, productName)
                 .then(res => {
@@ -282,12 +291,7 @@ class ProductModal extends React.Component {
   render() {
     const { isOpen, type } = this.props;
     const {alias_name_input, value: { product_name, alias_names }, addedAliases, deletedAliases, productNameInput } = this.state;
-
-    console.log(product_name)
-
     const noProductType = (productNameInput.trim().length === 0) ? true : false
-
-    console.log(noProductType)
 
     const disabledSaveBtn = (
         product_name === productNameInput

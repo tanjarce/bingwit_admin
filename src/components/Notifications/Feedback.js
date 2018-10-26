@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import Tables from '../Tables'
+import { withRouter } from 'react-router-dom'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import DeleteModal from '../../modals/DeleteModal'
 import SearchAndCount from '../SearchAndCount'
-// import feedback from '../dummyJSONdata/feedback.json'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-// import userDefafult from '../../assets/userDefault.svg'
+import userDefafult from '../../assets/userDefault.svg'
 import moment from 'moment'
+import * as Help from '../../toastify/helpers'
 
 class Feedback extends Component {
     constructor(props) {
@@ -21,6 +22,15 @@ class Feedback extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)
+        this.deleteFeedback = this.deleteFeedback.bind(this)
+        this.viewFeedback = this.viewFeedback.bind(this) 
+    }
+
+    viewFeedback (rowInfo) {
+        const { id } = rowInfo
+        const { history: { push, goBack } , location: { pathname } } = this.props
+
+        this.props.history.push(`${pathname}/view/${id}`)
     }
 
     getFeedbacks () {
@@ -40,19 +50,18 @@ class Feedback extends Component {
         })
     }
 
-    deleteFeedback (id) {
-        // API.deleteRules(id)
-        // .then((response) => {
-        //     const error = response.err || ''
-        //     if (!error) {
-
-        //         Help.toastPop({message: 'Deleted successfully...', type: 'error'})
-        //         this.updateTable();
-        //         return
-        //     } else {
-        //         this.props.onError(response.err.message)
-        //     }
-        // })
+    deleteFeedback () {
+        const { selectedRow: {id, User: {full_name}} } = this.state
+        // console.log(id, full_name)
+        API.deleteFeedbacks(id)
+        .then((response) => {
+            if (response.success) {
+                Help.toastPop({message: 'Deleted successfully...', type: 'error'})
+                this.getFeedbacks();
+            } else {
+                Help.toastPop({message: 'something went wrong', type: 'error'})
+            }
+        })
     }
 
     componentWillMount(){
@@ -62,8 +71,10 @@ class Feedback extends Component {
     toggleModal (rowInfo) {
         this.setState((prevState)=>({
             isOpen: !this.state.isOpen,
-            selectedRow : rowInfo ? {...rowInfo} : prevState.selectedRow
-        }))
+            selectedRow : rowInfo ? {...rowInfo} : null
+        }), ()=>{
+            console.log(this.state.selectedRow)
+        })
     }
 
     render() {
@@ -75,23 +86,22 @@ class Feedback extends Component {
                 'action': {...feed}
             })
         })
+        
         const columnsRules = [
             {
                 Header: 'Account User',
                 accessor: 'User',
                 width: 300,
                 Cell: rowInfo =>  {
-                    const { value } = rowInfo
                     return (
                         <div>
-                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px', 'background': 'pink'}}>
-                                {/* <img 
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                                <img 
                                 with="25px" height="25px" 
-                                src={value['image_url'] ? value['image_url'] : userDefafult} 
-                                className="m-auto"/> */}
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
+                                className="m-auto"/>
                             </span>
-                            {value.full_name}
-                            
+                            {rowInfo.value.full_name}
                         </div>
                     )
                 }
@@ -116,21 +126,18 @@ class Feedback extends Component {
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={console.log('hi')}>Delete</DropdownItem>
+                                <DropdownItem onClick={()=>{this.viewFeedback(rowInfo.value)}}>View</DropdownItem>
+                                <DropdownItem onClick={()=>{this.toggleModal(rowInfo.value)}}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
             }
         ]
-        const rowInfo = selectedRow 
-        ? { 
-            'message': `Are you sure you want to delete ${selectedRow['User Name']}'s feedback.`,
-            'id': selectedRow.id
-        } : null
+
+        const deleteMessage = (selectedRow) ? `Are you sure you want to delete?` : ''
         return (
             <React.Fragment>
-                <DeleteModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={rowInfo} deleteItem={this.deleteFeedback} />
+                <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteFeedback} message={deleteMessage}/>
                 <SearchAndCount text="Feedback" count={feedbackCount}/>
                 <Tables
                     columns={columnsRules}
@@ -140,4 +147,4 @@ class Feedback extends Component {
     }
 }
 
-export default Feedback
+export default withRouter(Feedback)
