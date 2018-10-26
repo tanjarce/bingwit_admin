@@ -181,7 +181,15 @@ export const deleteAliasName = (productTypeId, aliasId) =>
 
  // GET FEEDBACKS
 export const getFeedbacks = () =>
-  fetch(`${api}/feedbacks?limit=${90}&offset=${0}`, { headers }) 
+
+  fetch(`${api}/feedbacks?limit=${100}&offset=${0}`, { headers }) 
+  .then(res => res.json()
+)
+
+export const deleteFeedbacks = (id) =>
+  fetch(`${api}/feedbacks/${id}`, {
+    method: 'DELETE',
+    headers }) 
   .then(res => res.json()
 )
 

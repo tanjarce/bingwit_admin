@@ -5,6 +5,7 @@ import Tabs from '../Tabs'
 import Rules from './Rules'
 import Products from './Products'
 import Banner from '../Banner'
+import ViewProduct from './ViewProduct'
 import ProductModal from '../../modals/ProductModal'
 import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
@@ -28,7 +29,7 @@ class List extends Component {
         API.getAllProductTypes()
         .then(res => {
             if(res.success){
-                console.log(res)
+                // console.log(res)
                 this.setState(()=>({
                     productCount: res.product_type.count,
                     productRow: res.product_type.rows
@@ -43,9 +44,11 @@ class List extends Component {
         })
     }
 
-    componentWillMount () {
-        this.getAllProduct()
-    }
+    // componentWillMount () {
+    //     // if(this.props.location.pathname === '/list/products'){
+    //         this.getAllProduct()
+    //     // }
+    // }
 
     render() {
         const tabs = [
@@ -73,12 +76,13 @@ class List extends Component {
                         <Route path="/list/rules" render={()=>(
                             <Rules />
                         )}/>
-                        <Route path="/list/products" render={()=>(
+                        <Route exact path="/list/products" render={()=>(
                             <Products productCount={productCount} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
-                            <Route render={()=>(
-                                <Redirect to="/list/rules" />
-                            )}/>
+                        <Route path="/list/products/view/:id" component={ ViewProduct } />
+                        <Route render={()=>(
+                            <Redirect to="/list/rules" />
+                        )}/>
                     </Switch>
                 </Container>
             </div>
