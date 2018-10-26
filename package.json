@@ -10,7 +10,7 @@
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "prop-types": "^15.6.1",
-    "react": "^16.5.2",
+    "react": "^16.6.0",
     "react-dom": "^16.5.2",
     "react-icons": "^2.2.7",
     "react-moment": "^0.8.1",

@@ -8,11 +8,11 @@ import CardUser from './CardUser'
 import SearchAndCount from '../SearchAndCount'
 import '../../styles/manage.css'
 import * as API from '../../services/API'
+import * as Help from '../../toastify/helpers'
 
 import dots from '../../images/show_more.svg'
 import SuspensionModal from '../../modals/SuspensionModal'
 import UserDeleteModal from '../../modals/UserDeleteModal'
-
 
 
 class ManageUser extends Component {
@@ -23,20 +23,15 @@ class ManageUser extends Component {
             isOpen: false,
             dataUsers : [],
             count : '',
-            userInfo : []
+            userInfo : [],
+            idSuspend : '',
+            roleStat : '',
         }
+        this.suspendUser = this.suspendUser.bind(this)
         this.updateTable = this.updateTable.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.viewUser = this.viewUser.bind(this)
-    }
-
-    toggleModal () {
-        this.setState({isOpen: !this.state.isOpen})
-    }
-    viewUser (id){
-        this.props.history.push(`/mnguser/${id}`)
-        
     }
     componentDidMount(){
         this.updateTable();
@@ -62,10 +57,47 @@ class ManageUser extends Component {
             console.log(response.error.message)
         })
     }
+
+    suspendUser(){        
+        const { roleStat } = this.state
+        if((roleStat.role !== 'admin' && roleStat.status !== 'inactive')){
+        const { idSuspend } = this.state
+        API.suspendUser(idSuspend)
+        .then((response) => {
+            response.success ? 
+            (
+            this.updateTable(),
+            Help.toastPop({message: `Suspended successfully`, type: 'error'})
+            )
+            :
+            Help.toastPop({message: response.error.message, type: 'error'})
+        })
+        }
+        else{
+            Help.toastPop({message: `You can't suspend this type.`, type: 'error'})
+        }
+    }
+
+    toggleModal () {
+        this.setState({
+            isOpen: !this.state.isOpen
+        })
+    }
+    viewUser (id){
+        this.props.history.push(`/mnguser/${id}`)
+        
+    }
+    
     setModal (data, type) {
+        console.log(data)
         this.setState({
             modalType: type,
-            userData: {...data}
+            userData: {...data},
+            idSuspend : data.id,
+            roleStat : {
+                role : data.type,
+                status : data.status
+            }
         }, () => {
             this.toggleModal()
         }
@@ -87,7 +119,8 @@ class ManageUser extends Component {
             })
         })
         
-        const columnsRules = [{
+        const columnsRules = [
+            {
                 Header: 'Account User',
                 accessor: 'username',
                 width: 200
@@ -107,6 +140,11 @@ class ManageUser extends Component {
                 width: 120
             },
             {
+                Header: 'Role',
+                accessor: 'role',
+                width: 150
+            },
+            {
                 Header: 'Account Status',
                 accessor: 'account_status',
                 width: 150
@@ -123,8 +161,8 @@ class ManageUser extends Component {
                         </DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={() => {this.viewUser(rowInfo.value.id)}}>View</DropdownItem>
-                            <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem>
-                            <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Delete</DropdownItem>
+                            {/* <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem> */}
+                            <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Suspend</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 )
@@ -135,7 +173,7 @@ class ManageUser extends Component {
         // checking what modal to be use
         const modal = (modalType === 'suspend') 
             ? (<SuspensionModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
-            : (<UserDeleteModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
+            : (<UserDeleteModal suspendUser={this.suspendUser} isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
         
         return (
             <div className='bottom-pad'>

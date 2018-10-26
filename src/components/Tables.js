@@ -16,6 +16,7 @@ class Tables extends Component {
           columns={columns}
           defaultPageSize={10}
           className="-highlight text-center"
+          
           />
     );
   }

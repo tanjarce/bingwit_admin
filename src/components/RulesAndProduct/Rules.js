@@ -82,7 +82,8 @@ class RulesTable extends Component {
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
-                width: 80
+                width: 50,
+                resizable: false
             },
             {
                 Header: 'Description',
@@ -91,11 +92,13 @@ class RulesTable extends Component {
             {
                 Header: 'Date Created',
                 accessor: 'createdAt',
-                width: 180
+                width: 180,
+                resizable: false,
             },{
                 Header: ' ',
                 accessor: 'action',
                 width: 50,
+                resizable: false,
                 Cell: rowInfo =>  
                     (
                        <UncontrolledDropdown className="text-muted" size="sm">

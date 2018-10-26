@@ -35,11 +35,7 @@ class Report extends Component {
         .then((response) => {
             if (response.success) {
                 Help.toastPop({message: `Successfully deleted.`, type: 'error'})
-                this.setState({
-                    userReport : []
-                })
                 this.getReport();
-                
             }
         }).catch(err => {
             Help.toastPop({message: err , type: 'error'})
@@ -49,29 +45,18 @@ class Report extends Component {
     getReport(){
         API.getReports()
         .then((response) => {
-                response.report.rows.map(item => {
-                        API.getUserId(item.consumer_id)
-                                .then((res) => {
-                                    var joined = this.state.userReport.concat({
-                                        'id' : item.id,
-                                        'consumer' : res.user.full_name,
-                                        'report_description' : item.feedback,
-                                        'reported_seller' : item.User.full_name,
-                                        'sent_date' : moment(item.createdAt).format('MMMM D, YYYY'),
-                                        'action' : {...item}
-                                    })
-                                    this.setState({
-                                        userReport : joined,
-                                        count : response.report.count
-                                    })
-                                })
-                            })
-                        }
-                    )
-        // })
-        // .catch(error => {
-        //     console.log(error)
-        // })
+                if(response.success){
+                    this.setState({
+                        userReport : response.report.rows
+                    })
+                }
+                else{
+                    console.log(response.error.message)
+                }
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }    
 
     toggleModal (rowInfo) {
@@ -90,13 +75,15 @@ class Report extends Component {
     )}
   render() {
     const { userReport, selectedRow, count, isOpen } = this.state;
+    console.log(userReport)
     const Reports = userReport.map((report)=>{
         return ({
-            'consumer': report.consumer,
-            'report_description': report.report_description,
-            'reported_seller': report.reported_seller,
-            'sent_date':  report.sent_date,
-            'action': report.action
+            'consumer': report.consumer.full_name,
+            'report_description': report.feedback,
+            'reported_seller': report.producer.full_name,
+            'sent_date':  moment(report.createdAt).format('MMMM D, YYYY'),
+            'action': {...report}
+            
         })
     })
     const columnsRules = [
@@ -152,3 +139,22 @@ class Report extends Component {
 }
 
 export default Report
+
+    //response.report.rows.map(item => {
+    //         API.getUserId(item.consumer_id)
+    //                 .then((res) => {
+    //                     var joined = this.state.userReport.concat({
+    //                         'id' : item.id,
+    //                         'consumer' : res.user.full_name,
+    //                         'report_description' : item.feedback,
+    //                         'reported_seller' : item.User.full_name,
+    //                         'sent_date' : moment(item.createdAt).format('MMMM D, YYYY'),
+    //                         'action' : {...item}
+    //                     })
+    //                     this.setState({
+    //                         userReport : joined,
+    //                         count : response.report.count
+    //                     })
+    //                 })
+    //             })
+    //         }

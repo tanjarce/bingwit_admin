@@ -26,9 +26,7 @@ class Feedback extends Component {
     getFeedbacks () {
         API.getFeedbacks()
         .then((response) => {
-            console.log(response)
             if(response.success){
-                console.log(response)
                 this.setState(()=>({
                     feedbacks: [...response.feedback.rows],
                     feedbackCount: response.feedback.count
@@ -117,7 +115,7 @@ class Feedback extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
-                                <DropdownItem onClick={console.log('hi')}>Delete</DropdownItem>
+                                <DropdownItem onClick={console.log('')}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
