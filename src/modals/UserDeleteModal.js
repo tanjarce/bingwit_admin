@@ -7,26 +7,13 @@ import Modal from '../components/Modal';
 class UserDeleteModal extends Component {
     constructor(props) {
         super(props);
-        
         this.onConfirm = this.onConfirm.bind(this)
     }
     
     onConfirm () {
-        // const { userData } = this.props
-        // if (!userData) 
-        //     return
-        // //API CALL
-        // API.deleteUser(userData)
-        // .then( response => {
-        //     if (response.errors)
-        //         return console.error(`ERROR ON UserDeleteModal line: 16 ${response.errors}`);
-        //     this.props.onDeleteUser()
-        //     this.props.toggle()
-        // })
-        console.log(`delete User ${this.props.userData.username}`)
+        this.props.suspendUser()
         this.props.toggle()
     }
-
     render() {
         const { isOpen, toggle, userData = null} = this.props
         return (
@@ -34,8 +21,15 @@ class UserDeleteModal extends Component {
                 <Modal
                     isOpen={isOpen}
                     toggle={toggle}
-                    modalTitle={`Delete ${ userData ? userData.username : '' }'s Account`}
-                    modalBody={<div>{`Are you sure you want to delete this account?` }</div>}
+                    modalTitle={userData && 
+                        `${userData.status === 'suspended' ?
+                         `Activate ${ userData ? userData.username : '' }'s Account` :
+                          `Suspend ${ userData ? userData.username : '' }'s Account`}`}
+
+                    modalBody={userData && 
+                        `${userData.status === 'suspended' ?
+                        `Are you sure you want to activate this account?` :
+                        `Are you sure you want to suspend this account?`}`}
                     modalFooter={
                         <React.Fragment>
                             <Button color="primary" onClick={this.onConfirm}>Confirm</Button>

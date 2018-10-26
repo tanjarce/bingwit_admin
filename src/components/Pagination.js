@@ -82,6 +82,7 @@ export default class CBReactTablePagination extends Component {
       canNext,
       onPageSizeChange
     } = this.props
+    
     return (
       <div className="pagi_main">
 

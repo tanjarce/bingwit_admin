@@ -1,7 +1,7 @@
 import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.0.125:3000/api/v1';
-const api = 'http://192.168.0.126:3000/api/v1';
+const api = 'http://192.168.0.125:3000/api/v1';
 let token = Session.getToken()
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -30,9 +30,17 @@ export const getUserId = (id) =>
 
 // GET ALL USERS
 export const getAllUser = (search) =>  
-  fetch(`${api}/users?offset=${0}&limit=${10}&q=${search}`, { 
+  fetch(`${api}/users?offset=${0}&limit=${99}&q=${search}`, { 
   headers })
   .then(res => res.json())
+
+// SUSPEND USER
+export const suspendUser = (id) =>   
+  fetch(`${api}/users/${id}/suspend`, {
+  method: 'PUT',
+  headers })
+  .then(res => res.json())
+
 
 // GET USER TYPE
 export const getUserType = (body) =>   
@@ -173,6 +181,7 @@ export const deleteAliasName = (productTypeId, aliasId) =>
 
  // GET FEEDBACKS
 export const getFeedbacks = () =>
+
   fetch(`${api}/feedbacks?limit=${100}&offset=${0}`, { headers }) 
   .then(res => res.json()
 )

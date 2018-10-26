@@ -36,9 +36,7 @@ class Feedback extends Component {
     getFeedbacks () {
         API.getFeedbacks()
         .then((response) => {
-            console.log(response)
             if(response.success){
-                console.log(response)
                 this.setState(()=>({
                     feedbacks: [...response.feedback.rows],
                     feedbackCount: response.feedback.count
@@ -126,8 +124,10 @@ class Feedback extends Component {
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
                             <DropdownMenu>
+
                                 <DropdownItem onClick={()=>{this.viewFeedback(rowInfo.value)}}>View</DropdownItem>
                                 <DropdownItem onClick={()=>{this.toggleModal(rowInfo.value)}}>Delete</DropdownItem>
+
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
