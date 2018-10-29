@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Card, CardBody, CardTitle, CardSubtitle, Button, ListGroupItem, ListGroup, ListGroupItemHeading, ListGroupItemText } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap';
 
 import * as API from '../../services/API'
 import moment from 'moment'

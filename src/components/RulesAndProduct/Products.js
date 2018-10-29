@@ -89,7 +89,7 @@ class Products extends Component {
                     'action': {...product}}
             )
         })
-        const columnsRules = [{
+        const columnsProduct = [{
                 Header: 'Product Name',
                 accessor: 'name',
             },
@@ -135,7 +135,7 @@ class Products extends Component {
                 <SearchCount text="Product" count={productCount}/>
                 <Table
                     isLoading={isLoading}
-                    columns={columnsRules} 
+                    columns={columnsProduct} 
                     data={Products} />
             </React.Fragment>
         );
