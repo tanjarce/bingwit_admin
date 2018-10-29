@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import Tables from '../Tables'
-import { Col, Row, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import DeleteModal from '../../modals/DeleteModal'
 
+import userDefafult from '../../assets/userDefault.svg'
 import * as Help from '../../toastify/helpers'
 import moment from 'moment'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
-import TotalCount from '../TotalCount';
+import SearchAndCount from '../SearchAndCount'
 
 class Report extends Component {
     constructor(props) {
@@ -17,7 +18,8 @@ class Report extends Component {
             isOpen: false,
             userReport : [],
             selectedRow: null,
-            count : ''
+            count : '',
+            loading : true
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
@@ -47,7 +49,9 @@ class Report extends Component {
         .then((response) => {
                 if(response.success){
                     this.setState({
-                        userReport : response.report.rows
+                        userReport : response.report.rows,
+                        count : response.report.count,
+                        loading : false
                     })
                 }
                 else{
@@ -74,13 +78,13 @@ class Report extends Component {
         }
     )}
   render() {
-    const { userReport, selectedRow, count, isOpen } = this.state;
+    const { userReport, selectedRow, count, isOpen, loading } = this.state;
     console.log(userReport)
     const Reports = userReport.map((report)=>{
         return ({
-            'consumer': report.consumer.full_name,
+            'consumer': report.consumer,
             'report_description': report.feedback,
-            'reported_seller': report.producer.full_name,
+            'reported_seller': report.producer,
             'sent_date':  moment(report.createdAt).format('MMMM D, YYYY'),
             'action': {...report}
             
@@ -90,7 +94,21 @@ class Report extends Component {
         {
             Header: 'Consumer',
             accessor: 'consumer',
-            width: 200
+            width: 200,
+            Cell: rowInfo =>  {
+                return (
+                    <div>
+                        {console.log(rowInfo.value)}
+                        <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                            <img 
+                            with="25px" height="25px" 
+                            src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
+                            className="m-auto"/>
+                        </span>
+                        {rowInfo.value.full_name}
+                    </div>
+                )
+            }
         },
         {
             Header: 'Report Description',
@@ -99,7 +117,20 @@ class Report extends Component {
         {
             Header: 'Reported Seller',
             accessor: 'reported_seller',
-            width: 200
+            width: 200,
+            Cell: rowInfo =>  {
+                return (
+                    <div>
+                        <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                            <img 
+                            with="25px" height="25px" 
+                            src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
+                            className="m-auto"/>
+                        </span>
+                        {rowInfo.value.full_name}
+                    </div>
+                )
+            }
         },
         {
             Header: 'Sent Date',
@@ -110,6 +141,7 @@ class Report extends Component {
             Header: ' ',
             accessor: 'action',
             width: 50,
+            resizable: false,
             Cell: rowInfo =>  
                 (
                     <UncontrolledDropdown className="text-muted" size="sm">
@@ -127,10 +159,10 @@ class Report extends Component {
     return (
         <React.Fragment>
             <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
-            <Row><Col></Col>
-            <Col xs='auto'><TotalCount count={count} text='Reports'/></Col>
-            </Row>
+            <SearchAndCount text="Reports" count={count}/>
             <Tables 
+
+                loading = {loading}
                 columns={columnsRules} 
                 data={Reports} />
         </React.Fragment>
@@ -139,22 +171,3 @@ class Report extends Component {
 }
 
 export default Report
-
-    //response.report.rows.map(item => {
-    //         API.getUserId(item.consumer_id)
-    //                 .then((res) => {
-    //                     var joined = this.state.userReport.concat({
-    //                         'id' : item.id,
-    //                         'consumer' : res.user.full_name,
-    //                         'report_description' : item.feedback,
-    //                         'reported_seller' : item.User.full_name,
-    //                         'sent_date' : moment(item.createdAt).format('MMMM D, YYYY'),
-    //                         'action' : {...item}
-    //                     })
-    //                     this.setState({
-    //                         userReport : joined,
-    //                         count : response.report.count
-    //                     })
-    //                 })
-    //             })
-    //         }

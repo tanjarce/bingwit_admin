@@ -46,7 +46,7 @@ class LoginForm extends Component {
                 }
                 else{
                     this.toggleLoading()
-                    this.props.onError("Sorry. You must be admin to access this website.")
+                    this.props.onError("You don't have access to this site.")
                 }
             }
             else

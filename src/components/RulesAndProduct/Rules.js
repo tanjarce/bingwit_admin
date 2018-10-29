@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { withRouter } from 'react-router-dom'
+import { withRouter , Route} from 'react-router-dom'
 import moment from 'moment'
 
 import Table from '../Tables'
@@ -10,7 +10,7 @@ import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import * as Help from '../../toastify/helpers'
-
+import ViewRules from './ViewRules'
 
 
 
@@ -22,8 +22,10 @@ class RulesTable extends Component {
             isOpen: false,
             getRule: [],
             count : '',
-            selectedRow : null
+            selectedRow : null,
+            loading : true
         }
+        this.ViewRules = this.ViewRules.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
         this.deleteRule = this.deleteRule.bind(this)
@@ -47,7 +49,8 @@ class RulesTable extends Component {
                 })
                 this.setState({
                     ruleRow : arr,
-                    count : response.rule.count
+                    count : response.rule.count,
+                    loading : false
                 })
                 return
             } else {
@@ -76,13 +79,17 @@ class RulesTable extends Component {
             Help.toastPop({message: err , type: 'error'})
         })
     }
-    
+    ViewRules(){
+        const { selectedRow } = this.state; 
+        console.log(selectedRow)
+        // this.props.history.push(`${pathname}/view/${id}`)
+    }
     render() {
-        const { ruleRow, isOpen, count, selectedRow } = this.state;
+        const { ruleRow, isOpen, count, selectedRow, loading } = this.state;
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
-                width: 50,
+                width: 70,
                 resizable: false
             },
             {
@@ -106,7 +113,7 @@ class RulesTable extends Component {
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
+                                <DropdownItem onClick={() => this.ViewRules(rowInfo.value)}>View</DropdownItem>
                                 <DropdownItem onClick={() => this.toggleModal(rowInfo.value)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
@@ -114,11 +121,13 @@ class RulesTable extends Component {
             }]
         const message = selectedRow ? `Are you sure you want to delete rule no. ${selectedRow.no}.` : ''
         return (
+            
                 <React.Fragment>
-                    
-                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
+                
+                <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
                 <SearchCount updateTable={this.updateTable} count={count} text="Rules"/>
                 <Table
+                    loading={loading}
                     columns={columnsRules} 
                     data={ruleRow} />
                 <SetRules updateTable={this.updateTable}/>
