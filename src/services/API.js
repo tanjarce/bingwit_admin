@@ -8,6 +8,8 @@ const headers = {
   'Authorization': `Bearer ${token ? token.token : null}`
 }
 
+console.log(token.token)
+
 // convert to form url encode 
 
 function toFormURLEncode (data) {
@@ -209,3 +211,8 @@ export const deleteReport = (id) =>
   headers })
 .then(res => res.json())
 
+// AREAS //=--------------------------------------
+
+export const getAllAreas = () =>
+  fetch(`${api}/area?limit=${10}&offset=${0}`, { headers }) 
+  .then(res => res.json())
