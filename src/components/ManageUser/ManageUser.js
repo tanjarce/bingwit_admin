@@ -13,7 +13,7 @@ import * as Help from '../../toastify/helpers'
 import dots from '../../images/show_more.svg'
 import SuspensionModal from '../../modals/SuspensionModal'
 import UserDeleteModal from '../../modals/UserDeleteModal'
-
+import userDefafult from '../../assets/userDefault.svg'
 
 class ManageUser extends Component {
     constructor(props) {
@@ -26,6 +26,7 @@ class ManageUser extends Component {
             userInfo : [],
             idSuspend : '',
             roleStat : '',
+            loading : true
         }
         this.suspendUser = this.suspendUser.bind(this)
         this.updateTable = this.updateTable.bind(this)
@@ -52,6 +53,7 @@ class ManageUser extends Component {
             this.setState({
                 dataUsers : response.users.rows,
                 count : response.users.count,
+                loading : false
             })
             :
             console.log(response.error.message)
@@ -110,7 +112,7 @@ class ManageUser extends Component {
             return ({
                 'id' : user.id,
                 'name': user.full_name,
-                'username': user.username,
+                'username': user,
                 'role': user.type,
                 'address': user.address,
                 'ratings': user.rating === null ? '- -' : user.rating,
@@ -123,7 +125,20 @@ class ManageUser extends Component {
             {
                 Header: 'Account User',
                 accessor: 'username',
-                width: 200
+                width: 200,
+                 Cell: rowInfo =>  {
+                    return (
+                        <div>
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                                <img 
+                                with="25px" height="25px" 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
+                                className="m-auto"/>
+                            </span>
+                            {rowInfo.value.username}
+                        </div>
+                    )
+                }
             },
             {
                 Header: 'Full Name',
@@ -153,7 +168,8 @@ class ManageUser extends Component {
                 Header: ' ',
                 accessor: 'action',
                 width: 50,
-            Cell: rowInfo =>  
+                resizable: false,
+                Cell: rowInfo =>  
                 (
                     <UncontrolledDropdown className="text-muted" size="sm">
                         <DropdownToggle className="bg-transparent border-0 p-0 h-auto d-inline-flex">
@@ -168,7 +184,7 @@ class ManageUser extends Component {
                 )
             }]
         
-        const { isOpen, userData, modalType} = this.state
+        const { isOpen, userData, modalType, loading } = this.state
         
         // checking what modal to be use
         const modal = (modalType === 'suspend') 
@@ -187,6 +203,7 @@ class ManageUser extends Component {
                             <React.Fragment>
                                 <SearchAndCount updateTable={this.updateTable} text="Users" count={count}/>
                                 <Tables
+                                    loading={loading}
                                     columns={columnsRules} 
                                     data={Users} />
                             </React.Fragment>
