@@ -4,6 +4,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import Tabs from '../Tabs'
 import Rules from './Rules'
 import Products from './Products'
+import Areas from './Areas'
 import Banner from '../Banner'
 import ViewProduct from './ViewProduct'
 import ProductModal from '../../modals/ProductModal'
@@ -14,12 +15,16 @@ class List extends Component {
     constructor(props){
         super(props)
         this.state = {
+            isLoading: true,
             isOpen: false,
             productCount: 0,
             productRow: [],
+            areaCount: 0,
+            areaRow: [],
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
+        this.getAllArea = this.getAllArea.bind(this)
     }
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
@@ -32,7 +37,8 @@ class List extends Component {
                 // console.log(res)
                 this.setState(()=>({
                     productCount: res.product_type.count,
-                    productRow: res.product_type.rows
+                    productRow: res.product_type.rows,
+                    isLoading: false
                 }))
             }
             // console.log(res)
@@ -40,23 +46,45 @@ class List extends Component {
         })
         // .then(res => console.log(res))
         .catch(err => {
+            this.setState(()=>({
+                isLoading: false
+            }))
             Help.toastPop({message: err, type: 'error'})
         })
     }
 
-    // componentWillMount () {
-    //     // if(this.props.location.pathname === '/list/products'){
-    //         this.getAllProduct()
-    //     // }
-    // }
+    getAllArea() {
+        API.getAllAreas()
+        .then(res => {
+            if(res.success){
+                console.log(res)
+                // console.log(res)
+            }
+            // console.log(res)
+            return res.product_type.rows
+        })
+        // .then(res => console.log(res))
+        .catch(err => {
+            this.setState(()=>({
+                isLoading: false
+            }))
+        })
+    }
+
+    componentWillMount () {
+        // if(this.props.location.pathname === '/list/products'){
+            this.getAllArea()
+        // }
+    }
 
     render() {
         const tabs = [
             {'text': 'Rules', 'url': '/list/rules'},
             {'text': 'Products', 'url': '/list/products'},
+            {'text': 'Areas', 'url': '/list/areas'},
         ]
         
-        const { isOpen, productCount, productRow } = this.state
+        const {isLoading, isOpen, productCount, productRow } = this.state
 
         return (
             <div className='bottom-pad'>
@@ -77,7 +105,10 @@ class List extends Component {
                             <Rules />
                         )}/>
                         <Route exact path="/list/products" render={()=>(
-                            <Products productCount={productCount} productRow={productRow} getAllProduct={this.getAllProduct}/>
+                            <Products isLoading={isLoading} productCount={productCount} productRow={productRow} getAllProduct={this.getAllProduct}/>
+                        )}/>
+                        <Route exact path="/list/areas" render={()=>(
+                            <Areas isLoading={isLoading} areaCount={productCount} areaRow={productRow} getAllArea={this.getAllArea}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
                         <Route render={()=>(

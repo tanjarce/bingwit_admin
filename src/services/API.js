@@ -1,12 +1,15 @@
 import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
-// const api = 'http://192.168.0.125:3000/api/v1';
 const api = 'http://192.168.0.125:3000/api/v1';
+// const api = 'http://192.168.0.126:3000/api/v1';
+// const api = 'http://18.224.2.191/api/v1';
 let token = Session.getToken()
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': `Bearer ${token ? token.token : null}`
 }
+
+console.log(token.token)
 
 // convert to form url encode 
 
@@ -209,3 +212,8 @@ export const deleteReport = (id) =>
   headers })
 .then(res => res.json())
 
+// AREAS //=--------------------------------------
+
+export const getAllAreas = () =>
+  fetch(`${api}/area?limit=${10}&offset=${0}`, { headers }) 
+  .then(res => res.json())
