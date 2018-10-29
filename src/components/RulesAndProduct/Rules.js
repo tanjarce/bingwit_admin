@@ -23,7 +23,8 @@ class RulesTable extends Component {
             getRule: [],
             count : '',
             selectedRow : null,
-            loading : true
+            loading : true,
+            bool : true
         }
         this.ViewRules = this.ViewRules.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
@@ -79,13 +80,17 @@ class RulesTable extends Component {
             Help.toastPop({message: err , type: 'error'})
         })
     }
-    ViewRules(){
-        const { selectedRow } = this.state; 
-        console.log(selectedRow)
-        // this.props.history.push(`${pathname}/view/${id}`)
+    ViewRules(rowInfo){
+        console.log(rowInfo)
+        this.setState({
+            bool : false,
+            selectedRow : rowInfo
+        })
+        
     }
     render() {
-        const { ruleRow, isOpen, count, selectedRow, loading } = this.state;
+        const { ruleRow, isOpen, count, selectedRow, loading, bool } = this.state;
+        console.log(selectedRow)
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -123,14 +128,17 @@ class RulesTable extends Component {
         return (
             
                 <React.Fragment>
-                
-                <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
-                <SearchCount updateTable={this.updateTable} count={count} text="Rules"/>
-                <Table
-                    loading={loading}
-                    columns={columnsRules} 
-                    data={ruleRow} />
-                <SetRules updateTable={this.updateTable}/>
+                {bool ? <div>
+                    <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
+                    <SearchCount updateTable={this.updateTable} count={count} text="Rules"/>
+                    <Table
+                        loading={loading}
+                        columns={columnsRules} 
+                        data={ruleRow} />
+                    <SetRules updateTable={this.updateTable}/>
+                </div> : 
+                <ViewRules selectedRow = {selectedRow}/>
+                }
                 
                 
             </React.Fragment>
