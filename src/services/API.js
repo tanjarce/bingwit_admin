@@ -1,7 +1,7 @@
 import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.0.125:3000/api/v1';
-const api = 'http://192.168.0.125:3000/api/v1';
+const api = 'http://18.224.2.191/api/v1';
 let token = Session.getToken()
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -30,7 +30,7 @@ export const getUserId = (id) =>
 
 // GET ALL USERS
 export const getAllUser = (search) =>  
-  fetch(`${api}/users?offset=${0}&limit=${99}&q=${search}`, { 
+  fetch(`${api}/users?offset=${0}&limit=${999}&q=${search}`, { 
   headers })
   .then(res => res.json())
 
@@ -87,7 +87,7 @@ export const logout = () =>
 
 // GET ALL RULES
 export const getAllRules = () =>  
-  fetch(`${api}/rules?offset=${0}&limit=${10}`, {
+  fetch(`${api}/rules?offset=${0}&limit=${999}`, {
   headers })
   .then(res => res.json())
 
@@ -111,7 +111,7 @@ export const addRules = (data) =>
 
 // GET ALL PRODUCT TYPES
 export const getAllProductTypes = () => 
-  fetch(`${api}/product_types?offset=${0}&limit=${100}`, { 
+  fetch(`${api}/product_types?offset=${0}&limit=${999}`, { 
     headers })
     .then(res => res.json())
 
@@ -182,7 +182,7 @@ export const deleteAliasName = (productTypeId, aliasId) =>
  // GET FEEDBACKS
 export const getFeedbacks = () =>
 
-  fetch(`${api}/feedbacks?limit=${100}&offset=${0}`, { headers }) 
+  fetch(`${api}/feedbacks?limit=${999}&offset=${0}`, { headers }) 
   .then(res => res.json()
 )
 
@@ -198,7 +198,7 @@ export const deleteFeedbacks = (id) =>
 
 // default GET
 export const getReports = () =>
-  fetch(`${api}/reports?limit=${10}&offset=${0}`, { headers }) 
+  fetch(`${api}/reports?limit=${999}&offset=${0}`, { headers }) 
   .then(res => res.json())
   
  

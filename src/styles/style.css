@@ -55,3 +55,9 @@
     font-weight: bold;
     margin-left: 40px; 
 }
+
+.all_padding .inputField {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 0.2rem rgb(255, 255, 255) !important;
+    border : 1px solid #ced4da !important;
+}

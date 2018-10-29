@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.0-beta.6",
     "availity-reactstrap-validation": "^2.3.0",
     "bootstrap": "^4.1.1",
     "escape-string-regexp": "^1.0.5",

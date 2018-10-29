@@ -82,7 +82,7 @@ class AccountSetting extends Component {
                       <Label sm={3}>USERNAME:</Label>
                       <Col sm={10} lg='6'>
                       <AvGroup>
-                          <AvInput type='text' name="username" placeholder={username} required disabled />
+                          <AvInput class="border" type='text' name="username" placeholder={username} required disabled />
                       </AvGroup>
                       </Col>
                     </FormGroup>
@@ -91,7 +91,8 @@ class AccountSetting extends Component {
                       <Label sm={3}>NEW PASSWORD:</Label>
                       <Col sm={10} lg='6'>
                       <AvGroup>
-                          <AvInput 
+                          <AvInput
+                          className='inputField'
                           type='password' 
                           name="password" 
                           placeholder='Type password...' 
@@ -110,6 +111,7 @@ class AccountSetting extends Component {
                       <Col sm={10} lg='6'>
                       <AvGroup>
                           <AvInput 
+                          className='inputField'
                           type='password' 
                           name="vpassword" 
                           placeholder='Verify password...' 
@@ -130,7 +132,8 @@ class AccountSetting extends Component {
                            <FormText color="muted">
                             Re-enter your password to save changes to your account.
                           </FormText>
-                          <AvInput 
+                          <AvInput
+                          className='inputField'
                           type='password' 
                           name="oldPass" 
                           placeholder='Confirm old password...' 

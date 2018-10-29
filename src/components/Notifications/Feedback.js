@@ -18,7 +18,8 @@ class Feedback extends Component {
             isOpen: false,
             feedbacks: [],
             feedbackCount: 0,
-            selectedRow: null
+            selectedRow: null,
+            loading : true
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)
@@ -39,7 +40,8 @@ class Feedback extends Component {
             if(response.success){
                 this.setState(()=>({
                     feedbacks: [...response.feedback.rows],
-                    feedbackCount: response.feedback.count
+                    feedbackCount: response.feedback.count,
+                    loading : false
                 }))
             }
             
@@ -76,7 +78,7 @@ class Feedback extends Component {
     }
 
     render() {
-        const { feedbacks, isOpen, feedbackCount, selectedRow } = this.state
+        const { feedbacks, isOpen, feedbackCount, selectedRow, loading } = this.state
         const Feedback = feedbacks.map((feed)=>{
             return ({
                 ...feed,
@@ -140,6 +142,7 @@ class Feedback extends Component {
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteFeedback} message={deleteMessage}/>
                 <SearchAndCount text="Feedback" count={feedbackCount}/>
                 <Tables
+                    loading = {loading}
                     columns={columnsRules}
                     data={Feedback} />
             </React.Fragment>
