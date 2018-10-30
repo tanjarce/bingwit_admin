@@ -34,15 +34,21 @@ class Feedback extends Component {
         this.props.history.push(`${pathname}/view/${id}`)
     }
 
-    getFeedbacks (search) {
-        var tmp = ''
+    loading(){
+        this.setState({
+            loading : true
+        })
+    }
+    getFeedbacks(search){
+        this.loading()
+        var tmp_value = ''
         if(search === undefined){
-            tmp = ' ' 
+            tmp_value = ' ' 
         }
         else{
-            tmp = search
+            tmp_value = search
         }
-        API.getFeedbacks(tmp)
+        API.getFeedbacks(tmp_value)
         .then((response) => {
             if(response.success){
                 this.setState(()=>({
@@ -104,9 +110,9 @@ class Feedback extends Component {
                         <div>
                             <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                                 <img 
-                                with="25px" height="25px" 
+                                width="25px" height="25px" 
                                 src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
-                                className="m-auto"/>
+                                className="m-auto rounded-circle"/>
                             </span>
                             {rowInfo.value.full_name}
                         </div>

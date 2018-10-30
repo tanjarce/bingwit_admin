@@ -45,14 +45,14 @@ class ManageUser extends Component {
     }
     updateTable(search){
         this.loading()
-        var tmp = ''
-        if(search === undefined){
-            tmp = ' ' 
+        var tmp_value = ''
+        if(search === undefined && ' '){
+            tmp_value = ' ' 
         }
         else{
-            tmp = search
+            tmp_value = search
         }
-        API.getAllUser(tmp)
+        API.getAllUser(tmp_value)
         .then((response) => {
             response.success === true ?
             
@@ -137,9 +137,9 @@ class ManageUser extends Component {
                         <div>
                             <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                                 <img 
-                                with="25px" height="25px" 
+                                width="25px" height="25px" 
                                 src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
-                                className="m-auto"/>
+                                className="m-auto rounded-circle"/>
                             </span>
                             {rowInfo.value.username}
                         </div>

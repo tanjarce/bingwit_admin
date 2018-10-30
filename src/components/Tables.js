@@ -15,7 +15,7 @@ const override = css`
 
 class Tables extends Component {
   render() {
-    let { columns, data, loading, dataCount } = this.props
+    let { columns, data, loading } = this.props
     
     return(
           <ReactTable
