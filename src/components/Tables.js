@@ -15,7 +15,7 @@ const override = css`
 
 class Tables extends Component {
   render() {
-    let { columns, data, loading, dataCount } = this.props
+    let { columns, data, loading, dataCount, updateTable} = this.props
     
     return(
           <ReactTable
@@ -34,10 +34,11 @@ class Tables extends Component {
           noDataText="No Database Found!"
           PaginationComponent={Pagination}
           data={data}
+          dataCount={dataCount}
           columns={columns}
           defaultPageSize={10}
           className="-highlight text-center"
-          
+          updateTable={updateTable}
           />
     );
   }
