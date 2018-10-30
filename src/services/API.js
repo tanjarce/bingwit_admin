@@ -9,7 +9,6 @@ const headers = {
   'Authorization': `Bearer ${token ? token.token : null}`
 }
 
-// console.log(token.token)
 
 // convert to form url encode 
 
@@ -183,9 +182,9 @@ export const deleteAliasName = (productTypeId, aliasId) =>
 // GET FEEDBACKS //=--------------------------------------
 
  // GET FEEDBACKS
-export const getFeedbacks = () =>
+export const getFeedbacks = (search) =>
 
-  fetch(`${api}/feedbacks?limit=${999}&offset=${0}`, { headers }) 
+  fetch(`${api}/feedbacks?limit=${999}&offset=${0}&q=${search}`, { headers }) 
   .then(res => res.json()
 )
 
@@ -200,8 +199,8 @@ export const deleteFeedbacks = (id) =>
 // GET REPORTS //=--------------------------------------
 
 // default GET
-export const getReports = () =>
-  fetch(`${api}/reports?limit=${999}&offset=${0}`, { headers }) 
+export const getReports = (search) =>
+  fetch(`${api}/reports?limit=${999}&offset=${0}&q=${search}`, { headers }) 
   .then(res => res.json())
   
  

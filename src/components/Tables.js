@@ -19,25 +19,25 @@ class Tables extends Component {
     
     return(
           <ReactTable
-            loading={loading}
-            loadingText={
-              <div className='sweet-loading'>
-                <SyncLoader
-                  className={override}
-                  sizeUnit={"px"}
-                  size={8}
-                  color={'#17C1BC'}
-                  loading={true}
-                />
-              </div> 
-            }
-            noDataText="No Database Found!"
-            PaginationComponent={Pagination}
-            data={data}
-            dataCount={dataCount}
-            columns={columns}
-            defaultPageSize={10}
-            className="-highlight text-center"
+          loading={loading}
+          loadingText={
+            <div className='sweet-loading'>
+              <SyncLoader
+                className={override}
+                sizeUnit={"px"}
+                size={5}
+                color={'#17C1BC'}
+                loading={true}
+              />
+          </div> 
+          }
+          noDataText="No Database Found!"
+          PaginationComponent={Pagination}
+          data={data}
+          columns={columns}
+          defaultPageSize={10}
+          className="-highlight text-center"
+          
           />
     );
   }
