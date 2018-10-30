@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { withRouter , Route} from 'react-router-dom'
 import moment from 'moment'
 
@@ -11,6 +11,7 @@ import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import * as Help from '../../toastify/helpers'
 import ViewRules from './ViewRules'
+import TotalCount from '../TotalCount';
 
 
 
@@ -26,6 +27,7 @@ class RulesTable extends Component {
             loading : true,
             bool : true
         }
+        this.loading = this.loading.bind(this)
         this.ViewRules = this.ViewRules.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.updateTable = this.updateTable.bind(this)
@@ -35,7 +37,13 @@ class RulesTable extends Component {
     componentDidMount(){
         this.updateTable();
      }
-    updateTable(){
+     loading(){
+         this.setState({
+             loading : true
+         })
+     }
+     updateTable(){
+         this.loading()
         API.getAllRules()
         .then((response) => {
           const error = response.error || ''
@@ -130,7 +138,12 @@ class RulesTable extends Component {
                 <React.Fragment>
                 {bool ? <div>
                     <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
-                    <SearchCount updateTable={this.updateTable} count={count} text="Rules"/>
+                    <Row>
+                    <Col></Col>
+                    <Col xs='auto'>
+                    <TotalCount count={count} text="Rules"/>
+                    </Col>
+                    </Row>
                     <Table
                         loading={loading}
                         columns={columnsRules} 

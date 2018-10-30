@@ -16,11 +16,12 @@ class Report extends Component {
         this.state = {
             modalType: 'delete',
             isOpen: false,
-            userReport : [],
             selectedRow: null,
+            userReport : [],
             count : '',
             loading : true
         }
+        this.getReport = this.getReport.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.deleteRule = this.deleteRule.bind(this)
@@ -44,8 +45,15 @@ class Report extends Component {
         })
     }
     
-    getReport(){
-        API.getReports()
+    getReport(search){
+        var tmp = ''
+        if(search === undefined){
+            tmp = ' ' 
+        }
+        else{
+            tmp = search
+        }
+        API.getReports(tmp)
         .then((response) => {
                 if(response.success){
                     this.setState({
@@ -57,10 +65,9 @@ class Report extends Component {
                 else{
                     console.log(response.error.message)
                 }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            }).catch(error =>{
+                console.log(error)
+            })
     }    
 
     toggleModal (rowInfo) {
@@ -101,6 +108,7 @@ class Report extends Component {
                         {console.log(rowInfo.value)}
                         <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                             <img 
+                            alt = 'img'
                             with="25px" height="25px" 
                             src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
                             className="m-auto"/>
@@ -159,9 +167,8 @@ class Report extends Component {
     return (
         <React.Fragment>
             <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
-            <SearchAndCount text="Reports" count={count}/>
+            <SearchAndCount updateTable={this.getReport} text="Reports" count={count}/>
             <Tables 
-
                 loading = {loading}
                 columns={columnsRules} 
                 data={Reports} />
