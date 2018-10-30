@@ -23,17 +23,12 @@ class Notification extends Component {
             <Container>
                 <Tabs links={tabs} />
                 <Switch>
-                    <Route exact path="/notif/feedback" render={()=>(
-                        <Feedback /> 
-                    )}/>
-                    <Route path="/notif/report" render={()=>(
-                        <Report />
-                    )}/>
+                    <Route exact path="/notif/feedback" component={ Feedback } />
+                    <Route path="/notif/report" component={ Report } />
                     <Route path="/notif/feedback/view/:id" component={ ViewFeedback } />
                     <Route render={()=>(
                         <Redirect to="/notif/feedback" />
                     )}/>
-
                 </Switch>
             </Container>
         </div>

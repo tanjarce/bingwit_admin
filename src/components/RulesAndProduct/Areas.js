@@ -91,8 +91,9 @@ class Areas extends Component {
             }).catch(err => console.log(err))
     }
 
-    getAllArea(){
-        API.getAllAreas()
+    getAllArea(data){
+        const search = data || ''
+        API.getAllAreas(search)
         .then((res) => {
             if(res.success){
                 console.log(res)
@@ -155,7 +156,7 @@ class Areas extends Component {
         return (
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteArea} message={deleteMessage}/>
-                <SearchCount text="Area" count={ areaCount }/>
+                <SearchCount text="Area" count={ areaCount } updateTable={this.getAllArea}/>
                 <Form onSubmit={this.handleSubmit}>
                     <InputGroup>
                         <Input 
@@ -168,6 +169,7 @@ class Areas extends Component {
                 <Table
                     loading = {loading}
                     columns={columnsAreas}
+                    dataCount={areaCount}
                     data={areaRow} />
             </React.Fragment>
         );

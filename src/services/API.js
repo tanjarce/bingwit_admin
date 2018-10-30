@@ -113,8 +113,8 @@ export const addRules = (data) =>
 /* PRODUCT TYPE */ //=--------------------------------------
 
 // GET ALL PRODUCT TYPES
-export const getAllProductTypes = () => 
-  fetch(`${api}/product_types?offset=${0}&limit=${999}`, { 
+export const getAllProductTypes = ({ offset = 0, limit = 100, searchQ }) => 
+  fetch(`${api}/product_types?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
     headers })
     .then(res => res.json())
 
@@ -215,8 +215,8 @@ export const deleteReport = (id) =>
 // AREAS //=--------------------------------------
 
 // get all areas
-export const getAllAreas = () =>
-  fetch(`${api}/area?limit=${100}&offset=${0}&q=${''}`, { headers }) 
+export const getAllAreas = (data) =>
+  fetch(`${api}/area?limit=${100}&offset=${0}&q=${data}`, { headers }) 
   .then(res => res.json())
 
 export const getAreasAndUsers = (id) =>

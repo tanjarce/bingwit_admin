@@ -28,11 +28,14 @@ class List extends Component {
         this.setState({isOpen: !this.state.isOpen})
     }
 
-    getAllProduct() {
-        API.getAllProductTypes()
+    getAllProduct(searchQ) {
+        const data = {
+            searchQ : searchQ || ''
+        }
+        API.getAllProductTypes(data)
         .then(res => {
             if(res.success){
-                // console.log(res)
+                console.log(res)
                 this.setState(()=>({
                     productCount: res.product_type.count,
                     productRow: res.product_type.rows,
