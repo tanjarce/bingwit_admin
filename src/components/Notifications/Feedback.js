@@ -34,8 +34,15 @@ class Feedback extends Component {
         this.props.history.push(`${pathname}/view/${id}`)
     }
 
-    getFeedbacks () {
-        API.getFeedbacks()
+    getFeedbacks (search) {
+        var tmp = ''
+        if(search === undefined){
+            tmp = ' ' 
+        }
+        else{
+            tmp = search
+        }
+        API.getFeedbacks(tmp)
         .then((response) => {
             if(response.success){
                 this.setState(()=>({
@@ -140,7 +147,7 @@ class Feedback extends Component {
         return (
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteFeedback} message={deleteMessage}/>
-                <SearchAndCount text="Feedback" count={feedbackCount}/>
+                <SearchAndCount updateTable={this.getFeedbacks} text="Feedback" count={feedbackCount}/>
                 <Tables
                     loading = {loading}
                     columns={columnsRules}

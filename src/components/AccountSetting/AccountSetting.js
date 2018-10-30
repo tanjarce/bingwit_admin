@@ -82,7 +82,7 @@ class AccountSetting extends Component {
                       <Label sm={3}>USERNAME:</Label>
                       <Col sm={10} lg='6'>
                       <AvGroup>
-                          <AvInput class="border" type='text' name="username" placeholder={username} required disabled />
+                          <AvInput className="border" type='text' name="username" placeholder={username} required disabled />
                       </AvGroup>
                       </Col>
                     </FormGroup>

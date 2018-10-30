@@ -28,6 +28,7 @@ class ManageUser extends Component {
             roleStat : '',
             loading : true
         }
+        this.loading = this.loading.bind(this)
         this.suspendUser = this.suspendUser.bind(this)
         this.updateTable = this.updateTable.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
@@ -37,8 +38,13 @@ class ManageUser extends Component {
     componentDidMount(){
         this.updateTable();
     }
-
+    loading(){
+        this.setState({
+            loading : true
+        })
+    }
     updateTable(search){
+        this.loading()
         var tmp = ''
         if(search === undefined){
             tmp = ' ' 
@@ -69,7 +75,7 @@ class ManageUser extends Component {
             response.success ? 
             (
             this.updateTable(),
-            Help.toastPop({message: `Suspended successfully`, type: 'error'})
+            Help.toastPop({message: `Suspended successfully`, type: 'success'})
             )
             :
             Help.toastPop({message: response.error.message, type: 'error'})

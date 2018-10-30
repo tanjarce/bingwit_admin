@@ -25,7 +25,7 @@ class Tables extends Component {
               <SyncLoader
                 className={override}
                 sizeUnit={"px"}
-                size={8}
+                size={5}
                 color={'#17C1BC'}
                 loading={true}
               />
