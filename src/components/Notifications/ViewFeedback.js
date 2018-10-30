@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Container } from 'reactstrap';
+// import { Container } from 'reactstrap';
 
-import * as API from '../../services/API'
+// import * as API from '../../services/API'
 
 
 

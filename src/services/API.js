@@ -3,6 +3,7 @@ import * as Session from './session';
 // const api = 'http://192.168.0.125:3000/api/v1';
 const api = 'http://18.224.2.191/api/v1';
 let token = Session.getToken()
+
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': `Bearer ${token ? token.token : null}`
@@ -111,8 +112,8 @@ export const addRules = (data) =>
 /* PRODUCT TYPE */ //=--------------------------------------
 
 // GET ALL PRODUCT TYPES
-export const getAllProductTypes = () => 
-  fetch(`${api}/product_types?offset=${0}&limit=${999}`, { 
+export const getAllProductTypes = ({ offset = 0, limit = 100, searchQ }) => 
+  fetch(`${api}/product_types?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
     headers })
     .then(res => res.json())
 
@@ -212,6 +213,47 @@ export const deleteReport = (id) =>
 
 // AREAS //=--------------------------------------
 
-export const getAllAreas = () =>
-  fetch(`${api}/area?limit=${10}&offset=${0}`, { headers }) 
+// get all areas
+export const getAllAreas = (data) =>
+  fetch(`${api}/area?limit=${100}&offset=${0}&q=${data}`, { headers }) 
   .then(res => res.json())
+
+export const getAreasAndUsers = (id) =>
+  fetch(`${api}/area/${id}`, { headers }) 
+  .then(res => res.json())
+
+
+  // delete area
+export const deleteArea = (id) => 
+  fetch(`${api}/area/${id}`, { 
+  method: 'DELETE', 
+  headers })
+  .then(res => res.json())
+
+// add area
+export const addArea = (area) => {
+  const body = {
+    'area_address': area
+  }
+
+  return fetch(`${api}/area`, {
+    method: 'POST', 
+    body: toFormURLEncode(body),
+    headers,
+  })
+  .then(res => res.json())
+}
+
+// UPDATE Area
+export const updateArea = (id, data) => {
+  const body = {
+    'area_address': data
+  }
+
+  return fetch(`${api}/area/${id}`, {
+    method: 'PUT', 
+    body: toFormURLEncode(body),
+    headers,
+  })
+  .then(res => res.json())
+}

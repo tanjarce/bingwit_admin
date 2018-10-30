@@ -7,6 +7,7 @@ import Products from './Products'
 import Areas from './Areas'
 import Banner from '../Banner'
 import ViewProduct from './ViewProduct'
+import ViewArea from './ViewArea'
 import ProductModal from '../../modals/ProductModal'
 import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
@@ -19,22 +20,22 @@ class List extends Component {
             isOpen: false,
             productCount: 0,
             productRow: [],
-            areaCount: 0,
-            areaRow: [],
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
-        this.getAllArea = this.getAllArea.bind(this)
     }
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
 
-    getAllProduct() {
-        API.getAllProductTypes()
+    getAllProduct(searchQ) {
+        const data = {
+            searchQ : searchQ || ''
+        }
+        API.getAllProductTypes(data)
         .then(res => {
             if(res.success){
-                // console.log(res)
+                console.log(res)
                 this.setState(()=>({
                     productCount: res.product_type.count,
                     productRow: res.product_type.rows,
@@ -51,30 +52,6 @@ class List extends Component {
             }))
             Help.toastPop({message: err, type: 'error'})
         })
-    }
-
-    getAllArea() {
-        API.getAllAreas()
-        .then(res => {
-            if(res.success){
-                console.log(res)
-                // console.log(res)
-            }
-            // console.log(res)
-            return res.product_type.rows
-        })
-        // .then(res => console.log(res))
-        .catch(err => {
-            this.setState(()=>({
-                isLoading: false
-            }))
-        })
-    }
-
-    componentWillMount () {
-        // if(this.props.location.pathname === '/list/products'){
-            this.getAllArea()
-        // }
     }
 
     render() {
@@ -111,6 +88,7 @@ class List extends Component {
                             <Areas isLoading={isLoading} areaCount={productCount} areaRow={productRow} getAllArea={this.getAllArea}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
+                        <Route path="/list/areas/view/:id" component={ ViewArea } />
                         <Route render={()=>(
                             <Redirect to="/list/rules" />
                         )}/>
