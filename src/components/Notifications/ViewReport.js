@@ -22,7 +22,7 @@ class ViewReport extends Component {
                 <Col>
                     <p>Sender: {selectedRow.consumer.full_name}</p>
                     <p>Reported User: {selectedRow.producer.full_name}</p>
-                    <p>Date Created: {moment(selectedRow.createdAt).format('MMMM D, YYYY')}</p>
+                    <p>Date Created: {moment(selectedRow.createdAt).format('MMMM D, YYYY')}</p><br/>
                     <p>{selectedRow.feedback}</p>
                 </Col>
             </div>

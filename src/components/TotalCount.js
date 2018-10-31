@@ -4,7 +4,7 @@ class TotalCount extends Component {
     render() {
         const rule = {
             text : this.props.text,
-            count : this.props.count
+            count : this.props.count ? this.props.count : 0
         }
         return (
             <div className='mt-auto'>
