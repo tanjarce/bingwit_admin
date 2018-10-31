@@ -3,79 +3,90 @@ import { Row , Col, Button , CustomInput} from 'reactstrap'
 
 export default class CBReactTablePagination extends Component {
   constructor (props) {
-    super()
-
-    this.pageRow = this.pageRow.bind(this)
-    this.getSafePage = this.getSafePage.bind(this)
-    this.changePage = this.changePage.bind(this)
-    this.applyPage = this.applyPage.bind(this)
-
-    this.updateCurrentRows(props)    
-
+    super(props)
     this.state = {
-      page: props.page,
-      tablePage : '',
-      tableRow : '',
-      canNext: false,
-      canPrevious: false
+      currentPage: 1
+    }
+    this.handleChange = this.handleChange.bind(this) 
+    this.Next = this.Next.bind(this)
+    this.Previous = this.Previous.bind(this)
+    this.Update = this.Update.bind(this)
+  }
+
+  handleChange (e) {
+    const { dataCount, pageSize } = this.props
+    const pagelength = Math.ceil(dataCount / pageSize)
+
+    const target = e.target
+    // const value = (Number(target.value) <= 1)
+    // ? 1
+    // : (Number(target.value) >= pagelength)
+    //   ? pagelength
+    //   : target.value
+    this.setState(()=>({
+      [target.name]: target.value
+    }), ()=>{console.log(this.state.currentPage)})    
+  }
+
+  
+  Update () {
+    const { updateTable, pageSize, dataCount } = this.props
+    const { currentPage } = this.state
+
+    const pagelength = Math.ceil(dataCount / pageSize)
+    if(currentPage > pagelength){
+      this.setState(()=>({
+        currentPage: pagelength
+      }), ()=>{
+        const { currentPage } = this.state
+
+        console.log(currentPage)
+        const offset = (currentPage - 1) * pageSize
+        updateTable({offset, limit: pageSize})
+      })
+    } 
+    if(currentPage <= 0){
+      this.setState(()=>({
+        currentPage: 1
+      }), ()=>{
+        const { currentPage } = this.state
+
+        console.log(currentPage)
+        const offset = (currentPage - 1) * pageSize
+        updateTable({offset, limit: pageSize})
+      })
+    } 
+    
+    else{
+      const offset = (currentPage - 1) * pageSize
+      updateTable({offset, limit: pageSize})
     }
   }
 
-  componentDidMount(){
-    this.pageRow()
-  }
-  pageRow(page){
-    this.setState({
-        tablePage : this.props.pageSize,
+  Next () {
+    this.setState((prevState)=>({
+      currentPage: Number(prevState.currentPage) + 1
+    }), ()=>{
+      this.Update()
     })
   }
-  componentWillReceiveProps (nextProps) {
-    this.setState({ page: nextProps.page })
 
-    this.updateCurrentRows(nextProps)
-  }
-  updateCurrentRows(props) {
-    if (   typeof props.sortedData  !== 'undefined'  //use props.data for unfiltered (all) rows
-        && typeof props.page !== 'undefined'
-        && typeof props.pageSize !== 'undefined'
-    ){
-      this.rowCount = props.sortedData.length  //use props.data.length for unfiltered (all) rows
-      this.rowMin = props.page * props.pageSize + 1
-      this.rowMax = Math.min((props.page + 1) * props.pageSize, this.rowCount)
-    }
-  }
-  getSafePage (page) {
-    if (isNaN(page)) {
-      page = this.props.page
-    }
-    return Math.min(Math.max(page, 0), this.props.pages - 1)
-  }
-  changePage (page) {
-    page = this.getSafePage(page)
-    this.setState({ 
-      page,
-      tablePage : page + 1,
-      tableRow : this.props.pageSize
+  Previous () {
+    this.setState((prevState)=>({
+      currentPage: Number(prevState.currentPage) - 1
+    }),()=>{
+      this.Update()
     })
-    if (this.props.page !== page) {
-      this.props.onPageChange(page)
-    }
-    this.updateCurrentRows(page)
-  }
-  applyPage (e) {
-    if (e) { e.preventDefault() }
-    const page = this.state.page
-    this.changePage(page === '' ? this.props.page : page)
   }
 
   render () {
-    const { pages, page, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, canPrevious, canNext, onPageSizeChange, dataCount } = this.props
-    console.log(this.props)
-    // console.log('dataCount: '+ dataCount)
-    // console.log('pageSize: '+ pageSize)
-    // console.log('page: ' + page+1)
-    // console.log('maxPage: ' + pages)
-    
+    const {updateTable, pages, page, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
+    const {currentPage} = this.state
+    const pagelength = Math.ceil(dataCount / pageSize)
+
+    const canPrevious = (Number(currentPage) <= 1) ? false : true
+    const canNext = (Number(currentPage) >= pagelength) ? false : true
+
     return (
       <div className="pagi_main">
         <div className='pm-d'>
@@ -85,12 +96,11 @@ export default class CBReactTablePagination extends Component {
           <Col xs='auto'>
             <Button
               className='button'
-              onClick={() => {
-                if (!canPrevious) return
-                this.changePage(page - 1)
+              onClick={()=>{
+                this.Previous()
               }}
               disabled={!canPrevious}>
-              {this.props.previousText}
+              Previous
             </Button>
           </Col>
           <Col xs='auto'className='col'>
@@ -98,29 +108,22 @@ export default class CBReactTablePagination extends Component {
               { showPageJump && 
                 <CustomInput
                   id="custom"
+                  min="1"
                   className='input'
-                  type='text'
-                  onChange={e => {
-                    const val = e.target.value
-                    const page = val - 1
-                    if (val === '') {
-                      return this.setState({ page: val })
-                    }
-                    this.setState({ 
-                      page: this.getSafePage(page),
-                    })
-                    this.pageRow 
-                  }}
-                  value={this.state.page === '' ? '' : this.state.page + 1}
-                  onBlur={this.applyPage}
+                  name="currentPage"
+                  type='number'
+                  value={currentPage}
+                  onChange={this.handleChange}
+                  onBlur={this.Update}
                   onKeyPress={e => {
-                    if (e.which === 13 || e.keyCode === 13) {
-                      this.applyPage()}}
-                  }
+                      if (e.which === 13 || e.keyCode === 13) {
+                        this.Update()
+                      }
+                  }}
                 />
               }
-                    {/* of Max Page */}
-              <span>{this.props.ofText}{' '}{pages || 1}</span>
+              {/* of Max Page */}
+              <span>{`of ${pagelength || 1}`}</span>
 
               {/* Page Select */}
               {showPageSizeOptions && 
@@ -129,8 +132,12 @@ export default class CBReactTablePagination extends Component {
                   className='input'
                   type='select'
                   onChange={e => {
-                    onPageSizeChange(Number(e.target.value))
-                    this.pageRow()
+                    new Promise((resolve, reject)=>{
+                      onPageSizeChange(Number(e.target.value))
+                      resolve()
+                    }).then(()=>{
+                      this.Update()
+                    })
                   }}
                   value={pageSize}>
                   {pageSizeOptions.map((option, i) => (
@@ -140,16 +147,13 @@ export default class CBReactTablePagination extends Component {
                 </CustomInput>}
           </Col>
           <Col  xs='auto'>
-            {/* Page Next */}
             <Button
               className='button'
               onClick={() => {
-                if (!canNext) return
-                this.changePage(page + 1)
+                this.Next()
               }}
               disabled={!canNext}>
-
-              {this.props.nextText}
+              Next
             </Button>
           </Col>
           <Col></Col>

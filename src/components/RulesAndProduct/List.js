@@ -28,9 +28,10 @@ class List extends Component {
         this.setState({isOpen: !this.state.isOpen})
     }
 
-    getAllProduct(searchQ) {
+    getAllProduct(pagination, searchQ) {
         const data = {
-            searchQ : searchQ || ''
+            searchQ : searchQ || '',
+            ...pagination
         }
         API.getAllProductTypes(data)
         .then(res => {
