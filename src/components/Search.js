@@ -17,10 +17,17 @@ class Search extends Component {
         e.preventDefault();
         this.setState({
             [e.target.name] : e.target.value
-            }, () => this.update()
+            },() => this.update()
         );
         
     };
+
+    _handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.update();
+        }
+      }
+      
     update(){
         const { updateTable } = this.props
         updateTable(this.state.searchValue)
@@ -36,6 +43,7 @@ class Search extends Component {
                   name='searchValue'
                   onChange={this.handleChange}
                   value={this.state.searchValue}
+                  onKeyPress={this._handleKeyPress}
                   />
                   <img className='img' src={searchIco} alt='search'/>
                 </Col>

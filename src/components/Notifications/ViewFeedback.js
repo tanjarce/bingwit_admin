@@ -5,7 +5,7 @@ import React, { Component, Fragment } from 'react'
 
 
 
-class ViewFeedback extends Component{
+class ViewReport extends Component{
     constructor(props){
         super(props)
 
@@ -25,4 +25,4 @@ class ViewFeedback extends Component{
     }
 }
 
-export default ViewFeedback 
+export default ViewReport 

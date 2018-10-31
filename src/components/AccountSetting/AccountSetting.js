@@ -29,7 +29,6 @@ class AccountSetting extends Component {
   }
   componentDidMount(){
     const id = Session.getToken();
-    console.log(id.id)
     API.getUserId(id.id)
     .then((response) => {
       if(response.success === true){
@@ -38,7 +37,7 @@ class AccountSetting extends Component {
         })
       }
       else{
-        alert(response.error.message);
+        Help.toastPop({message: response.error.message, type: 'error'})
       }
     })
   }
