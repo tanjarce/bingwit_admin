@@ -30,19 +30,42 @@ export default class CBReactTablePagination extends Component {
 
   
   Update () {
-    const { updateTable, pageSize } = this.props
+    const { updateTable, pageSize, dataCount } = this.props
     const { currentPage } = this.state
 
-    const offset = (currentPage - 1) * pageSize
-    updateTable({offset, limit: pageSize})
-    console.log(offset)
+    const pagelength = Math.ceil(dataCount / pageSize)
+    if(currentPage > pagelength){
+      this.setState(()=>({
+        currentPage: pagelength
+      }), ()=>{
+        const { currentPage } = this.state
+
+        console.log(currentPage)
+        const offset = (currentPage - 1) * pageSize
+        updateTable({offset, limit: pageSize})
+      })
+    } 
+    if(currentPage <= 0){
+      this.setState(()=>({
+        currentPage: 1
+      }), ()=>{
+        const { currentPage } = this.state
+
+        console.log(currentPage)
+        const offset = (currentPage - 1) * pageSize
+        updateTable({offset, limit: pageSize})
+      })
+    } 
+    
+    else{
+      const offset = (currentPage - 1) * pageSize
+      updateTable({offset, limit: pageSize})
+    }
   }
 
   Next () {
-    console.log(this.props.pageSize)
-
     this.setState((prevState)=>({
-      currentPage: prevState.currentPage + 1
+      currentPage: Number(prevState.currentPage) + 1
     }), ()=>{
       this.Update()
     })
@@ -50,7 +73,7 @@ export default class CBReactTablePagination extends Component {
 
   Previous () {
     this.setState((prevState)=>({
-      currentPage: prevState.currentPage - 1
+      currentPage: Number(prevState.currentPage) - 1
     }),()=>{
       this.Update()
     })
@@ -63,7 +86,6 @@ export default class CBReactTablePagination extends Component {
 
     const canPrevious = (Number(currentPage) <= 1) ? false : true
     const canNext = (Number(currentPage) >= pagelength) ? false : true
-    console.log(typeof currentPage)
 
     return (
       <div className="pagi_main">
@@ -92,8 +114,12 @@ export default class CBReactTablePagination extends Component {
                   type='number'
                   value={currentPage}
                   onChange={this.handleChange}
-                  // onBlur={}
-                  // onKeyPress={}
+                  onBlur={this.Update}
+                  onKeyPress={e => {
+                      if (e.which === 13 || e.keyCode === 13) {
+                        this.Update()
+                      }
+                  }}
                 />
               }
               {/* of Max Page */}
@@ -106,8 +132,12 @@ export default class CBReactTablePagination extends Component {
                   className='input'
                   type='select'
                   onChange={e => {
-                    onPageSizeChange(Number(e.target.value))
-                    this.Update()
+                    new Promise((resolve, reject)=>{
+                      onPageSizeChange(Number(e.target.value))
+                      resolve()
+                    }).then(()=>{
+                      this.Update()
+                    })
                   }}
                   value={pageSize}>
                   {pageSizeOptions.map((option, i) => (
