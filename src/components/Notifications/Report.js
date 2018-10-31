@@ -9,6 +9,7 @@ import moment from 'moment'
 import * as API from '../../services/API'
 import dots from '../../images/show_more.svg'
 import SearchAndCount from '../SearchAndCount'
+import ViewReport from './ViewReport';
 
 class Report extends Component {
     constructor(props) {
@@ -19,8 +20,10 @@ class Report extends Component {
             selectedRow: null,
             userReport : [],
             count : '',
-            loading : true
+            loading : true,
+            bool : true
         }
+        this.viewReport = this.viewReport.bind(this)
         this.getReport = this.getReport.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
@@ -45,15 +48,30 @@ class Report extends Component {
         })
     }
     
+    viewReport (rowInfo) {
+        console.log(rowInfo)
+        this.setState({
+            bool : false,
+            selectedRow : rowInfo
+        })
+        
+    }
+
+    loading(){
+        this.setState({
+            loading : true
+        })
+    }
     getReport(search){
-        var tmp = ''
+        this.loading()
+        var tmp_value = ''
         if(search === undefined){
-            tmp = ' ' 
+            tmp_value = ' ' 
         }
         else{
-            tmp = search
+            tmp_value = search
         }
-        API.getReports(tmp)
+        API.getReports(tmp_value)
         .then((response) => {
                 if(response.success){
                     this.setState({
@@ -85,7 +103,7 @@ class Report extends Component {
         }
     )}
   render() {
-    const { userReport, selectedRow, count, isOpen, loading } = this.state;
+    const { userReport, selectedRow, count, isOpen, loading, bool } = this.state;
     console.log(userReport)
     const Reports = userReport.map((report)=>{
         return ({
@@ -131,9 +149,10 @@ class Report extends Component {
                     <div>
                         <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                             <img 
-                            with="25px" height="25px" 
+                            width="25px" height="25px" 
                             src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
-                            className="m-auto"/>
+                            className="m-auto rounded-circle"
+                            />
                         </span>
                         {rowInfo.value.full_name}
                     </div>
@@ -157,7 +176,7 @@ class Report extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={()=>{console.log('view')}}>View</DropdownItem>
+                            <DropdownItem onClick={()=>{this.viewReport(rowInfo.value)}}>View</DropdownItem>
                             <DropdownItem onClick={() => this.toggleModal(rowInfo.value)}>Delete</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
@@ -166,12 +185,17 @@ class Report extends Component {
     const message = selectedRow ? `Are you sure you want to delete this report? "${selectedRow.feedback}".` : ''
     return (
         <React.Fragment>
+        {bool ? <div>
             <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
             <SearchAndCount updateTable={this.getReport} text="Reports" count={count}/>
             <Tables 
                 loading = {loading}
                 columns={columnsRules} 
                 data={Reports} />
+                </div>
+                :
+                <ViewReport  selectedRow = {selectedRow}/>
+        }
         </React.Fragment>
     )
   }
