@@ -25,7 +25,12 @@ class RulesTable extends Component {
             count : '',
             selectedRow : null,
             loading : true,
-            bool : true
+            bool : true,
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.loading = this.loading.bind(this)
         this.ViewRules = this.ViewRules.bind(this)
@@ -42,29 +47,48 @@ class RulesTable extends Component {
              loading : true
          })
      }
-     updateTable(){
-         this.loading()
-        API.getAllRules()
-        .then((response) => {
-          const error = response.error || ''
-            if (!error) {
-                const arr = response.rule.rows.map((item, key) => {
-                    return ({
-                        'no' : key+1,
-                        'description' : item.description,
-                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                        'action' : {...item, 'no': key+1}
-                    })
-                })
-                this.setState({
-                    ruleRow : arr,
-                    count : response.rule.count,
-                    loading : false
-                })
-                return
-            } else {
-                console.log(response.error.message)
+     updateTable(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
             }
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+            API.getAllRules(data)
+            .then((response) => {
+            const error = response.error || ''
+                if (!error) {
+                    const arr = response.rule.rows.map((item, key) => {
+                        return ({
+                            'no' : key+1,
+                            'description' : item.description,
+                            'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
+                            'action' : {...item, 'no': key+1}
+                        })
+                    })
+                    this.setState({
+                        ruleRow : arr,
+                        count : response.rule.count,
+                        loading : false
+                    })
+                    return
+                } else {
+                    console.log(response.error.message)
+                }
+            })
         })
     }
 
@@ -97,7 +121,7 @@ class RulesTable extends Component {
         
     }
     render() {
-        const { ruleRow, isOpen, count, selectedRow, loading, bool } = this.state;
+        const { ruleRow, isOpen, count, selectedRow, loading, bool, pagination } = this.state;
         console.log(selectedRow)
         const columnsRules = [{
                 Header: 'No.',
@@ -146,7 +170,10 @@ class RulesTable extends Component {
                     </Row>
                     <Table
                         loading={loading}
-                        columns={columnsRules} 
+                        columns={columnsRules}
+                        dataCount={count}
+                        paginationData={pagination}
+                        updateTable={this.updateTable} 
                         data={ruleRow} />
                     <SetRules updateTable={this.updateTable}/>
                 </div> : 

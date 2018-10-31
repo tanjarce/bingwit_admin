@@ -26,7 +26,12 @@ class ManageUser extends Component {
             userInfo : [],
             idSuspend : '',
             roleStat : '',
-            loading : true
+            loading : true,
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.loading = this.loading.bind(this)
         this.suspendUser = this.suspendUser.bind(this)
@@ -43,27 +48,40 @@ class ManageUser extends Component {
             loading : true
         })
     }
-    updateTable(search){
-        this.loading()
-        var tmp_value = ''
-        if(search === undefined && ' '){
-            tmp_value = ' ' 
-        }
-        else{
-            tmp_value = search
-        }
-        API.getAllUser(tmp_value)
-        .then((response) => {
-            response.success === true ?
-            
-            this.setState({
-                dataUsers : response.users.rows,
-                count : response.users.count,
-                loading : false
+    updateTable(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
+            }
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+            API.getAllUser(data)
+            .then((response) => {
+                response.success === true ?
+                
+                this.setState({
+                    dataUsers : response.users.rows,
+                    count : response.users.count,
+                    loading : false
+                })
+                :
+                console.log(response.error.message)
             })
-            :
-            console.log(response.error.message)
         })
+
     }
 
     suspendUser(){        
@@ -112,7 +130,7 @@ class ManageUser extends Component {
     )
     }
     render() {
-        const { dataUsers, count } = this.state;
+        const { dataUsers, count, pagination } = this.state;
         
         const Users = dataUsers.map((user)=>{
             return ({
@@ -211,6 +229,9 @@ class ManageUser extends Component {
                                 <Tables
                                     loading={loading}
                                     columns={columnsRules} 
+                                    dataCount={count}
+                                    paginationData={pagination}
+                                    updateTable={this.updateTable} 
                                     data={Users} />
                             </React.Fragment>
                         )}/>

@@ -21,7 +21,12 @@ class Report extends Component {
             userReport : [],
             count : '',
             loading : true,
-            bool : true
+            bool : true,
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.viewReport = this.viewReport.bind(this)
         this.getReport = this.getReport.bind(this)
@@ -62,17 +67,28 @@ class Report extends Component {
             loading : true
         })
     }
-    getReport(search){
-        this.loading()
-        var tmp_value = ''
-        if(search === undefined){
-            tmp_value = ' ' 
-        }
-        else{
-            tmp_value = search
-        }
-        API.getReports(tmp_value)
-        .then((response) => {
+    getReport(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
+            }
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+            API.getReports(data)
+            .then((response) => {
                 if(response.success){
                     this.setState({
                         userReport : response.report.rows,
@@ -86,6 +102,8 @@ class Report extends Component {
             }).catch(error =>{
                 console.log(error)
             })
+        })
+
     }    
 
     toggleModal (rowInfo) {
@@ -103,7 +121,7 @@ class Report extends Component {
         }
     )}
   render() {
-    const { userReport, selectedRow, count, isOpen, loading, bool } = this.state;
+    const { userReport, selectedRow, count, isOpen, loading, bool, pagination } = this.state;
     console.log(userReport)
     const Reports = userReport.map((report)=>{
         return ({
@@ -191,6 +209,9 @@ class Report extends Component {
             <Tables 
                 loading = {loading}
                 columns={columnsRules} 
+                dataCount={count}
+                paginationData={pagination}
+                updateTable={this.getReport} 
                 data={Reports} />
                 </div>
                 :

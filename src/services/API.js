@@ -32,8 +32,8 @@ export const getUserId = (id) =>
     .then(res => res.json())
 
 // GET ALL USERS
-export const getAllUser = (search) =>  
-  fetch(`${api}/users?offset=${0}&limit=${999}&q=${search}`, { 
+export const getAllUser = ({ offset = 0, limit = 10, searchQ = ''}) =>  
+  fetch(`${api}/users?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
   headers })
   .then(res => res.json())
 
@@ -89,8 +89,8 @@ export const logout = () =>
 /* RULES */ //=--------------------------------------
 
 // GET ALL RULES
-export const getAllRules = () =>  
-  fetch(`${api}/rules?offset=${0}&limit=${999}`, {
+export const getAllRules = ({ offset = 0, limit = 10, searchQ = ''}) =>  
+  fetch(`${api}/rules?offset=${offset}&limit=${limit}&q=${searchQ}`, {
   headers })
   .then(res => res.json())
 
@@ -113,8 +113,8 @@ export const addRules = (data) =>
 /* PRODUCT TYPE */ //=--------------------------------------
 
 // GET ALL PRODUCT TYPES
-export const getAllProductTypes = ({ offset = 0, limit = 10, searchQ }) => {
-  console.log(offset, limit)  
+export const getAllProductTypes = ({ offset = 0, limit = 10, searchQ = ''}) => {
+  console.log(`offset: ${offset}, limit: ${limit}, search: ${searchQ}`)  
   return fetch(`${api}/product_types?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
     headers })
     .then(res => res.json())
@@ -185,9 +185,9 @@ export const deleteAliasName = (productTypeId, aliasId) =>
 // GET FEEDBACKS //=--------------------------------------
 
  // GET FEEDBACKS
-export const getFeedbacks = (search) =>
+export const getFeedbacks = ({ offset = 0, limit = 10, searchQ = ''}) =>
 
-  fetch(`${api}/feedbacks?limit=${999}&offset=${0}&q=${search}`, { headers }) 
+  fetch(`${api}/feedbacks?offset=${offset}&limit=${limit}&q=${searchQ}`, { headers }) 
   .then(res => res.json()
 )
 
@@ -202,8 +202,8 @@ export const deleteFeedbacks = (id) =>
 // GET REPORTS //=--------------------------------------
 
 // default GET
-export const getReports = (search) =>
-  fetch(`${api}/reports?limit=${999}&offset=${0}&q=${search}`, { headers }) 
+export const getReports = ({ offset = 0, limit = 10, searchQ = ''}) =>
+  fetch(`${api}/reports?offset=${offset}&limit=${limit}&q=${searchQ}`, { headers }) 
   .then(res => res.json())
   
  
@@ -217,8 +217,8 @@ export const deleteReport = (id) =>
 // AREAS //=--------------------------------------
 
 // get all areas
-export const getAllAreas = (data) =>
-  fetch(`${api}/area?limit=${100}&offset=${0}&q=${data}`, { headers }) 
+export const getAllAreas = ({ offset = 0, limit = 10, searchQ = ''}) =>
+  fetch(`${api}/area?limit=${limit}&offset=${offset}&q=${searchQ}`, { headers }) 
   .then(res => res.json())
 
 export const getAreasAndUsers = (id) =>

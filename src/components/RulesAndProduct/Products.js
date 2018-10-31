@@ -77,7 +77,7 @@ class Products extends Component {
 
     render() {
         const { isOpen, selectedRow, modalType } = this.state
-        const { productRow, productCount, isLoading, getAllProduct} = this.props
+        const { productRow, productCount, isLoading, getAllProduct, paginationData} = this.props
         const Products = productRow.map((product)=>{
             const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
             return (
@@ -136,6 +136,7 @@ class Products extends Component {
                     isLoading={isLoading}
                     columns={columnsProduct} 
                     dataCount={productCount}
+                    paginationData={paginationData}
                     updateTable={getAllProduct}
                     data={Products} />
             </React.Fragment>
