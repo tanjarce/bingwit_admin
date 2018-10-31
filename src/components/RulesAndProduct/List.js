@@ -20,6 +20,11 @@ class List extends Component {
             isOpen: false,
             productCount: 0,
             productRow: [],
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
@@ -28,30 +33,43 @@ class List extends Component {
         this.setState({isOpen: !this.state.isOpen})
     }
 
-    getAllProduct(pagination, searchQ) {
-        const data = {
-            searchQ : searchQ || '',
-            ...pagination
-        }
-        API.getAllProductTypes(data)
-        .then(res => {
-            if(res.success){
-                console.log(res)
+    getAllProduct(paginationData, searchQData) {
+        this.setState((prevState)=>({
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
+            }
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+
+            API.getAllProductTypes(data)
+            .then(res => {
+                if(res.success){
+                    this.setState(()=>({
+                        productCount: res.product_type.count,
+                        productRow: res.product_type.rows,
+                        isLoading: false
+                    }))
+                }
+                return res.product_type.rows
+            })
+            .catch(err => {
                 this.setState(()=>({
-                    productCount: res.product_type.count,
-                    productRow: res.product_type.rows,
                     isLoading: false
                 }))
-            }
-            // console.log(res)
-            return res.product_type.rows
-        })
-        // .then(res => console.log(res))
-        .catch(err => {
-            this.setState(()=>({
-                isLoading: false
-            }))
-            Help.toastPop({message: err, type: 'error'})
+                Help.toastPop({message: err, type: 'error'})
+            })
         })
     }
 
@@ -62,7 +80,7 @@ class List extends Component {
             {'text': 'Areas', 'url': '/list/areas'},
         ]
         
-        const {isLoading, isOpen, productCount, productRow } = this.state
+        const {isLoading, isOpen, productCount, productRow, pagination } = this.state
 
         return (
             <div className='bottom-pad'>
@@ -83,7 +101,7 @@ class List extends Component {
                             <Rules />
                         )}/>
                         <Route exact path="/list/products" render={()=>(
-                            <Products isLoading={isLoading} productCount={productCount} productRow={productRow} getAllProduct={this.getAllProduct}/>
+                            <Products isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
                         <Route exact path="/list/areas" render={()=>(
                             <Areas isLoading={isLoading} areaCount={productCount} areaRow={productRow} getAllArea={this.getAllArea}/>

@@ -33,34 +33,32 @@ export default class CBReactTablePagination extends Component {
     const { updateTable, pageSize, dataCount } = this.props
     const { currentPage } = this.state
 
-    const pagelength = Math.ceil(dataCount / pageSize)
-    if(currentPage > pagelength){
-      this.setState(()=>({
-        currentPage: pagelength
-      }), ()=>{
-        const { currentPage } = this.state
+    const check = () => {
+      const pagelength = Math.ceil(dataCount / pageSize)
 
-        console.log(currentPage)
-        const offset = (currentPage - 1) * pageSize
-        updateTable({offset, limit: pageSize})
-      })
-    } 
-    if(currentPage <= 0){
-      this.setState(()=>({
-        currentPage: 1
-      }), ()=>{
-        const { currentPage } = this.state
-
-        console.log(currentPage)
-        const offset = (currentPage - 1) * pageSize
-        updateTable({offset, limit: pageSize})
-      })
-    } 
-    
-    else{
-      const offset = (currentPage - 1) * pageSize
-      updateTable({offset, limit: pageSize})
+      if(currentPage > pagelength){
+        this.setState(()=>({
+          currentPage: pagelength
+        }))
+      } else if(currentPage <= 0){
+        this.setState(()=>({
+          currentPage: 1
+        }))
+      } 
     }
+
+    new Promise((resolve, reject)=>{
+      check()
+      resolve()
+    }).then(()=>{
+      const { updateTable, pageSize } = this.props
+      const { currentPage } = this.state
+
+      const offset = (currentPage - 1) * pageSize
+      console.log(`offset ${offset} limit: ${pageSize}`)
+      updateTable({offset, limit: pageSize})
+    })
+
   }
 
   Next () {
@@ -80,9 +78,11 @@ export default class CBReactTablePagination extends Component {
   }
 
   render () {
-    const {updateTable, pages, page, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
-    const {currentPage} = this.state
-    const pagelength = Math.ceil(dataCount / pageSize)
+    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
+    // const {currentPage} = this.state
+    const pagelength = Math.ceil(dataCount / limit)
+
+    const currentPage = (offset / limit) + 1
 
     const canPrevious = (Number(currentPage) <= 1) ? false : true
     const canNext = (Number(currentPage) >= pagelength) ? false : true

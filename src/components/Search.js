@@ -30,7 +30,7 @@ class Search extends Component {
       
     update(){
         const { updateTable } = this.props
-        updateTable(this.state.searchValue)
+        updateTable(null, this.state.searchValue)
     }
 
     render() {

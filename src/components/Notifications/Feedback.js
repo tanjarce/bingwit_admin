@@ -19,7 +19,12 @@ class Feedback extends Component {
             feedbacks: [],
             feedbackCount: 0,
             selectedRow: null,
-            loading : true
+            loading : true,
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)
@@ -39,27 +44,39 @@ class Feedback extends Component {
             loading : true
         })
     }
-    getFeedbacks(search){
-        this.loading()
-        var tmp_value = ''
-        if(search === undefined){
-            tmp_value = ' ' 
-        }
-        else{
-            tmp_value = search
-        }
-        API.getFeedbacks(tmp_value)
-        .then((response) => {
-            if(response.success){
-                this.setState(()=>({
-                    feedbacks: [...response.feedback.rows],
-                    feedbackCount: response.feedback.count,
-                    loading : false
-                }))
+    getFeedbacks(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
             }
-            
-        }).catch(error =>{
-            console.log(error)
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+            API.getFeedbacks(data)
+            .then((response) => {
+                if(response.success){
+                    this.setState(()=>({
+                        feedbacks: [...response.feedback.rows],
+                        feedbackCount: response.feedback.count,
+                        loading : false
+                    }))
+                }
+                
+            }).catch(error =>{
+                console.log(error)
+            })
         })
     }
 
@@ -91,7 +108,7 @@ class Feedback extends Component {
     }
 
     render() {
-        const { feedbacks, isOpen, feedbackCount, selectedRow, loading } = this.state
+        const { feedbacks, isOpen, feedbackCount, selectedRow, loading, pagination } = this.state
         const Feedback = feedbacks.map((feed)=>{
             return ({
                 ...feed,
@@ -157,6 +174,9 @@ class Feedback extends Component {
                 <Tables
                     loading = {loading}
                     columns={columnsRules}
+                    dataCount={feedbackCount}
+                    paginationData={pagination}
+                    updateTable={this.getFeedbacks}
                     data={Feedback} />
             </React.Fragment>
         )

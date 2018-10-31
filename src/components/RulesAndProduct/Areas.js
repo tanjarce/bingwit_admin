@@ -21,7 +21,12 @@ class Areas extends Component {
             areas: [],
             areaCount: 0,
             loading: true,
-            areaInput: ''
+            areaInput: '',
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
         }
         this.deleteArea = this.deleteArea.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
@@ -91,23 +96,42 @@ class Areas extends Component {
             }).catch(err => console.log(err))
     }
 
-    getAllArea(data){
-        const search = data || ''
-        API.getAllAreas(search)
-        .then((res) => {
-            if(res.success){
-                console.log(res)
-                this.setState(()=>({
-                    areaCount: res.area.count,
-                    areas: res.area.rows,
-                    loading: false
-                }), ()=>{ console.log( this.state )})           
+    getAllArea(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                searchQ : searchQ,
+                ...pagination
             }
-        }).catch(err => console.log(err))
+            : {
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0
+            }
+            API.getAllAreas(data)
+            .then((res) => {
+                if(res.success){
+                    console.log(res)
+                    this.setState(()=>({
+                        areaCount: res.area.count,
+                        areas: res.area.rows,
+                        loading: false
+                    }), ()=>{ console.log( this.state )})           
+                }
+            }).catch(err => console.log(err))
+        })
     }
     
     render() {
-        const { areaCount, areas, isOpen, selectedRow, loading } = this.state
+        const { areaCount, areas, isOpen, selectedRow, loading, pagination } = this.state
 
         // console.log(areas)
         
@@ -169,7 +193,9 @@ class Areas extends Component {
                 <Table
                     loading = {loading}
                     columns={columnsAreas}
-                    dataCount={areaCount}
+                    dataCount={areaCount}   
+                    paginationData={pagination}
+                    updateTable={this.getAllArea}
                     data={areaRow} />
             </React.Fragment>
         );
