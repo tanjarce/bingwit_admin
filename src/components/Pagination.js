@@ -5,7 +5,7 @@ export default class CBReactTablePagination extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentPage: 1
+      currentPage: 0
     }
     this.handleChange = this.handleChange.bind(this) 
     this.Next = this.Next.bind(this)
@@ -14,18 +14,25 @@ export default class CBReactTablePagination extends Component {
   }
 
   handleChange (e) {
-    const { dataCount, pageSize } = this.props
-    const pagelength = Math.ceil(dataCount / pageSize)
-
     const target = e.target
-    // const value = (Number(target.value) <= 1)
-    // ? 1
-    // : (Number(target.value) >= pagelength)
-    //   ? pagelength
-    //   : target.value
+    const { dataCount, pageSize, paginationData: {offset, limit} } = this.props
+    // const { currentPage } = this.state
+    const pagelength = Math.ceil(dataCount / pageSize)
+    
+    let value = (target.value > pagelength) 
+      ? pagelength
+      : target.value
+
+    const newOffset = (value * limit) - limit
+
+    this.props.paginationData.offset = newOffset
+    this.props.paginationData.limit = limit
+
+    console.log(pagelength)
+
     this.setState(()=>({
       [target.name]: target.value
-    }), ()=>{console.log(this.state.currentPage)})    
+    }))
   }
 
   
@@ -82,7 +89,12 @@ export default class CBReactTablePagination extends Component {
     // const {currentPage} = this.state
     const pagelength = Math.ceil(dataCount / limit)
 
+
     const currentPage = (offset / limit) + 1
+
+    // console.log('OFFSET: ' + ((currentPage * limit) - limit) + 'LIMIT: '+ limit)
+
+    // console.log((currentPage * limit) - 1)
 
     const canPrevious = (Number(currentPage) <= 1) ? false : true
     const canNext = (Number(currentPage) >= pagelength) ? false : true
@@ -112,7 +124,9 @@ export default class CBReactTablePagination extends Component {
                   className='input'
                   name="currentPage"
                   type='number'
-                  value={currentPage}
+                  value={
+                    currentPage || ''
+                  }
                   onChange={this.handleChange}
                   onBlur={this.Update}
                   onKeyPress={e => {
