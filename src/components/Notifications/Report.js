@@ -28,6 +28,7 @@ class Report extends Component {
             },
             searchQ: ''
         }
+        this.viewItem = this.viewItem.bind(this)
         this.viewReport = this.viewReport.bind(this)
         this.getReport = this.getReport.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
@@ -52,11 +53,15 @@ class Report extends Component {
             Help.toastPop({message: err , type: 'error'})
         })
     }
-    
+    viewItem(){
+        this.setState({
+            bool : !this.state.bool
+        })
+    }
     viewReport (rowInfo) {
+        this.viewItem();
         console.log(rowInfo)
         this.setState({
-            bool : false,
             selectedRow : rowInfo
         })
         
@@ -215,7 +220,7 @@ class Report extends Component {
                 data={Reports} />
                 </div>
                 :
-                <ViewReport  selectedRow = {selectedRow}/>
+                <ViewReport viewItem={this.viewItem} selectedRow = {selectedRow}/>
         }
         </React.Fragment>
     )

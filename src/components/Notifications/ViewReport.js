@@ -8,20 +8,21 @@ class ViewReport extends Component {
     constructor(props){
         super(props)
     }
-
+    componentDidMount(){
+    }
     render() {
-        const { selectedRow } = this.props
+        const { selectedRow, viewItem } = this.props
         console.log(selectedRow)
         return (
             <div className='rule-body'>
                 <Col xs='12' md='12'>
-                <NavLink to='/notif/feedback' activeClassName='gback'>
+                <NavLink to='#' activeClassName='gback' onClick={viewItem}>
                         &lang; &nbsp; Go Back
                 </NavLink>
                 </Col>
                 <Col>
-                    <p>Sender: {selectedRow.consumer.full_name}</p>
-                    <p>Reported User: {selectedRow.producer.full_name}</p>
+                    <p>Consumer: {selectedRow.consumer.full_name}</p>
+                    <p>Reported Seller: {selectedRow.producer.full_name}</p>
                     <p>Date Created: {moment(selectedRow.createdAt).format('MMMM D, YYYY')}</p><br/>
                     <p>{selectedRow.feedback}</p>
                 </Col>
