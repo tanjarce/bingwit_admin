@@ -37,6 +37,12 @@ export const getAllUser = ({ offset = 0, limit = 10, searchQ = ''}) =>
   headers })
   .then(res => res.json())
 
+ // GET SUSPEND USER
+export const getSuspendUsers = ({ offset = 0, limit = 99, searchQ = ''}) =>  
+fetch(`${api}/users/suspended?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
+headers })
+.then(res => res.json())
+
 // SUSPEND USER
 export const suspendUser = (id) =>   
   fetch(`${api}/users/${id}/suspend`, {
@@ -260,3 +266,14 @@ export const updateArea = (id, data) => {
   })
   .then(res => res.json())
 }
+
+
+
+/* USERS TRANSACTION */ //=--------------------------------------
+
+// GET USER TANSACTIONS
+
+export const getUserTransaction = (id) =>  
+fetch(`${api}/users/${id}/transactions`, { 
+headers })
+.then(res => res.json())

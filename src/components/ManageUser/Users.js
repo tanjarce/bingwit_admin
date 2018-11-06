@@ -3,11 +3,8 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container } from 'reactstrap';
 
 
-import Tabs from '../Tabs'
 import Tables from '../Tables'
 import Banner from '../Banner';
-import CardUser from './CardUser'
-import SuspendedUser from './SuspendedUser'
 import SearchAndCount from '../SearchAndCount'
 import '../../styles/manage.css'
 import * as API from '../../services/API'
@@ -18,7 +15,7 @@ import SuspensionModal from '../../modals/SuspensionModal'
 import UserDeleteModal from '../../modals/UserDeleteModal'
 import userDefafult from '../../assets/userDefault.svg'
 
-class ManageUser extends Component {
+class User extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -58,6 +55,9 @@ class ManageUser extends Component {
             pagination: paginationData ? {...paginationData} : prevState.pagination
         }), ()=>{
             const { pagination, searchQ } = this.state 
+
+            console.log(searchQ)
+
             const data = (typeof searchQData === 'undefined')
             ? {
                 searchQ : searchQ,
@@ -111,6 +111,7 @@ class ManageUser extends Component {
     }
     viewUser (id){
         this.props.history.push(`/mnguser/${id}`)
+        
     }
     
     setModal (data, type) {
@@ -129,12 +130,7 @@ class ManageUser extends Component {
     )
     }
     render() {
-        const tabs = [
-            {'text': 'Users', 'url': '/mnguser/users', 'notif': 0},
-            {'text': 'Suspended Users', 'url': '/mnguser/suspended', 'notif': 0},
-        ]
         const { dataUsers, count, pagination } = this.state;
-        
         const Users = dataUsers.map((user)=>{
             return ({
                 'id' : user.id,
@@ -217,38 +213,22 @@ class ManageUser extends Component {
         const modal = (modalType === 'suspend') 
             ? (<SuspensionModal isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
             : (<UserDeleteModal suspendUser={this.suspendUser} isOpen={isOpen} toggle={this.toggleModal} userData={userData} />)
-        
         return (
             <div className='bottom-pad'>
                 { modal }
-                <Banner 
-                    header="Manage User"
-                    contents="List of Registered Users."/>
-                <Container>
-                    <Tabs links={tabs} />
-                    <Switch>
-                        <Route exact path="/mnguser/users" render={()=>(
-                            <React.Fragment>
-                                <SearchAndCount updateTable={this.updateTable} text="Users" count={count}/>
-                                <Tables
-                                    loading={loading}
-                                    columns={columnsRules} 
-                                    dataCount={count}
-                                    paginationData={pagination}
-                                    updateTable={this.updateTable} 
-                                    data={Users} />
-                            </React.Fragment>
-                        )}/>
-                        <Route path="/mnguser/suspended" component={SuspendedUser}/>
-                        <Route path="/mnguser/:id" component={CardUser}/>
-                        <Route render={()=>(
-                        <Redirect to="/mnguser/users" />
-                    )}/>
-                    </Switch>
-                </Container>
+                    <React.Fragment>
+                        <SearchAndCount updateTable={this.updateTable} text="Users" count={count}/>
+                        <Tables
+                            loading={loading}
+                            columns={columnsRules} 
+                            dataCount={count}
+                            paginationData={pagination}
+                            updateTable={this.updateTable} 
+                            data={Users} />
+                    </React.Fragment>
             </div>
         );
     }
 }
 
-export default withRouter(ManageUser);
+export default withRouter(User);
