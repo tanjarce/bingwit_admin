@@ -144,9 +144,8 @@ export default class CBReactTablePagination extends Component {
     const canPrevious = (focus) ? false : (currentPageonProps <= 1) ? false : true
     const canNext = (focus) ? false : (currentPageonProps >= pagelength) ? false : true
 
-    console.log(focus)
-
-    console.log(canPrevious)
+    //console.log(focus)
+    //console.log(canPrevious)
     return (
       <div className="pagi_main">
         <div className='pm-d'>

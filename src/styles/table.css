@@ -27,6 +27,10 @@ input[type="number"] {
     border-left: 0 !important;
     border-right: 0 !important;
 }
+.rt-th
+{
+    cursor: pointer;
+}
 .rt-td,
 .rt-th{
     padding-left: 20px !important;
