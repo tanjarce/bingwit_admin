@@ -30,7 +30,7 @@ class Products extends Component {
     viewProduct (rowInfo) {
         const { id } = rowInfo
         console.log(rowInfo)
-        const { history: { push, goBack } , location: { pathname } } = this.props
+        const { location: { pathname } } = this.props
 
         this.props.history.push(`${pathname}/view/${id}`)
     }
@@ -69,7 +69,6 @@ class Products extends Component {
     }
 
     componentDidMount(){
-        console.log('get all product')
         this.props.getAllProduct()
     }
     

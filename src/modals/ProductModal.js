@@ -110,7 +110,7 @@ class ProductModal extends React.Component {
     }
 
     async saveEdit () {
-        const { deletedAliases, addedAliases, value: {product_name}, productNameInput} = this.state
+        const { deletedAliases, addedAliases, productNameInput} = this.state
         const { selectedRow: {id} } = this.props
 
         if(productNameInput.trim() !== ''){
@@ -132,12 +132,12 @@ class ProductModal extends React.Component {
             await new Promise((resolve) => {
                 if(deletedAliases.length > 0){
                     deletedAliases.map(alias =>{
-                        console.log(alias)
                         API.deleteAliasName(alias.productType_id, alias.alias_id)
                             .then(res => {
                                 console.log('hi')
                                 console.log(res)
                             })
+                        return true
                     })
                 }
                 resolve(console.log('deletedAliases'))

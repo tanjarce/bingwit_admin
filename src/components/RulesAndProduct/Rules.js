@@ -119,6 +119,8 @@ class RulesTable extends Component {
     }
     render() {
         const { ruleRow, isOpen, count, selectedRow, loading, bool, pagination } = this.state;
+        const { paginationData } = this.props
+        console.log(selectedRow)
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -170,7 +172,7 @@ class RulesTable extends Component {
                         loading={loading}
                         columns={columnsRules}
                         dataCount={count}
-                        paginationData={pagination}
+                        paginationData={paginationData}
                         updateTable={this.updateTable} 
                         data={ruleRow} />
                     <SetRules updateTable={this.updateTable}/>
