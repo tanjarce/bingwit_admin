@@ -30,12 +30,15 @@ class ManageUser extends Component {
             idSuspend : '',
             roleStat : '',
             loading : true,
+            order : 'username',
+            sort : 'ASC',
             pagination: {
                 offset: 0,
                 limit: 10
             },
             searchQ: ''
         }
+        this.orderSort = this.orderSort.bind(this)
         this.loading = this.loading.bind(this)
         this.suspendUser = this.suspendUser.bind(this)
         this.updateTable = this.updateTable.bind(this)
@@ -57,13 +60,17 @@ class ManageUser extends Component {
             searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
             pagination: paginationData ? {...paginationData} : prevState.pagination
         }), ()=>{
-            const { pagination, searchQ } = this.state 
+            const { pagination, searchQ, order, sort } = this.state 
             const data = (typeof searchQData === 'undefined')
             ? {
+                order : order,
+                sort : sort,
                 searchQ : searchQ,
                 ...pagination
             }
             : {
+                order : order,
+                sort : sort,
                 searchQ: searchQ,
                 ...pagination,
                 offset: 0
@@ -71,7 +78,7 @@ class ManageUser extends Component {
             API.getAllUser(data)
             .then((response) => {
                 response.success === true ?
-                
+                    
                 this.setState({
                     dataUsers : response.users.rows,
                     count : response.users.count,
@@ -109,10 +116,16 @@ class ManageUser extends Component {
             isOpen: !this.state.isOpen
         })
     }
-    viewUser (id){
-        this.props.history.push(`/mnguser/${id}`)
+    viewUser (rowInfo){
+        this.props.history.push(`/mnguser/${rowInfo.id}`)
     }
-    
+    orderSort(order){
+        const { sort } = this.state
+            this.setState({
+                order : order,
+                sort : sort === 'ASC' ? 'DESC' : 'ASC'
+            }, this.updateTable())
+    }
     setModal (data, type) {
         console.log(data)
         this.setState({
@@ -150,9 +163,10 @@ class ManageUser extends Component {
         
         const columnsRules = [
             {
-                Header: 'Account User',
+                Header: <div onClick={()=> {this.orderSort('username')}}>Account User</div>,
                 accessor: 'username',
                 width: 200,
+                sortable : false,
                  Cell: rowInfo =>  {
                     return (
                         <div>
@@ -168,33 +182,39 @@ class ManageUser extends Component {
                 }
             },
             {
-                Header: 'Full Name',
+                Header: <div onClick={()=> {this.orderSort('full_name')}}>Full Name</div>,
                 accessor: 'name',
+                sortable : false,
                 width: 200
             },
             {
-                Header: 'Address',
+                Header: <div onClick={()=> {this.orderSort('address')}}>Address</div>,
                 accessor: 'address',
+                sortable : false,
             },
             {
+                Header: <div onClick={()=> {this.orderSort('rating')}}>Ratings</div>,
                 accessor: 'ratings',
-                Header: 'Ratings',
+                sortable : false,
                 width: 120
             },
             {
-                Header: 'Role',
+                Header: <div onClick={()=> {this.orderSort('type')}}>Role</div>,
                 accessor: 'role',
-                width: 150
+                width: 150,
+                sortable : false
             },
             {
-                Header: 'Account Status',
+                Header: <div onClick={()=> {this.orderSort('status')}}>Account Status</div>,
                 accessor: 'account_status',
+                sortable : false,
                 width: 150
             },
             {
                 Header: ' ',
                 accessor: 'action',
                 width: 50,
+                sortable : false,
                 resizable: false,
                 Cell: rowInfo =>  
                 (
@@ -203,7 +223,7 @@ class ManageUser extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => {this.viewUser(rowInfo.value.id)}}>View</DropdownItem>
+                            <DropdownItem onClick={() => {this.viewUser(rowInfo.value)}}>View</DropdownItem>
                             {/* <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem> */}
                             <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Suspend</DropdownItem>
                         </DropdownMenu>

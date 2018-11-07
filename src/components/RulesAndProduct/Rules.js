@@ -54,9 +54,6 @@ class RulesTable extends Component {
             pagination: paginationData ? {...paginationData} : prevState.pagination
         }), ()=>{
             const { pagination, searchQ } = this.state 
-
-            console.log(searchQ)
-
             const data = (typeof searchQData === 'undefined')
             ? {
                 searchQ : searchQ,
@@ -122,16 +119,17 @@ class RulesTable extends Component {
     }
     render() {
         const { ruleRow, isOpen, count, selectedRow, loading, bool, pagination } = this.state;
-        console.log(selectedRow)
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
                 width: 70,
-                resizable: false
+                resizable: false,
+                filterable:false
             },
             {
                 Header: 'Description',
                 accessor: 'description',
+                // sortable : false,
             },
             {
                 Header: 'Date Created',

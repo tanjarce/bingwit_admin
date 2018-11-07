@@ -5,11 +5,22 @@ import PrimaryFact from './PrimaryFact'
 import Transaction from './Transaction'
 import * as API from '../../services/API'
 import NoImage from '../../assets/NoImage.png'
+
+import { css } from 'react-emotion';
+import { PulseLoader
+} from 'react-spinners';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 class CardUser extends Component {
     constructor(props){
         super(props)
         this.state = {
-            userInfo : ''
+            userInfo : '',
+            type : ''
         }
         this.goBack = this.goBack.bind(this)
     }
@@ -22,7 +33,8 @@ class CardUser extends Component {
             console.log(response.error.message)
             :
             this.setState({
-                userInfo : response.user
+                userInfo : response.user,
+                type : response.user.type
             })
         })
     }
@@ -31,7 +43,7 @@ class CardUser extends Component {
     }
     render() {
     const id = this.props.match.params.id
-    const { userInfo } = this.state;
+    const { userInfo, type } = this.state;
         return (
             <div>
             <Col xs='12' md='12'>
@@ -44,7 +56,7 @@ class CardUser extends Component {
 
         <Row className='main'>
 
-        <Col xs='12' md='5' lg='3'>
+        <Col xs='12' md='6' lg='3'>
         <div className='main-card'>
             <div className='card-body'>
                 <img className='card-img' src={userInfo.image_url ? userInfo.image_url : NoImage } alt={userInfo.full_name}/>
@@ -58,15 +70,35 @@ class CardUser extends Component {
             </div>
         </div>
         </Col>
-        <Col xs='12' md='7' lg='9'>
+        <Col xs='12' md='6' lg='9'>
         <div className='main-side'>
         <Switch>
             <Route exact path={`/mnguser/:id/prim`} render={()=>(
                 <PrimaryFact user={userInfo}/>
                 )}/>
+            {type ? type  === 'consumer'?
             <Route path={'/mnguser/:id/transaction'}render={()=>(
                 <Transaction userTransaction={userInfo}/>
             )}/>
+                :
+                type !== 'admin' ?
+                    <Route path={'/mnguser/:id/transaction'}render={()=>(
+                        <div>PRODUCER TRANSACTIONS</div>
+                        )}/>
+                        :
+                        <Route path={'/mnguser/:id/transaction'}render={()=>(
+                            <div>Nothing to do here.</div>
+                            )}/>
+            
+            :
+            <PulseLoader
+            className={override}
+            sizeUnit={"px"}
+            size={5}
+            color={'#17C1BC'}
+            loading={true}
+          />}
+
             <Route render={()=>(
                 <Redirect to={`/mnguser/${id}/prim`} />
                 )}/>
