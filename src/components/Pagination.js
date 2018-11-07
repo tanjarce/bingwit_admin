@@ -26,7 +26,7 @@ export default class CBReactTablePagination extends Component {
     const target = e.target
     this.setState(()=>({
       [target.name]: target.value
-    }))
+    }),()=>{console.log(target.name, target.value, target)})
     // const { dataCount, pageSize, paginationData: {offset, limit} } = this.props
     // const pagelength = Math.ceil(dataCount / pageSize)
     
@@ -104,6 +104,8 @@ export default class CBReactTablePagination extends Component {
     this.setState((prevState)=>({
       currentPage: Number(prevState.currentPage) + 1
     }), ()=>{
+      // const { paginationData: {offset, limit}, updateTable, pageSize } = this.props
+
       this.Update()
     })
   }
@@ -112,14 +114,34 @@ export default class CBReactTablePagination extends Component {
     this.setState((prevState)=>({
       currentPage: Number(prevState.currentPage) - 1
     }),()=>{
+      // const { paginationData: {offset, limit}, updateTable, pageSize } = this.props
+      console.log(this.state.currentPage)
       this.Update()
     })
   }
 
+  componentDidMount(){
+    const {paginationData: {offset, limit}, pageSize, onPageSizeChange} = this.props
+    // console.log("PAGESIZE: "+ pageSize)
+    const currentPageonProps = (offset / limit) + 1
+
+    this.setState(()=>({
+      currentPage: currentPageonProps
+    }))
+
+    setTimeout(()=>{
+      // console.log('yeahh')
+      onPageSizeChange(limit)
+    }, 1)
+    
+  }
+
   render () {
-    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
+    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props
     const {focus, currentPage} = this.state
+
     const pagelength = Math.ceil(dataCount / limit)
+    
     const currentPageonProps = (offset / limit) + 1
 
     // if input field is focused the buttons will automatically disable
@@ -183,7 +205,7 @@ export default class CBReactTablePagination extends Component {
                       this.Update(true)
                     })
                   }}
-                  value={pageSize}>
+                  value={limit}>
                   {pageSizeOptions.map((option, i) => (
                     <option key={i} value={option}>
                       {option} {this.props.rowsText}

@@ -28,48 +28,58 @@ class List extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
+        this.resetPagination = this.resetPagination.bind(this) 
+        this.updateQuery = this.updateQuery.bind(this)
     }
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
+    resetPagination () {
+        console.log('yeahh')
+    }
 
-    getAllProduct(paginationData, searchQData) {
+    updateQuery(paginationData, searchQData){
         this.setState((prevState)=>({
             searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
             pagination: paginationData ? {...paginationData} : prevState.pagination
-        }), ()=>{
-            const { pagination, searchQ } = this.state 
+        }))
 
-            console.log(searchQ)
+        console.log('updateQuery')
+    }
+    
 
-            const data = (typeof searchQData === 'undefined')
-            ? {
-                searchQ : searchQ,
-                ...pagination
-            }
-            : {
-                searchQ: searchQ,
-                ...pagination,
-                offset: 0
-            }
+    getAllProduct(paginationData, searchQData) {
+        this.updateQuery(paginationData, searchQData)
 
-            API.getAllProductTypes(data)
-            .then(res => {
-                if(res.success){
-                    this.setState(()=>({
-                        productCount: res.product_type.count,
-                        productRow: res.product_type.rows,
-                        isLoading: false
-                    }))
-                }
-                return res.product_type.rows
-            })
-            .catch(err => {
+        const { pagination, searchQ } = this.state 
+
+        const data = (typeof searchQData === 'undefined')
+        ? {
+            searchQ : searchQ,
+            ...pagination
+        }
+        : {
+            searchQ: searchQ,
+            ...pagination,
+            offset: 0
+        }
+            
+        API.getAllProductTypes(data)
+        .then(res => {
+            if(res.success){
                 this.setState(()=>({
+                    productCount: res.product_type.count,
+                    productRow: res.product_type.rows,
                     isLoading: false
                 }))
-                Help.toastPop({message: err, type: 'error'})
-            })
+            }
+            return res.product_type.rows
+        })
+        .catch(err => {
+            this.setState(()=>({
+                isLoading: false
+            }))
+            Help.toastPop({message: err, type: 'error'})
         })
     }
 
@@ -77,6 +87,7 @@ class List extends Component {
         const tabs = [
             {'text': 'Rules', 'url': '/list/rules'},
             {'text': 'Products', 'url': '/list/products'},
+            {'text': 'Product Categories', 'url': '/list/product_categories'},
             {'text': 'Areas', 'url': '/list/areas'},
         ]
         
@@ -90,7 +101,7 @@ class List extends Component {
                     contents="Contains information about rules and products." 
                 />
                 <Container>
-                    <Tabs links={tabs}>
+                    <Tabs links={tabs} resetPagination={this.resetPagination}>
                         {
                             (this.props.location.pathname === '/list/products') && 
                             <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
@@ -98,19 +109,21 @@ class List extends Component {
                     </Tabs>
                     <Switch>
                         <Route path="/list/rules" render={()=>(
-                            <Rules />
+                            <Rules updateQuery={this.updateQuery} paginationData={pagination}/>
                         )}/>
                         <Route exact path="/list/products" render={()=>(
                             <Products isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
+                        <Route path="/list/products/view/:id" component={ ViewProduct } />
                         <Route exact path="/list/areas" render={()=>(
                             <Areas isLoading={isLoading} areaCount={productCount} areaRow={productRow} getAllArea={this.getAllArea}/>
                         )}/>
-                        <Route path="/list/products/view/:id" component={ ViewProduct } />
                         <Route path="/list/areas/view/:id" component={ ViewArea } />
+                        
                         <Route render={()=>(
                             <Redirect to="/list/rules" />
                         )}/>
+
                     </Switch>
                 </Container>
             </div>
