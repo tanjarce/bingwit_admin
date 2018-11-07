@@ -42,7 +42,7 @@ class Biography extends Component {
                 return ({
                     'tracking_number' : item.tracking_number,
                     'total_amount' : <span>&#8369; {item.total_amount}</span>,
-                    'createdAt' : moment(item.createdAt).format('MMMM D YYYY'),
+                    'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                     'action' : {...item},
                     'total' : item.total_amount
                 })
@@ -75,7 +75,7 @@ class Biography extends Component {
         let csvToExport = [',Tracking Number,Amount,Date'];
         let csvRow = [];
         csvRow = userInfo.map((item) => (
-            item.tracking_number + ',' + item.total + ',' + item.createdAt
+            item.tracking_number + ',' + item.total + ',' + item.createdAt.replace(',','-')
         ));
         
         csvToExport.push(...csvRow);
