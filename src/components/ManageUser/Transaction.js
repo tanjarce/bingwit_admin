@@ -24,11 +24,15 @@ class Biography extends Component {
             total : '',
             searchQ: ''
         }
+        this.viewTransaction = this.viewTransaction.bind(this)
         this.exportCSV = this.exportCSV.bind(this)
         this.getUserTransaction = this.getUserTransaction.bind(this)
     }
     componentDidMount(){
         this.getUserTransaction();
+    }
+    viewTransaction(){
+        console.log('VIEW TRANSACT')
     }
     getUserTransaction(){
         this.setState({
@@ -42,7 +46,7 @@ class Biography extends Component {
                 return ({
                     'tracking_number' : item.tracking_number,
                     'total_amount' : <span>&#8369; {item.total_amount}</span>,
-                    'createdAt' : moment(item.createdAt).format('MMMM D YYYY'),
+                    'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                     'action' : {...item},
                     'total' : item.total_amount
                 })
@@ -75,7 +79,7 @@ class Biography extends Component {
         let csvToExport = [',Tracking Number,Amount,Date'];
         let csvRow = [];
         csvRow = userInfo.map((item) => (
-            item.tracking_number + ',' + item.total + ',' + item.createdAt
+            item.tracking_number + ',' + item.total + ',' + item.createdAt.replace(',','-')
         ));
         
         csvToExport.push(...csvRow);
@@ -120,7 +124,7 @@ class Biography extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => {this.viewUser(rowInfo.value.id)}}>View</DropdownItem>
+                            <DropdownItem onClick={() => {this.viewTransaction(rowInfo.value.id)}}>View</DropdownItem>
                             {/* <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem> */}
                             <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Suspend</DropdownItem>
                         </DropdownMenu>

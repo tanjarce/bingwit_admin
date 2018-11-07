@@ -32,8 +32,9 @@ export const getUserId = (id) =>
     .then(res => res.json())
 
 // GET ALL USERS
-export const getAllUser = ({ offset = 0, limit = 10, searchQ = ''}) =>  
-  fetch(`${api}/users?offset=${offset}&limit=${limit}&q=${searchQ}`, { 
+
+export const getAllUser = ({ offset = 0, limit = 10, searchQ = '', order = '' , sort = 'ASC'}) =>  
+  fetch(`${api}/users?offset=${offset}&limit=${limit}&q=${searchQ}&order=["${order}%20${sort}"]`, { 
   headers })
   .then(res => res.json())
 
