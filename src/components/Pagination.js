@@ -6,8 +6,6 @@ export default class CBReactTablePagination extends Component {
     super(props)
     this.state = {
       currentPage: 1,
-      canNext: false,
-      canPrevious: false,
       focus: false
     }
     this.handleChange = this.handleChange.bind(this) 
@@ -21,16 +19,16 @@ export default class CBReactTablePagination extends Component {
   handleFocus () {
     this.setState(()=>({
       focus: true
-    }), () => {
-      console.log(this.state.focus)
-    })
+    }))
   }
 
   handleChange (e) {
     const target = e.target
-    const { dataCount, pageSize, paginationData: {offset, limit} } = this.props
-    // const { currentPage } = this.state
-    const pagelength = Math.ceil(dataCount / pageSize)
+    this.setState(()=>({
+      [target.name]: target.value
+    }))
+    // const { dataCount, pageSize, paginationData: {offset, limit} } = this.props
+    // const pagelength = Math.ceil(dataCount / pageSize)
     
     // console.log(target.value)
     
@@ -43,29 +41,18 @@ export default class CBReactTablePagination extends Component {
     // this.props.paginationData.offset = newOffset
     // this.props.paginationData.limit = limit
 
-    this.setState(()=>({
-      [target.name]: target.value
-    }), () => {
-      // console.log(this.state.currentPage)
-    })
   }
 
   hadleBlur (e) {
     this.setState(()=>({
       focus: false
-    }), () => {
-      console.log(this.state.focus)
-    })
+    }))
 
     const target = e.target
-    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
+    const {paginationData: {offset, limit} } = this.props
     const currentPage = (offset / limit) + 1
 
-
-    // console.log(currentPage)
-    console.log(Number(target.value))
-
-    // if current page is same /from the props it will not update
+    // if current page is same from the props it will not update
     if(Number(target.value) !== currentPage){
       this.Update()
     }
@@ -74,8 +61,7 @@ export default class CBReactTablePagination extends Component {
   
   Update (data) {
     let changeRowSize = data || false
-    // const {, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
-    const {paginationData: {offset, limit}, updateTable, pageSize, dataCount } = this.props
+    const {paginationData: {offset, limit}, pageSize, dataCount } = this.props
     const currentPageonProps = (offset / limit) + 1
     const { currentPage } = this.state
 
@@ -101,11 +87,13 @@ export default class CBReactTablePagination extends Component {
       const { currentPage } = this.state
   
       const currentPageonProps = (offset / limit) + 1
-      // console.log(currentPage, currentPageonProps)
-      // console.log("changerow size: " + changeRowSize)
+
+      // if inputed current page is !== to current page from props the table will update OR
+      // if this function is triggered by pagesize input field the table will update ELSE
+      // table will NOT UPDATE
+
       if(Number(currentPage) !== currentPageonProps || changeRowSize){
         const offset = (currentPage - 1) * pageSize
-        console.log(`offset ${offset} limit: ${pageSize}`)
         updateTable({offset, limit: pageSize})
       }
     })
@@ -132,21 +120,12 @@ export default class CBReactTablePagination extends Component {
     const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, pageSize, showPageJump, onPageSizeChange, dataCount } = this.props
     const {focus, currentPage} = this.state
     const pagelength = Math.ceil(dataCount / limit)
-
-
     const currentPageonProps = (offset / limit) + 1
-
-    // console.log('OFFSET: ' + ((currentPage * limit) - limit) + 'LIMIT: '+ limit)
-
-    // console.log((currentPage * limit) - 1)
 
     // if input field is focused the buttons will automatically disable
     const canPrevious = (focus) ? false : (currentPageonProps <= 1) ? false : true
     const canNext = (focus) ? false : (currentPageonProps >= pagelength) ? false : true
 
-    console.log(focus)
-
-    console.log(canPrevious)
     return (
       <div className="pagi_main">
         <div className='pm-d'>
@@ -230,15 +209,3 @@ export default class CBReactTablePagination extends Component {
 
   }
 }
-
-/*       
-          {(typeof this.rowCount !== 'undefined') ?
-              <span className="-rowInfo">{"Showing "}
-                <span className="-rowMin">{this.rowMin}</span>
-                  {" - "}
-                <span className="-rowMax">{this.rowMax}</span>
-                  {" of "} 
-                <span className="-rowCount">{this.rowCount}</span>
-                  {" total rows"}
-              </span>
-            : ''} */
