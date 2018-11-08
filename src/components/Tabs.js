@@ -5,7 +5,7 @@ import { NavLink as RRNavLink } from 'react-router-dom';
 class Tabs extends React.Component {
   
     render() {
-    const { links, resetPagination } = this.props
+    const { links, resetPaginationAndSearch } = this.props
 
     const navItem = links.map((link, index) => {
             return(
@@ -15,7 +15,7 @@ class Tabs extends React.Component {
                         activeClassName="active" 
                         to={link.url} 
                         onClick={()=>{
-                            resetPagination()
+                            resetPaginationAndSearch && resetPaginationAndSearch()
                         }}
                     >
                         {link.text}{link.notif > 0 && <Badge color="danger ml-2">{link.notif}</Badge>}

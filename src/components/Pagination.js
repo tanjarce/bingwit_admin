@@ -5,6 +5,7 @@ export default class CBReactTablePagination extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      update: false,
       currentPage: 1,
       focus: false
     }
@@ -121,20 +122,31 @@ export default class CBReactTablePagination extends Component {
   }
 
   componentDidMount(){
-    const {paginationData: {offset, limit}, pageSize, onPageSizeChange} = this.props
-    // console.log("PAGESIZE: "+ pageSize)
-    const currentPageonProps = (offset / limit) + 1
+    const {paginationData: {limit, offset}, onPageSizeChange} = this.props
 
+    // const {paginationData: {offset, limit}} = this.props
+    const currentPageonProps = (offset / limit) + 1
+  
     this.setState(()=>({
       currentPage: currentPageonProps
     }))
-
+    // to change the pagesize of table (yung mismong height)
     setTimeout(()=>{
-      // console.log('yeahh')
       onPageSizeChange(limit)
     }, 1)
-    
   }
+
+  // componentWillReceiveProps(){
+  //   const {paginationData: {limit, offset}} = this.props
+
+  //   // const {paginationData: {offset, limit}} = this.props
+  //   const currentPageonProps = (offset / limit) + 1
+  //   setTimeout(()=>{
+  //     this.setState(()=>({
+  //       currentPage: currentPageonProps
+  //     }))
+  //   }, 1)
+  // }
 
   render () {
     const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props

@@ -26,11 +26,6 @@ class RulesTable extends Component {
             selectedRow : null,
             loading : true,
             bool : true,
-            pagination: {
-                offset: 0,
-                limit: 10
-            },
-            searchQ: ''
         }
         this.loading = this.loading.bind(this)
         this.ViewRules = this.ViewRules.bind(this)
@@ -48,44 +43,38 @@ class RulesTable extends Component {
          })
      }
      updateTable(paginationData, searchQData){
-        this.setState((prevState)=>({
-            loading: true,
-            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
-            pagination: paginationData ? {...paginationData} : prevState.pagination
-        }), ()=>{
-            const { pagination, searchQ } = this.state 
-            const data = (typeof searchQData === 'undefined')
-            ? {
-                searchQ : searchQ,
-                ...pagination
-            }
-            : {
-                searchQ: searchQ,
-                ...pagination,
-                offset: 0
-            }
-            API.getAllRules(data)
-            .then((response) => {
-            const error = response.error || ''
-                if (!error) {
-                    const arr = response.rule.rows.map((item, key) => {
-                        return ({
-                            'no' : key+1,
-                            'description' : item.description,
-                            'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                            'action' : {...item, 'no': key+1}
-                        })
+        this.loading()
+        // updating the paginationData and searchData from parent component
+        this.props.updateQuery(paginationData, searchQData)
+        
+        const {pagination, searchQ } = this.props 
+
+        const data = {
+            searchQ : searchQ,
+            ...pagination
+        }
+
+        API.getAllRules(data)
+        .then((response) => {
+        const error = response.error || ''
+            if (!error) {
+                const arr = response.rule.rows.map((item, key) => {
+                    return ({
+                        'no' : key+1,
+                        'description' : item.description,
+                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
+                        'action' : {...item, 'no': key+1}
                     })
-                    this.setState({
-                        ruleRow : arr,
-                        count : response.rule.count,
-                        loading : false
-                    })
-                    return
-                } else {
-                    console.log(response.error.message)
-                }
-            })
+                })
+                this.setState({
+                    ruleRow : arr,
+                    count : response.rule.count,
+                    loading : false
+                })
+                return
+            } else {
+                console.log(response.error.message)
+            }
         })
     }
 
@@ -118,9 +107,8 @@ class RulesTable extends Component {
         
     }
     render() {
-        const { ruleRow, isOpen, count, selectedRow, loading, bool, pagination } = this.state;
-        const { paginationData } = this.props
-        console.log(selectedRow)
+        const { ruleRow, isOpen, count, selectedRow, loading, bool } = this.state;
+        const { pagination } = this.props
         const columnsRules = [{
                 Header: 'No.',
                 accessor: 'no',
@@ -157,6 +145,7 @@ class RulesTable extends Component {
                     )
             }]
         const message = selectedRow ? `Are you sure you want to delete rule no. ${selectedRow.no}.` : ''
+        
         return (
             
                 <React.Fragment>
@@ -172,7 +161,7 @@ class RulesTable extends Component {
                         loading={loading}
                         columns={columnsRules}
                         dataCount={count}
-                        paginationData={paginationData}
+                        paginationData={pagination}
                         updateTable={this.updateTable} 
                         data={ruleRow} />
                     <SetRules updateTable={this.updateTable}/>
