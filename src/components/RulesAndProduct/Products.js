@@ -124,7 +124,6 @@ class Products extends Component {
         const modal = (modalType === 'delete')
             ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
             : (<ProductModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
-    
         return (
             <React.Fragment>
                     {  
@@ -132,7 +131,7 @@ class Products extends Component {
                     }
                 <SearchCount text="Product" count={productCount} updateTable={this.props.getAllProduct}/>
                 <Table
-                    isLoading={isLoading}
+                    loading={isLoading}
                     columns={columnsProduct} 
                     dataCount={productCount}
                     paginationData={paginationData}

@@ -22,11 +22,6 @@ class Report extends Component {
             count : '',
             loading : true,
             bool : true,
-            pagination: {
-                offset: 0,
-                limit: 10
-            },
-            searchQ: ''
         }
         this.viewItem = this.viewItem.bind(this)
         this.viewReport = this.viewReport.bind(this)
@@ -73,24 +68,15 @@ class Report extends Component {
         })
     }
     getReport(paginationData, searchQData){
-        this.setState((prevState)=>({
-            loading: true,
-            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
-            pagination: paginationData ? {...paginationData} : prevState.pagination
-        }), ()=>{
-            const { pagination, searchQ } = this.state 
+        this.loading()
 
-            console.log(searchQ)
+        this.props.updateQuery(paginationData, searchQData)
+        setTimeout(()=>{
+            const { pagination, searchQ } = this.props
 
-            const data = (typeof searchQData === 'undefined')
-            ? {
+            const data = {
                 searchQ : searchQ,
                 ...pagination
-            }
-            : {
-                searchQ: searchQ,
-                ...pagination,
-                offset: 0
             }
             API.getReports(data)
             .then((response) => {
@@ -107,8 +93,7 @@ class Report extends Component {
             }).catch(error =>{
                 console.log(error)
             })
-        })
-
+        }, 10)
     }    
 
     toggleModal (rowInfo) {
@@ -126,8 +111,8 @@ class Report extends Component {
         }
     )}
   render() {
-    const { userReport, selectedRow, count, isOpen, loading, bool, pagination } = this.state;
-    console.log(userReport)
+    const { userReport, selectedRow, count, isOpen, loading, bool } = this.state;
+    const { pagination } = this.props
     const Reports = userReport.map((report)=>{
         return ({
             'consumer': report.consumer,

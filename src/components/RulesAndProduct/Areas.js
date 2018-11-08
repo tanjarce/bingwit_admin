@@ -97,25 +97,18 @@ class Areas extends Component {
     }
 
     getAllArea(paginationData, searchQData){
-        this.setState((prevState)=>({
-            loading: true,
-            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
-            pagination: paginationData ? {...paginationData} : prevState.pagination
-        }), ()=>{
-            const { pagination, searchQ } = this.state 
+        this.setState({loading: true})
 
-            console.log(searchQ)
+        this.props.updateQuery(paginationData, searchQData)
 
-            const data = (typeof searchQData === 'undefined')
-            ? {
+        setTimeout(()=>{
+            const {pagination, searchQ } = this.props 
+
+            const data = {
                 searchQ : searchQ,
                 ...pagination
             }
-            : {
-                searchQ: searchQ,
-                ...pagination,
-                offset: 0
-            }
+
             API.getAllAreas(data)
             .then((res) => {
                 if(res.success){
@@ -127,12 +120,12 @@ class Areas extends Component {
                     }), ()=>{ console.log( this.state )})           
                 }
             }).catch(err => console.log(err))
-        })
+        },10)
     }
     
     render() {
-        const { areaCount, areas, isOpen, selectedRow, loading, pagination } = this.state
-
+        const { areaCount, areas, isOpen, selectedRow, loading } = this.state
+        const { pagination } = this.props
         // console.log(areas)
         
         const areaRow = areas.map((area)=>{
@@ -167,7 +160,6 @@ class Areas extends Component {
                             <DropdownMenu>
 
                                 <DropdownItem onClick={()=>{this.viewArea(rowInfo.value)}}>View</DropdownItem>
-                                <DropdownItem onClick={()=>{this.toggleModal(rowInfo.value)}}>Edit</DropdownItem>
                                 <DropdownItem onClick={()=>{this.toggleModal(rowInfo.value)}}>Delete</DropdownItem>
 
                             </DropdownMenu>

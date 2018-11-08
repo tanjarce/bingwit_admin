@@ -28,59 +28,64 @@ class List extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
-        this.resetPagination = this.resetPagination.bind(this) 
+        this.resetPaginationAndSearch = this.resetPaginationAndSearch.bind(this) 
         this.updateQuery = this.updateQuery.bind(this)
     }
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
-    resetPagination () {
-        console.log('yeahh')
+    resetPaginationAndSearch () {
+        this.setState(()=>({
+            pagination: {
+                offset: 0,
+                limit: 10
+            },
+            searchQ: ''
+        }))
     }
 
     updateQuery(paginationData, searchQData){
+        // if there is NO inputed in search box the searchData from parent component will remain
+        // else searchData will update and it will pass 0 to offset to search all the data
         this.setState((prevState)=>({
             searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
-            pagination: paginationData ? {...paginationData} : prevState.pagination
+            pagination: paginationData ? {...paginationData} : (typeof searchQData !== 'undefined')
+                ? {...prevState.pagination, offset: 0} : prevState.pagination 
         }))
-
-        console.log('updateQuery')
     }
     
 
     getAllProduct(paginationData, searchQData) {
+        this.setState({
+            isLoading: true
+        })
         this.updateQuery(paginationData, searchQData)
-
-        const { pagination, searchQ } = this.state 
-
-        const data = (typeof searchQData === 'undefined')
-        ? {
-            searchQ : searchQ,
-            ...pagination
-        }
-        : {
-            searchQ: searchQ,
-            ...pagination,
-            offset: 0
-        }
+        setTimeout(()=>{
+            const { pagination, searchQ } = this.state 
             
-        API.getAllProductTypes(data)
-        .then(res => {
-            if(res.success){
+            const data =  {
+                searchQ : searchQ,
+                ...pagination
+            }
+                
+            API.getAllProductTypes(data)
+            .then(res => {
+                if(res.success){
+                    this.setState(()=>({
+                        productCount: res.product_type.count,
+                        productRow: res.product_type.rows,
+                        isLoading: false
+                    }))
+                }
+                return res.product_type.rows
+            })
+            .catch(err => {
                 this.setState(()=>({
-                    productCount: res.product_type.count,
-                    productRow: res.product_type.rows,
                     isLoading: false
                 }))
-            }
-            return res.product_type.rows
-        })
-        .catch(err => {
-            this.setState(()=>({
-                isLoading: false
-            }))
-            Help.toastPop({message: err, type: 'error'})
-        })
+                Help.toastPop({message: err, type: 'error'})
+            })
+        },10)
     }
 
     render() {
@@ -91,7 +96,7 @@ class List extends Component {
             {'text': 'Areas', 'url': '/list/areas'},
         ]
         
-        const {isLoading, isOpen, productCount, productRow, pagination } = this.state
+        const {isLoading, isOpen, productCount, productRow, pagination, searchQ } = this.state
 
         return (
             <div className='bottom-pad'>
@@ -101,22 +106,25 @@ class List extends Component {
                     contents="Contains information about rules and products." 
                 />
                 <Container>
-                    <Tabs links={tabs} resetPagination={this.resetPagination}>
+                    <Tabs links={tabs} resetPaginationAndSearch={this.resetPaginationAndSearch}>
                         {
                             (this.props.location.pathname === '/list/products') && 
                             <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
                         }
                     </Tabs>
                     <Switch>
+                        // RULES
                         <Route path="/list/rules" render={()=>(
-                            <Rules updateQuery={this.updateQuery} paginationData={pagination}/>
+                            <Rules updateQuery={this.updateQuery} searchQ={searchQ} pagination={pagination}/>
                         )}/>
+                        // PRODUCTS
                         <Route exact path="/list/products" render={()=>(
                             <Products isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
+                        // AREAS
                         <Route exact path="/list/areas" render={()=>(
-                            <Areas isLoading={isLoading} areaCount={productCount} areaRow={productRow} getAllArea={this.getAllArea}/>
+                            <Areas updateQuery={this.updateQuery} searchQ={searchQ} pagination={pagination}/>
                         )}/>
                         <Route path="/list/areas/view/:id" component={ ViewArea } />
                         

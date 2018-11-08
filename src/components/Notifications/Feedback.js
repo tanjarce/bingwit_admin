@@ -20,11 +20,6 @@ class Feedback extends Component {
             feedbackCount: 0,
             selectedRow: null,
             loading : true,
-            pagination: {
-                offset: 0,
-                limit: 10
-            },
-            searchQ: ''
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)
@@ -45,25 +40,17 @@ class Feedback extends Component {
         })
     }
     getFeedbacks(paginationData, searchQData){
-        this.setState((prevState)=>({
-            loading: true,
-            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
-            pagination: paginationData ? {...paginationData} : prevState.pagination
-        }), ()=>{
-            const { pagination, searchQ } = this.state 
+        this.loading()
 
-            console.log(searchQ)
+        this.props.updateQuery(paginationData, searchQData)
+        setTimeout(()=>{
+            const { pagination, searchQ } = this.props
 
-            const data = (typeof searchQData === 'undefined')
-            ? {
+            const data = {
                 searchQ : searchQ,
                 ...pagination
             }
-            : {
-                searchQ: searchQ,
-                ...pagination,
-                offset: 0
-            }
+            
             API.getFeedbacks(data)
             .then((response) => {
                 if(response.success){
@@ -77,7 +64,7 @@ class Feedback extends Component {
             }).catch(error =>{
                 console.log(error)
             })
-        })
+        },10)
     }
 
     deleteFeedback () {
@@ -108,7 +95,8 @@ class Feedback extends Component {
     }
 
     render() {
-        const { feedbacks, isOpen, feedbackCount, selectedRow, loading, pagination } = this.state
+        const { feedbacks, isOpen, feedbackCount, selectedRow, loading } = this.state
+        const { pagination } = this.props
         const Feedback = feedbacks.map((feed)=>{
             return ({
                 ...feed,
