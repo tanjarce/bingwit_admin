@@ -4,7 +4,6 @@ import { withRouter , Route} from 'react-router-dom'
 import moment from 'moment'
 
 import Table from '../Tables'
-import SearchCount from '../SearchAndCount'
 import SetRules from './SetRules'
 import DeleteModal from '../../modals/DeleteModal'
 import * as API from '../../services/API'
@@ -12,7 +11,7 @@ import dots from '../../images/show_more.svg'
 import * as Help from '../../toastify/helpers'
 import ViewRules from './ViewRules'
 import TotalCount from '../TotalCount';
-
+import * as Session from '../../services/session'
 
 
 class RulesTable extends Component {
@@ -35,29 +34,30 @@ class RulesTable extends Component {
     }
     
     componentDidMount(){
+        console.log(Session.getToken())
         this.updateTable();
      }
-     loading(){
-         this.setState({
-             loading : true
-         })
-     }
-     updateTable(paginationData, searchQData){
-        this.loading()
-        // updating the paginationData and searchData from parent component
-        this.props.updateQuery(paginationData, searchQData)
-        
-        const {pagination, searchQ } = this.props 
 
-        const data = {
-            searchQ : searchQ,
-            ...pagination
-        }
+    loading(){
+        this.setState({loading : true})
+    }
+
+    updateTable(paginationData, searchQData){
+        this.loading()
+        this.props.updateQuery(paginationData, searchQData)
+
+        setTimeout(()=>{
+            const {pagination, searchQ } = this.props 
+
+            const data = {
+                searchQ : searchQ,
+                ...pagination
+            }
 
         API.getAllRules(data)
-        .then((response) => {
-        const error = response.error || ''
-            if (!error) {
+        .then((response) => { 
+            if (response.success) {
+                console.log(response)
                 const arr = response.rule.rows.map((item, key) => {
                     return ({
                         'no' : key+1,
@@ -71,11 +71,13 @@ class RulesTable extends Component {
                     count : response.rule.count,
                     loading : false
                 })
-                return
-            } else {
+            } 
+            else {
                 console.log(response.error.message)
             }
-        })
+        }).catch(err => console.log(err))
+    },10)
+
     }
 
     toggleModal (rowInfo) {
@@ -147,7 +149,6 @@ class RulesTable extends Component {
         const message = selectedRow ? `Are you sure you want to delete rule no. ${selectedRow.no}.` : ''
         
         return (
-            
                 <React.Fragment>
                 {bool ? <div>
                     <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteRule} message={message}/>
@@ -168,8 +169,6 @@ class RulesTable extends Component {
                 </div> : 
                 <ViewRules selectedRow = {selectedRow}/>
                 }
-                
-                
             </React.Fragment>
         );
     }

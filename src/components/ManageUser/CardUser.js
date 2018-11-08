@@ -6,15 +6,7 @@ import Transaction from './Transaction'
 import * as API from '../../services/API'
 import NoImage from '../../assets/NoImage.png'
 
-import { css } from 'react-emotion';
-import { PulseLoader
-} from 'react-spinners';
 
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-`;
 class CardUser extends Component {
     constructor(props){
         super(props)
@@ -65,7 +57,9 @@ class CardUser extends Component {
                 <ul>
                     <li>Informations</li>
                     <li><NavLink to={`/mnguser/${id}/prim`} className='link'>Primary Facts</NavLink></li>
+                    {type !== 'admin' && 
                     <li><NavLink to={`/mnguser/${id}/transaction`} className='link'>Transactions</NavLink></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -75,33 +69,15 @@ class CardUser extends Component {
         <Switch>
             <Route exact path={`/mnguser/:id/prim`} render={()=>(
                 <PrimaryFact user={userInfo}/>
-                )}/>
-            {type ? type  === 'consumer'?
+            )}/>
+            {type !== 'admin' &&
             <Route path={'/mnguser/:id/transaction'}render={()=>(
                 <Transaction userTransaction={userInfo}/>
             )}/>
-                :
-                type !== 'admin' ?
-                    <Route path={'/mnguser/:id/transaction'}render={()=>(
-                        <div>PRODUCER TRANSACTIONS</div>
-                        )}/>
-                        :
-                        <Route path={'/mnguser/:id/transaction'}render={()=>(
-                            <div>Nothing to do here.</div>
-                            )}/>
-            
-            :
-            <PulseLoader
-            className={override}
-            sizeUnit={"px"}
-            size={5}
-            color={'#17C1BC'}
-            loading={true}
-          />}
-
+            }
             <Route render={()=>(
-                <Redirect to={`/mnguser/${id}/prim`} />
-                )}/>
+            <Redirect to={`/mnguser/${id}/prim`} />
+            )}/>
 
         </Switch>
         </div>
