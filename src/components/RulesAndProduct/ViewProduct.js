@@ -10,8 +10,8 @@ class ViewProduct extends Component{
         super(props)
         this.state = {
             productName : {},
-            aliases: []
-
+            aliases: [],
+            loading: true
         }
 
         this.goBack = this.goBack.bind(this)
@@ -30,7 +30,8 @@ class ViewProduct extends Component{
                         .then(res => {
                             if(res.success){
                                 this.setState((prevState)=>({
-                                    aliases: res.aliases
+                                    aliases: res.aliases,
+                                    loading: false
                                 }))
                             }
                         })
@@ -45,7 +46,7 @@ class ViewProduct extends Component{
     render(){
         const momentFormat = (data) => moment(data).format('MMMM D, YYYY')
         const { match } = this.props
-        const { productName, aliases } = this.state
+        const { productName, aliases, loading } = this.state
 
         const aliasesList = aliases.length ? aliases.map(alias => {
             return(
@@ -57,7 +58,9 @@ class ViewProduct extends Component{
         }) : <div>No Alias</div>
 
         return(
-            <div className='rule-body'> 
+            loading 
+            ?<div>loading...</div> 
+            :<div className='rule-body'> 
                 <div className="my-3">
                     <NavLink to='#' activeClassName='gback' className="my-3" onClick={ (e)=>{
                         e.preventDefault()

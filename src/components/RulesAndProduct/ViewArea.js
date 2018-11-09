@@ -16,7 +16,8 @@ class ViewFeedback extends Component{
             edit: false,
             area: {},
             users: [],
-            areaInput: ''
+            areaInput: '',
+            loading: true
         }
         this.goBack = this.goBack.bind(this)
         this.toggleEdit = this.toggleEdit.bind(this)
@@ -74,9 +75,9 @@ class ViewFeedback extends Component{
                             createdAt: res.area.createdAt
                         },
                         users: res.area.user || [],
-                        areaInput: res.area.area_address
+                        areaInput: res.area.area_address,
+                        loading: false
                     }), ()=> {
-                        console.log(this.state)
                     })
                 }
             }).catch(err => console.log(err))
@@ -86,7 +87,7 @@ class ViewFeedback extends Component{
        this.getAreaAndUsers()
     }
     render(){
-        const { edit, area: { area_address, createdAt }, users, areaInput } = this.state
+        const { edit, area: { area_address, createdAt }, users, areaInput, loading } = this.state
         // console.log(this.state)
         const userList = (users.length) 
             ? users.map(user => 
@@ -98,7 +99,9 @@ class ViewFeedback extends Component{
             : <li><a>No users in this area.</a></li>
 
         return(
-            <div className='rule-body'>
+            loading 
+            ? <div>loading...</div>
+            : <div className='rule-body'>
                 <div className="my-3">
                     <NavLink to='#' activeClassName='gback' className="my-3" onClick={ (e)=>{
                         e.preventDefault()
