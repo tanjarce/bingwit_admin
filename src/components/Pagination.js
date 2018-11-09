@@ -136,17 +136,21 @@ export default class CBReactTablePagination extends Component {
     }, 1)
   }
 
-  // componentWillReceiveProps(){
-  //   const {paginationData: {limit, offset}} = this.props
+  componentWillReceiveProps(){
+    const {paginationData: {limit, offset}} = this.props
+    const currentPageonProps = (offset / limit) + 1
+    
+    if(offset === 0){
+      this.setState(()=>({
+        currentPage: 1
+      }))
+    } else {
+      this.setState(()=>({
+        currentPage: currentPageonProps
+      }))
+    }
 
-  //   // const {paginationData: {offset, limit}} = this.props
-  //   const currentPageonProps = (offset / limit) + 1
-  //   setTimeout(()=>{
-  //     this.setState(()=>({
-  //       currentPage: currentPageonProps
-  //     }))
-  //   }, 1)
-  // }
+  }
 
   render () {
     const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props
