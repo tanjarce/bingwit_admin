@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from 'react'
-import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap';
-
+import React, { Component } from 'react'
+import { Container, Button, Col, Row  } from 'reactstrap';
+import { withRouter, NavLink } from 'react-router-dom'
+import '../../styles/rule.css'
 import * as API from '../../services/API'
 import moment from 'moment'
 
@@ -56,20 +57,25 @@ class ViewProduct extends Component{
         }) : <div>No Alias</div>
 
         return(
-            <Fragment>
-                <Button className="my-3" onClick={this.goBack} >back</Button>
-                <Card>
-                    <CardBody>
-                        <CardTitle className="font-weight-bold text-capitalize">{productName.name}</CardTitle>
-                        <CardSubtitle className="text-muted mb-3">Created: {momentFormat(productName.createdAt)}</CardSubtitle>
-                        <hr/>
-                        <p className="m-0 mb-2 font-weight-bold">Alias Names:</p>
-                        <ul>
-                            { aliasesList }
-                        </ul>
-                    </CardBody>
-                </Card>
-            </Fragment>
+            <div className='rule-body'> 
+                <div className="my-3">
+                    <NavLink to='#' activeClassName='gback' className="my-3" onClick={ (e)=>{
+                        e.preventDefault()
+                        this.goBack()
+                    }}>
+                        &lang; &nbsp; Go Back
+                    </NavLink>
+                </div>
+                <div>
+                    <h4 className="text-capitalize">Product Name: {productName.name}</h4>
+                    <p className="text-muted my-2">Created: {momentFormat(productName.createdAt)}</p>
+                    <hr/>
+                    <p className="m-0 mb-2">Product Aliases:</p>
+                    <ul>
+                        { aliasesList }
+                    </ul>
+                </div>
+            </div>
         )
     }
 }

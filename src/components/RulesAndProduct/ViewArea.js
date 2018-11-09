@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { Container, Form, InputGroupAddon, InputGroup, Input, Button } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import * as Help from '../../toastify/helpers'
-
+import editIcon from '../../assets/edit-solid.svg'
 
 import * as API from '../../services/API'
 import moment from 'moment'
@@ -98,8 +98,15 @@ class ViewFeedback extends Component{
             : <li><a>No users in this area.</a></li>
 
         return(
-            <Fragment>
-                <button onClick={this.goBack} >back</button>
+            <div className='rule-body'>
+                <div className="my-3">
+                    <NavLink to='#' activeClassName='gback' className="my-3" onClick={ (e)=>{
+                        e.preventDefault()
+                        this.goBack()
+                    }}>
+                        &lang; &nbsp; Go Back
+                    </NavLink>
+                </div>
                 <div>
                     {
                         (edit)
@@ -119,19 +126,26 @@ class ViewFeedback extends Component{
                             </React.Fragment>
                         )
                         :(  <React.Fragment>
-                                <h4>{area_address}</h4>
-                                <button onClick={this.toggleEdit}>edit</button>
+                                <span className="d-inline-block productName">
+                                    <h4>{area_address}</h4>
+                                    <span className="d-inline-flex align-items-center editIcon" onClick={this.toggleEdit}>
+                                        edit <img src={editIcon} style={{'width': '18px', 'height': '18px', 'paddingLeft': '3px'}}/>
+                                    </span>
+                                </span>
+                                
                             </React.Fragment>
                         )
                     }
 
                 </div>    
-                <p>Created: {moment(createdAt).format('MMMM D, YYYY')}</p>
-                <h6>Users in this Area:</h6>
-                <ul>
-                    {userList}
-                </ul>
-            </Fragment>
+                <div>
+                    <p className="text-muted my-2">Created: {moment(createdAt).format('MMMM D, YYYY')}</p>
+                    <p>Users in this Area:</p>
+                    <ul>
+                        {userList}
+                    </ul>
+                </div>
+            </div>
         )
     }
 }

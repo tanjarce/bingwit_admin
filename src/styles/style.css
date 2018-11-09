@@ -61,3 +61,20 @@
     box-shadow: 0 0 0 0.2rem rgb(255, 255, 255) !important;
     border : 1px solid #ced4da !important;
 }
+
+.productName{
+    position: relative
+}
+
+.editIcon{
+    position: absolute;
+    top: 0;
+    left: 105%;
+    /* visibility: hidden; */
+}
+
+.editIcon:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    /* background: pink; */
+}

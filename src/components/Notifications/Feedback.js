@@ -9,11 +9,14 @@ import dots from '../../images/show_more.svg'
 import userDefafult from '../../assets/userDefault.svg'
 import moment from 'moment'
 import * as Help from '../../toastify/helpers'
+import ViewFeedback from './ViewFeedback'
+
 
 class Feedback extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            showTable: true,
             modalType: 'delete',
             isOpen: false,
             feedbacks: [],
@@ -25,13 +28,20 @@ class Feedback extends Component {
         this.getFeedbacks = this.getFeedbacks.bind(this)
         this.deleteFeedback = this.deleteFeedback.bind(this)
         this.viewFeedback = this.viewFeedback.bind(this) 
+        this.viewTable = this.viewTable.bind(this)
     }
 
+    viewTable () {
+        this.setState((prevState)=>({
+            showTable: true,
+        }))
+    }
+    
     viewFeedback (rowInfo) {
-        const { id } = rowInfo
-        const { history: { push, goBack } , location: { pathname } } = this.props
-
-        this.props.history.push(`${pathname}/view/${id}`)
+        this.setState((prevState)=>({
+            showTable: false,
+            selectedRow : rowInfo ? {...rowInfo} : null
+        }))
     }
 
     loading(){
@@ -95,7 +105,7 @@ class Feedback extends Component {
     }
 
     render() {
-        const { feedbacks, isOpen, feedbackCount, selectedRow, loading } = this.state
+        const {showTable, feedbacks, isOpen, feedbackCount, selectedRow, loading } = this.state
         const { pagination } = this.props
         const Feedback = feedbacks.map((feed)=>{
             return ({
@@ -156,6 +166,7 @@ class Feedback extends Component {
 
         const deleteMessage = (selectedRow) ? `Are you sure you want to delete?` : ''
         return (
+            showTable ? 
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteFeedback} message={deleteMessage}/>
                 <SearchAndCount updateTable={this.getFeedbacks} text="Feedback" count={feedbackCount}/>
@@ -167,6 +178,7 @@ class Feedback extends Component {
                     updateTable={this.getFeedbacks}
                     data={Feedback} />
             </React.Fragment>
+            : <ViewFeedback selectedRow={selectedRow} viewTable={this.viewTable}/>
         )
     }
 }
