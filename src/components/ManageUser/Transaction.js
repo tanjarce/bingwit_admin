@@ -38,6 +38,7 @@ class Biography extends Component {
         this.setState({
             loading : true
         })
+        
         const { userTransaction } = this.props;
         API.getUserTransaction(userTransaction.id)
         .then((response) => {
@@ -45,7 +46,7 @@ class Biography extends Component {
             const arr = response.transaction.rows.map((item, key) => {
                 return ({
                     'tracking_number' : item.tracking_number,
-                    'total_amount' : <span>&#8369; {item.total_amount}</span>,
+                    'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
                     'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                     'action' : {...item},
                     'total' : item.total_amount
@@ -58,7 +59,7 @@ class Biography extends Component {
                 userInfo : arr,
                 count : response.transaction.count,
                 loading : false,
-                total : total
+                total : Intl.NumberFormat('en-GB').format(total)
             })
         }
         else{   
