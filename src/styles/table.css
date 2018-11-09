@@ -58,7 +58,7 @@ input[type="number"] {
     border: 0;
     border-radius: 0;
     background: #17C1BC;
-    width: 200px;
+    width: 170px;
 }
 .pagi_main .button:disabled{
     background: rgb(17, 107, 104);
@@ -72,7 +72,7 @@ input[type="number"] {
     height: 40px;
 }
 .pagi_main .pm-d{
-    margin: 40px
+    margin: 40px 0 40px 0
 }
 .pagi_main .col{
     display: flex;
