@@ -7,6 +7,7 @@ import {Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownIt
 import TotalCount from '../TotalCount'
 import dots from '../../images/show_more.svg'
 import moment from 'moment'
+import ExportCSV from '../../assets/Export.svg'
 
 class Biography extends Component {
     constructor(props) {
@@ -67,12 +68,6 @@ class Biography extends Component {
         }
         })
         
-        /* 
-        'tracking_number' : item.tracking_number,
-                    'total_amount' : <span>&#8369; {item.total_amount}</span>,
-                    'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                    'action' : {...item},
-                    'total' : item.total_amount */
     }
     exportCSV(){
         const { userInfo } = this.state 
@@ -139,7 +134,9 @@ class Biography extends Component {
                     <p className='text-muted role'>{userTransaction.type}</p>
                 </div>
                 <Row>
-                <Col xs='auto'><span style={{cursor : 'pointer'}} onClick={this.exportCSV}>Export as CSV</span></Col>
+                <Col xs='auto' className='mb-1'><span style={{cursor : 'pointer', color : '#3175B5'}} onClick={this.exportCSV}>
+                <img src={ExportCSV} className='pr-1'/> Export as CSV
+                </span></Col>
                 <Col></Col>
                 <Col xs='auto'><span>Total Amount: &#8369; {total}</span></Col>
                 {'|'}
