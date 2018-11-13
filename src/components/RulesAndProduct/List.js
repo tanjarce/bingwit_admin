@@ -4,10 +4,12 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import Tabs from '../Tabs'
 import Rules from './Rules'
 import Products from './Products'
+import Categories from './Categories'
 import Areas from './Areas'
 import Banner from '../Banner'
 import ViewProduct from './ViewProduct'
 import ViewArea from './ViewArea'
+import ViewCategory from './ViewCategory'
 import ProductModal from '../../modals/ProductModal'
 import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
@@ -24,16 +26,20 @@ class List extends Component {
                 offset: 0,
                 limit: 10
             },
-            searchQ: ''
+            searchQ: '',
+            optionCategory: []
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
         this.resetPaginationAndSearch = this.resetPaginationAndSearch.bind(this) 
         this.updateQuery = this.updateQuery.bind(this)
+        this.updateFilterCategory = this.updateFilterCategory.bind(this)
+        this.getAllCategory = this.getAllCategory.bind(this)
     }
     toggleModal () {
         this.setState({isOpen: !this.state.isOpen})
     }
+    
     resetPaginationAndSearch () {
         this.setState(()=>({
             pagination: {
@@ -42,6 +48,14 @@ class List extends Component {
             },
             searchQ: ''
         }))
+    }
+
+    updateFilterCategory(e){
+        // console.log()
+        const target = e.target
+        this.setState(()=>({
+            category: target.value
+        }), ()=>{this.getAllProduct()})
     }
 
     updateQuery(paginationData, searchQData){
@@ -61,21 +75,25 @@ class List extends Component {
         })
         this.updateQuery(paginationData, searchQData)
         setTimeout(()=>{
-            const { pagination, searchQ } = this.state 
+            const { pagination, searchQ, category} = this.state 
             
             const data =  {
                 searchQ : searchQ,
+                category: category,
                 ...pagination
             }
                 
             API.getAllProductTypes(data)
             .then(res => {
+                // console.log(res)
                 if(res.success){
                     this.setState(()=>({
                         productCount: res.product_type.count,
                         productRow: res.product_type.rows,
                         isLoading: false
-                    }))
+                    }), ()=>{
+                        console.log(this.state)
+                    })
                 }
                 return res.product_type.rows
             })
@@ -88,6 +106,22 @@ class List extends Component {
         },10)
     }
 
+    getAllCategory () {
+        API.getAllCategories()
+            .then(res => {
+                if(res.success){
+                    this.setState(()=>({
+                        optionCategory : res.category.rows
+                    }))
+                }
+            })
+
+    }
+
+    componentDidMount(){
+        this.getAllCategory()
+    }
+
     render() {
         const tabs = [
             {'text': 'Rules', 'url': '/list/rules'},
@@ -96,11 +130,11 @@ class List extends Component {
             {'text': 'Areas', 'url': '/list/areas'},
         ]
         
-        const {isLoading, isOpen, productCount, productRow, pagination, searchQ } = this.state
+        const {isLoading, isOpen, productCount, productRow, pagination, searchQ, optionCategory} = this.state
 
         return (
             <div className='bottom-pad'>
-                <ProductModal isOpen={isOpen}  getAllProduct={this.getAllProduct} toggle={this.toggleModal}  type="add" />
+                <ProductModal isOpen={isOpen} optionCategory={optionCategory} getAllProduct={this.getAllProduct} toggle={this.toggleModal}  type="add" />
                 <Banner 
                     header="List of Rules &amp; Products"
                     contents="Contains information about rules and products." 
@@ -119,13 +153,20 @@ class List extends Component {
                         )}/>
                         // PRODUCTS
                         <Route exact path="/list/products" render={()=>(
-                            <Products isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
+                            <Products updateCategory={this.updateFilterCategory} optionCategory={optionCategory} isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
                         // AREAS
                         <Route exact path="/list/areas" render={()=>(
                             <Areas updateQuery={this.updateQuery} searchQ={searchQ} pagination={pagination}/>
                         )}/>
+                        <Route exact path="/list/product_categories" render={()=>(
+                            <Categories updateQuery={this.updateQuery} optionCategory={optionCategory} getAllCategory={this.getAllCategory} searchQ={searchQ} pagination={pagination}/>
+                        )}/>
+
+                        <Route path="/list/product_categories/view/:id" render={ ()=>(
+                            <ViewCategory optionCategory={optionCategory}/>
+                        ) } />
                         <Route path="/list/areas/view/:id" component={ ViewArea } />
                         
                         <Route render={()=>(

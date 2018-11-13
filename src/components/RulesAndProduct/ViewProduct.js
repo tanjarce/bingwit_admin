@@ -25,7 +25,7 @@ class ViewProduct extends Component{
                 if(res.success){
                     this.setState((prevState)=>({
                         productName: res.product_type
-                    }))
+                    }), ()=>{console.log(this.state.productName)})
                     API.getAliasName(id)
                         .then(res => {
                             if(res.success){
@@ -71,6 +71,7 @@ class ViewProduct extends Component{
                 </div>
                 <div>
                     <h4 className="text-capitalize">Product Name: {productName.name}</h4>
+                    <h5 className="text-capitalize">Category: {productName.product_category.name}</h5>
                     <p className="text-muted my-2">Created: {momentFormat(productName.createdAt)}</p>
                     <hr/>
                     <p className="m-0 mb-2">Product Aliases:</p>
