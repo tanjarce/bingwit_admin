@@ -279,9 +279,16 @@ export const updateArea = (id, data) => {
 
 /* USERS TRANSACTION */ //=--------------------------------------
 
-// GET USER TANSACTIONS
+// GET USER TANSACTIONS CONSUMER
 
-export const getUserTransaction = (id) =>  
+export const getUserTransactionReceipt = (id) =>  
+fetch(`${api}/users/${id}/receipts`, { 
+  headers: headers() })
+.then(res => res.json())
+
+// GET USER TANSACTIONS PRODUCERE
+
+export const getUserTransactionTransaction = (id) =>  
 fetch(`${api}/users/${id}/transactions`, { 
   headers: headers() })
 .then(res => res.json())

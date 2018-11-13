@@ -7,6 +7,16 @@ import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
 import * as Session from '../../services/session'
 
+import { css } from 'react-emotion';
+import { PulseLoader
+} from 'react-spinners';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
 class AccountSetting extends Component {
   constructor(props){
     super(props);
@@ -15,7 +25,8 @@ class AccountSetting extends Component {
         vpassword : '',
         username : '',
         oldPass : '',
-        err : ''
+        err : '',
+        loading : false
 
     }
     this.changePass = this.changePass.bind(this);
@@ -43,7 +54,10 @@ class AccountSetting extends Component {
   }
   changePass(){
     console.log('Change Pass')
-    const { password, vpassword, oldPass } = this.state
+    const { password, vpassword, oldPass, loading} = this.state
+    this.setState({
+      loading : true
+    })
     API.changePassword({
       'password' : oldPass,
       'new_password' : password,
@@ -55,13 +69,15 @@ class AccountSetting extends Component {
             vpassword : '',
             password : '',
             oldPass : '',
-            err : ''
+            err : '',
+            loading : false
           })
           Help.toastPop({message: 'Change Password Successfully.', type: 'success'})
       }
       else{        
           this.setState({
-            err : response.error.message
+            err : response.error.message,
+            loading : false
           })
           Help.toastPop({message: 'Error occured!.', type: 'error'})
       }
@@ -72,7 +88,7 @@ class AccountSetting extends Component {
     this.setState({[e.target.name] : e.target.value})
   };
     render() {
-      const { password , vpassword, username, oldPass , err} = this.state;
+      const { password , vpassword, username, oldPass ,loading, err} = this.state;
       console.log(oldPass)
         return (
                 <div className='all_padding'>
@@ -147,7 +163,21 @@ class AccountSetting extends Component {
 
                   <Row><Col sm={10} lg='9'>
                   
-                  <Button className='float-right' onClick={this.changePass}>Save Changes</Button>
+                  <Button className='float-right' onClick={this.changePass} style={{width : '180px'}}>
+                    <div>
+                      {loading ? 
+                      <PulseLoader
+                      className={override}
+                      sizeUnit={"px"}
+                      size={3}
+                      color={'white'}
+                      loading={loading}
+                    />
+                    :
+                    'Save Changes'
+                    }
+                    </div> 
+                  </Button>
                   </Col></Row>
                 </AvForm>
                 </div>
