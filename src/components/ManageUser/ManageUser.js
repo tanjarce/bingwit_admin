@@ -30,7 +30,8 @@ class ManageUser extends Component {
                 offset: 0,
                 limit: 10
             },
-            searchQ: ''
+            searchQ: '',
+            prevPath : ''
         }
         this.orderSort = this.orderSort.bind(this)
         this.loading = this.loading.bind(this)
@@ -104,14 +105,18 @@ class ManageUser extends Component {
             Help.toastPop({message: `You can't suspend this type.`, type: 'error'})
         }
     }
-
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.location !== this.props.location) {
+          this.setState({ prevPath: this.props.location })
+        }
+    }
     toggleModal () {
         this.setState({
             isOpen: !this.state.isOpen
         })
     }
     viewUser (rowInfo){
-        this.props.history.push(`/mnguser/${rowInfo.id}`)
+        this.props.history.push(`/mnguser/users/${rowInfo.id}`)
     }
     orderSort(order){
         const { sort } = this.state
@@ -168,7 +173,9 @@ class ManageUser extends Component {
                             />
                         )}/>
                         <Route path="/mnguser/suspended" component={SuspendedUser}/>
-                        <Route path="/mnguser/:id" component={CardUser}/>
+                        <Route path="/mnguser/users/:id" render={(props) => (
+                            <CardUser {...props} prevPath={this.state.prevPath}/>
+                        )}/>
                         <Route render={()=>(
                         <Redirect to="/mnguser/users" />
                     )}/>
