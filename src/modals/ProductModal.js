@@ -26,6 +26,11 @@ class ProductModal extends React.Component {
             addedAliases : [],
             deletedAliases : [],
             productNameInput: '',
+            optionCategory : [],
+            category: {
+                name: '',
+                id: ''
+            }
         }
         this.aliasInput = React.createRef()
         this.handleChange = this.handleChange.bind(this)
@@ -35,12 +40,11 @@ class ProductModal extends React.Component {
         this.reset = this.reset.bind(this)
         this.toggleOut = this.toggleOut.bind(this)    
         this.AddedSuccessfully = this.AddedSuccessfully.bind(this)
+        this.updateFilterCategory = this.updateFilterCategory.bind(this) 
     }
 
     componentWillReceiveProps(){
         const { selectedRow, type, isOpen } = this.props
-        // console.log(selectedRow)
-
         // checking if there is value in selectedRow
         if(type === 'edit' && !isOpen && selectedRow){
             this.setState((prevState)=>(
@@ -49,9 +53,12 @@ class ProductModal extends React.Component {
                         ...prevState.value,
                         product_name: selectedRow.name
                     },
-                    productNameInput: selectedRow.name
+                    productNameInput: selectedRow.name,
+                    category: selectedRow.product_category
                 }
-            ))
+            ), ()=>{
+                console.log(this.state)
+            })
                 API.getAliasName(selectedRow.id)
                     .then(res => {
                         if(res.success){
@@ -74,17 +81,22 @@ class ProductModal extends React.Component {
         this.toggleOut()
         this.props.getAllProduct()
         Help.toastPop({message: 'Product added successfully', type: 'success'})
+        this.reset()
     }
 
     addProduct () {
-        const {value: {alias_names}, productNameInput} = this.state
+        const {value: {alias_names}, productNameInput, category, category: {name, id}} = this.state
+        const {optionCategory} = this.props;
+        // if the category is '' it will get the index 0 on array
+        const categoryID = category.id ? category.id : optionCategory[0].id
+
 
         // add product type
-        const name = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
+        const productname = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
         
-        console.log(name)
+        console.log(productname)
 
-        API.addProductType({'name': name})
+        API.addProductType({'name': productname, 'product_category_id': categoryID})
             .then(res => {
                 if(res.success){
                     // checked if there is inputed aliases
@@ -110,7 +122,7 @@ class ProductModal extends React.Component {
     }
 
     async saveEdit () {
-        const { deletedAliases, addedAliases, productNameInput} = this.state
+        const { deletedAliases, addedAliases, category, productNameInput} = this.state
         const { selectedRow: {id} } = this.props
 
         if(productNameInput.trim() !== ''){
@@ -147,14 +159,15 @@ class ProductModal extends React.Component {
             await new Promise((resolve) => {
                 const name = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
                 
-                
-                const productName = {'name': name} 
+                const data = {
+                    'name': name,
+                    'category_id': category.id
+                } 
 
+                console.log(data)
 
-
-                API.updateProductType(id, productName)
+                API.updateProductType(id, data)
                 .then(res => {
-                    console.log(productName)
                     if(res.success){
                         this.toggleOut()
                         this.reset()
@@ -186,7 +199,8 @@ class ProductModal extends React.Component {
                 // },
                 productNameInput: target.value
             }), ()=>{
-                // console.log(this.state.value.product_name)
+                console.log(this.state.productNameInput)
+                console.log(this.state.value.product_name)
             })
         }
         else{
@@ -271,6 +285,20 @@ class ProductModal extends React.Component {
         
     }
 
+    updateFilterCategory(e){
+        // console.log()
+        const target = e.target
+
+        this.setState((prevState)=>({
+            category: {
+                ...prevState.category,
+                id: target.value
+            }
+        }), ()=>{
+            console.log(this.state.category)
+        })
+    }
+
     toggleOut() {
         this.props.toggle(true)
         this.reset()
@@ -281,25 +309,31 @@ class ProductModal extends React.Component {
             alias_name_input: '',
             value: {
                 product_name: "",
-                alias_names: ""
+                alias_names: []
             },
             addedAliases : [],
-            deletedAliases : []
+            deletedAliases : [],
+            productNameInput: '',
+            optionCategory : [],
+            category: {
+                name: '',
+                id: ''
+            }
+        }, ()=>{
         })
     }
 
+
   render() {
-    const { isOpen, type } = this.props;
-    const {alias_name_input, value: { product_name, alias_names }, addedAliases, deletedAliases, productNameInput } = this.state;
-    const noProductType = (productNameInput.trim().length === 0) ? true : false
-
-    const disabledSaveBtn = (
-        product_name === productNameInput
-        && addedAliases.length <= 0 
-        && deletedAliases.length <= 0
-    )
-        ? true : false
-
+    const {selectedRow, isOpen, type, optionCategory} = this.props;
+    const {category, alias_name_input, value: { product_name, alias_names }, addedAliases, deletedAliases, productNameInput } = this.state;
+    
+    const categoryOptions = optionCategory.map(category => {
+        return(
+            <option key={category.id} name={category.name} value={category.id} >{category.name}</option>
+        )
+    })
+    
     const list_alias = (alias_names.length > 0)
         ? alias_names
         .map((name, index) => {
@@ -319,6 +353,19 @@ class ProductModal extends React.Component {
         )})
         : <ListGroupItem className="text-muted">Aliases will be shown here.</ListGroupItem>
 
+    const noProductType = (productNameInput.trim().length === 0) ? true : false
+    
+    const categoryProps = selectedRow ? selectedRow.product_category.id : ''
+    const productNameProps = selectedRow ? selectedRow.name : ''
+
+    const disabledSaveBtn = (
+        productNameProps.toUpperCase() === productNameInput.trim().toUpperCase()
+        && addedAliases.length <= 0 
+        && deletedAliases.length <= 0
+        && categoryProps === this.state.category.id
+    )
+        ? true : false
+
     const title = type === "add" ? "Add New Product" : "Edit Product";
 
     const btn = type === "add"
@@ -333,7 +380,7 @@ class ProductModal extends React.Component {
         : (
             <Button
               color="primary"
-              disabled={noProductType || disabledSaveBtn}
+              disabled={disabledSaveBtn}
               onClick={this.saveEdit}>
               Save
             </Button>
@@ -346,6 +393,23 @@ class ProductModal extends React.Component {
         modalTitle={title}
         modalBody={
           <div>
+            <FormGroup>
+              <Label for="product_category" className="text-muted">
+                Product Category
+              </Label>
+              <Input 
+                type="select" 
+                name="select" 
+                id="exampleSelect" 
+                onChange={this.updateFilterCategory}
+                value={category.id || ''} 
+                >
+
+                    {
+                        categoryOptions
+                    }
+                </Input>
+            </FormGroup>
             <FormGroup>
               <Label for="product_name" className="text-muted">
                 Product Name

@@ -1,49 +1,56 @@
-import React, { Component, Fragment } from 'react'
-import { Container, Form, InputGroupAddon, InputGroup, Input, Button } from 'reactstrap';
-import { NavLink, Link } from 'react-router-dom'
+import React, { Component } from 'react'
+import {  Form, InputGroupAddon, InputGroup, Input, Button } from 'reactstrap';
+import { withRouter, NavLink, Link } from 'react-router-dom'
+import '../../styles/rule.css'
+import * as API from '../../services/API'
+import moment from 'moment'
 import * as Help from '../../toastify/helpers'
 import editIcon from '../../assets/edit-solid.svg'
 
-import * as API from '../../services/API'
-import moment from 'moment'
 
-
-
-class ViewFeedback extends Component{
+class ViewCategory extends Component{
     constructor(props){
         super(props)
         this.state = {
-            edit: false,
-            area: {},
-            users: [],
-            areaInput: '',
-            loading: true
+            productTypes : [],
+            productCategory: {},
+            aliases: [],
+            loading: true,
+            categoryInput: '',
+            edit: false
         }
+
         this.goBack = this.goBack.bind(this)
         this.toggleEdit = this.toggleEdit.bind(this)
         this.handleChange = this.handleChange.bind(this)
-        this.getAreaAndUsers = this.getAreaAndUsers.bind(this)
+        this.getCategory = this.getCategory.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this) 
+
     }
 
     handleChange (e) {
         const value = e.target.value
         this.setState((prevState)=>({
-            areaInput: value 
+            categoryInput: value 
         }))
     }
+
     handleSubmit (e) {
         e.preventDefault()
-        const { areaInput } = this.state
+        const { categoryInput } = this.state
 
-        if(areaInput.trim() !== ''){
+        if(categoryInput.trim() !== ''){
             const id = this.props.match.params.id
-            API.updateArea(id, areaInput)
+            API.updateCategory(id, categoryInput)
                 .then(res => {
                     if(res.success){
-                        this.getAreaAndUsers()
+                        this.getCategory()
                         Help.toastPop({message: 'Changes Saved!', type: 'success'})
                         this.toggleEdit()
+                        
+                        
+                        // update the options in category filter 
+                        this.props.getAllCategory()
                     }
                 }).catch(err => console.log(err))
         }
@@ -58,50 +65,50 @@ class ViewFeedback extends Component{
         })
     }
 
+    componentDidMount(){
+        this.getCategory()
+    }
+    getCategory () {
+        const id = this.props.match.params.id
+
+        API.getCategoryById(id)
+            .then(res => {
+                if(res.success){
+                    this.setState((prevState)=>({
+                        productTypes: res.product_type.rows, 
+                        productCategory: {...res.product_category.rows[0]},
+                        categoryInput: res.product_category.rows[0].name,
+                        loading: false
+                    }), ()=>{console.log(this.state)})
+                }
+            }).catch(err => console.log(err))
+    }
+
     goBack (){
         this.props.history.goBack()
     }
 
-    getAreaAndUsers(){
-        const id = this.props.match.params.id
-
-        API.getAreasAndUsers(id)
-            .then(res => {
-                if(res.success){
-                    console.log(res)
-                    this.setState(()=>({
-                        area: {
-                            area_address: res.area.area_address,
-                            createdAt: res.area.createdAt
-                        },
-                        users: res.area.user || [],
-                        areaInput: res.area.area_address,
-                        loading: false
-                    }), ()=> {
-                    })
-                }
-            }).catch(err => console.log(err))
-    }
-    
-    componentDidMount(){
-       this.getAreaAndUsers()
-    }
     render(){
-        const { edit, area: { area_address, createdAt }, users, areaInput, loading } = this.state
-        // console.log(this.state)
-        const userList = (users.length) 
-            ? users.map(user => 
-                (<li key={user.id}>
-                    <Link to={`/mnguser/${user.id}`} >
-                        {user.full_name}
+        // const momentFormat = (data) => moment(data).format('MMMM D, YYYY')
+        // const { match } = this.props
+        const {productCategory, productTypes, loading, categoryInput, edit} = this.state
+
+        const productTypeList = productTypes.length ? productTypes.map(productType => {
+            return(
+                <li key={productType.id}>
+                    <Link to={`/list/products/view/${productType.id}`} >
+                        {productType.name}
                     </Link>
-                </li>))
-            : <li><a>No users in this area.</a></li>
+                    {/* <p className="font-weight-normal m-0">{productType.name}</p> */}
+                    {/* <small className=" text-muted">Created: {momentFormat(alias.createdAt)} · Updated: {momentFormat(alias.updatedAt)}</small> */}
+                </li>
+            ) 
+        }) : <div>No Products in this Category</div>
 
         return(
             loading 
-            ? <div>loading...</div>
-            : <div className='rule-body'>
+            ?<div>loading...</div> 
+            : <div className='rule-body'> 
                 <div className="my-3">
                     <NavLink to='#' activeClassName='gback' className="my-3" onClick={ (e)=>{
                         e.preventDefault()
@@ -117,11 +124,11 @@ class ViewFeedback extends Component{
                                 <Form onSubmit={this.handleSubmit}>
                                     <InputGroup>
                                         <Input 
-                                            name="areaInput"
+                                            name="categoryInput"
                                             onChange={this.handleChange}    
-                                            defaultValue={areaInput}
+                                            defaultValue={categoryInput}
                                         />
-                                        <InputGroupAddon addonType="append"><Button color="primary">Add Area</Button></InputGroupAddon>
+                                        <InputGroupAddon addonType="append"><Button color="primary">Save</Button></InputGroupAddon>
                                         <InputGroupAddon addonType="append"><Button type="button" color="secondary" onClick={this.toggleEdit}>Cancel</Button></InputGroupAddon>
                                     </InputGroup>
                                 </Form>
@@ -130,7 +137,7 @@ class ViewFeedback extends Component{
                         )
                         :(  <React.Fragment>
                                 <span className="d-inline-block productName">
-                                    <h4>{area_address}</h4>
+                                    <h4>{productCategory.name}</h4>
                                     <span className="d-inline-flex align-items-center editIcon" onClick={this.toggleEdit}>
                                         edit <img src={editIcon} style={{'width': '18px', 'height': '18px', 'paddingLeft': '3px'}}/>
                                     </span>
@@ -140,12 +147,11 @@ class ViewFeedback extends Component{
                         )
                     }
 
-                </div>    
-                <div>
-                    <p className="text-muted my-2">Created: {moment(createdAt).format('MMMM D, YYYY')}</p>
-                    <p>Users in this Area:</p>
+                    {/* <h4 className="text-capitalize">Category: {productCategory.name}</h4> */}
+                    <hr/>
+                    <p className="m-0 mb-2">Products under <span className="font-weight-bold">{productCategory.name}</span> category:</p>
                     <ul>
-                        {userList}
+                        { productTypeList }
                     </ul>
                 </div>
             </div>
@@ -153,4 +159,4 @@ class ViewFeedback extends Component{
     }
 }
 
-export default ViewFeedback 
+export default withRouter(ViewCategory)
