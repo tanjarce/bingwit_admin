@@ -172,7 +172,7 @@ class List extends Component {
                         )}/>
                         // PRODUCTS
                         <Route exact path="/list/products" render={()=>(
-                            <Products updateCategory={this.updateFilterCategory} optionCategory={optionCategory} isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
+                            <Products updateQuery={this.updateQuery} updateCategory={this.updateFilterCategory} optionCategory={optionCategory} isLoading={isLoading} productCount={productCount} paginationData={pagination} productRow={productRow} getAllProduct={this.getAllProduct}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
                         // AREAS

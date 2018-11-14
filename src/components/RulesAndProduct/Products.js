@@ -25,6 +25,7 @@ class Products extends Component {
         this.setModal = this.setModal.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
         this.viewProduct = this.viewProduct.bind(this)
+        this.getAllProduct = this.getAllProduct.bind(this)
     }
 
     viewProduct (rowInfo) {
@@ -50,9 +51,9 @@ class Products extends Component {
     setModal (data, type) {
         this.setState({
             modalType: type,
-            selectedRow: {
+            selectedRow: data ? {
                 ...data,
-            },
+            } : null ,
         }, () => {
             this.toggleModal()
         }
@@ -72,14 +73,67 @@ class Products extends Component {
 
 
     componentDidMount(){
-        this.props.getAllProduct()
+        this.getAllProduct()
     }
     
+    getAllProduct(paginationData, searchQData) {
+        this.setState({
+            isLoading: true
+        })
+        this.props.updateQuery(paginationData, searchQData)
+        setTimeout(()=>{
+            const { pagination, searchQ, category} = this.props
+            
+            const data =  {
+                searchQ : searchQ,
+                category: category,
+                ...pagination
+            }
+                
+            API.getAllProductTypes(data)
+            .then(res => {
 
+                if(res.success){
+                    // transforming data
+
+                    const productTypes = res.category.rows
+                        .map((product)=>{
+                            return {category: {name: product.name, id: product.id  }, product_types: product.product_type} 
+                        })
+                        .reduce((productTypes, product)=>{
+                            // console.log(product)
+                            const productCategory = product.category
+                            product.product_types.map(product => {
+                                productTypes.push(
+                                    {...product, 'product_category': {...productCategory}}
+                                )
+                            })
+                            return productTypes
+                        }, [])
+
+                    console.log(productTypes)
+                    this.setState(()=>({
+                        productCount: res.product_type_count[1],
+                        productRow: productTypes,
+                        isLoading: false
+                    }), ()=>{
+                        console.log(this.state)
+                    })
+                }
+                // return res.product_type.rows
+            })
+            .catch(err => {
+                this.setState(()=>({
+                    isLoading: false
+                }))
+                Help.toastPop({message: err, type: 'error'})
+            })
+        },10)
+    }
 
     render() {
-        const { isOpen, selectedRow, modalType } = this.state
-        const { productRow, productCount, isLoading, getAllProduct, paginationData, optionCategory} = this.props
+        const { isOpen, selectedRow, modalType,  } = this.state
+        const {   productRow, productCount, isLoading, getAllProduct, paginationData, optionCategory} = this.props
         const Products = productRow.map((product)=>{
             const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
             // console.log(product.product_category)
@@ -140,7 +194,7 @@ class Products extends Component {
         // checking what modal to be use
         const modal = (modalType === 'delete')
             ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
-            : (<ProductModal isOpen={isOpen} optionCategory={optionCategory} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
+            : (<ProductModal isOpen={isOpen} optionCategory={optionCategory} toggle={this.toggleModal} selectedRow={selectedRow} type={modalType} getAllProduct={this.props.getAllProduct}/>)
         return (
             <React.Fragment>
                     {  
@@ -155,8 +209,8 @@ class Products extends Component {
                                     categoryOptions
                                 }
                             </Input>
-                            <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
                     </FormGroup>
+                    <Button color="primary" className="ml-auto" size="sm" onClick={()=>{this.setModal(null, 'add')}}>Add Product</Button>
 
                 </SearchCount>
                 <Table

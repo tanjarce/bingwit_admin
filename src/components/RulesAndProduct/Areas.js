@@ -22,11 +22,6 @@ class Areas extends Component {
             areaCount: 0,
             loading: true,
             areaInput: '',
-            pagination: {
-                offset: 0,
-                limit: 10
-            },
-            searchQ: ''
         }
         this.deleteArea = this.deleteArea.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
