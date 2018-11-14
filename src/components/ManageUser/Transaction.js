@@ -37,7 +37,7 @@ class Transaction extends Component {
         this.getUserTransactionConsumer = this.getUserTransactionConsumer.bind(this)
         this.getUserTransactionProducer = this.getUserTransactionProducer.bind(this)
     }
-    componentWillMount(){
+    componentDidMount(){
         const id = this.props.match.params.id
         API.getUserId(id)
         .then((response) => {
@@ -75,7 +75,7 @@ class Transaction extends Component {
                         'rating' : item.rating ? item.rating : '- -',
                         'consumer' : item.consumer_id ,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                        'action' : {...item}
+                        'action' : {...item},
                     })
                 })
                 const items = []
@@ -103,14 +103,14 @@ class Transaction extends Component {
         const id = this.props.match.params.id
         API.getUserTransactionReceipt(id)
         .then((response) => {
-            
             if(response.success){
-                const arr = response.receipts.map((item, key) => {
+                console.log(response)
+                const arr = response.rows.map((item, key) => {
                     return ({
                         'tracking_number' : item.tracking_number,
                         'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
                         'address' : item.address,
-                        'transaction' : item.transaction.length,
+                        'transaction' : item.transaction_count,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                         'action' : {...item}
                     })
@@ -124,7 +124,7 @@ class Transaction extends Component {
                     columnl : 'Address',
                     datal : 'address',
                     userInfo : arr,
-                    count : '- -',
+                    count : response.count,
                     loading : false,
                     total : Intl.NumberFormat('en-GB').format(total)
                 })
