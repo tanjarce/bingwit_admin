@@ -56,7 +56,7 @@ class SuspendedUser extends Component {
     }
 
     viewItem (rowInfo) {
-        this.props.history.push(`/mnguser/${rowInfo.id}`)
+        this.props.history.push(`/mnguser/users/${rowInfo.id}`)
     }
 
     loading(){

@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import Tables from '../Tables'
 import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
-import {Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container } from 'reactstrap';
+import {Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {Switch, Redirect, Route, withRouter } from 'react-router-dom'
 
+import ViewTransaction from './ViewTransaction'
 import TotalCount from '../TotalCount'
 import dots from '../../images/show_more.svg'
 import moment from 'moment'
+import ExportCSV from '../../assets/Export.svg'
 
-class Biography extends Component {
+class Transaction extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,57 +25,115 @@ class Biography extends Component {
                 limit: 10
             },
             total : '',
-            searchQ: ''
+            searchQ: '',
+            type : '',
+            column : '',
+            data : '',
+            columnl : '',
+            datal : '',
         }
         this.viewTransaction = this.viewTransaction.bind(this)
         this.exportCSV = this.exportCSV.bind(this)
-        this.getUserTransaction = this.getUserTransaction.bind(this)
+        this.getUserTransactionConsumer = this.getUserTransactionConsumer.bind(this)
+        this.getUserTransactionProducer = this.getUserTransactionProducer.bind(this)
     }
-    componentDidMount(){
-        this.getUserTransaction();
+    componentWillMount(){
+        const id = this.props.match.params.id
+        API.getUserId(id)
+        .then((response) => {
+        if(response.success === true){
+            response.user.type !== 'admin' ? 
+            response.user.type === 'consumer' ?
+            this.getUserTransactionConsumer() 
+            :
+            this.getUserTransactionProducer()
+            :
+            Help.toastPop({message: 'Admin type doesnt have this features.', type: 'error'})
+        }
+        else{
+            Help.toastPop({message: response.error.message, type: 'error'})
+        }
+        })
     }
     viewTransaction(){
-        console.log('VIEW TRANSACT')
+        const { userTransaction } = this.props;
+        this.props.history.push(`/mnguser/users/${userTransaction.id}/transaction/view`)
     }
-    getUserTransaction(){
+    getUserTransactionProducer(){
         this.setState({
             loading : true
-        })
-        
-        const { userTransaction } = this.props;
-        API.getUserTransaction(userTransaction.id)
+        })       
+        const id = this.props.match.params.id
+        API.getUserTransactionTransaction(id)
         .then((response) => {
-            if(response.success) { 
-            const arr = response.transaction.rows.map((item, key) => {
-                return ({
-                    'tracking_number' : item.tracking_number,
-                    'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
-                    'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                    'action' : {...item},
-                    'total' : item.total_amount
+            if(response.success){
+                console.log(response.transaction)
+                const arr = response.transaction.rows.map((item, key) => {
+                    return ({
+                        'tracking_number' : item.tracking_number,
+                        'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
+                        'rating' : item.rating ? item.rating : '- -',
+                        'consumer' : item.consumer_id ,
+                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
+                        'action' : {...item}
+                    })
                 })
-            })
-            const items = []
-            arr.map(item => items.push(item.total))
-            const total = items.reduce((prev,next) => prev + next,0);
-            this.setState({
-                userInfo : arr,
-                count : response.transaction.count,
-                loading : false,
-                total : Intl.NumberFormat('en-GB').format(total)
-            })
+                const items = []
+                arr.map(item => items.push(item.total))
+                const total = items.reduce((prev,next) => prev + next,0);
+                this.setState({
+                    column : 'Consumer',
+                    data : 'consumer',
+                    columnl : 'Rating',
+                    datal : 'rating',
+                    userInfo : arr,
+                    count : response.transaction.count,
+                    loading : false,
+                    total : Intl.NumberFormat('en-GB').format(total)
+                })
         }
-        else{   
-            Help.toastPop({message: `You can't suspend this type.`, type: 'error'})
+        else{
+            Help.toastPop({message: response.error.message, type: 'error'})
+        }})
+    }
+    getUserTransactionConsumer(){        
+        this.setState({
+            loading : true
+        })        
+        const id = this.props.match.params.id
+        API.getUserTransactionReceipt(id)
+        .then((response) => {
+            
+            if(response.success){
+                const arr = response.receipts.map((item, key) => {
+                    return ({
+                        'tracking_number' : item.tracking_number,
+                        'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
+                        'address' : item.address,
+                        'transaction' : item.transaction.length,
+                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
+                        'action' : {...item}
+                    })
+                })
+                const items = []
+                arr.map(item => items.push(item.total))
+                const total = items.reduce((prev,next) => prev + next,0);
+                this.setState({
+                    column : 'No. of Transaction',
+                    data : 'transaction',
+                    columnl : 'Address',
+                    datal : 'address',
+                    userInfo : arr,
+                    count : '- -',
+                    loading : false,
+                    total : Intl.NumberFormat('en-GB').format(total)
+                })
         }
+        else{
+            Help.toastPop({message: response.error.message, type: 'error'})
+        } 
         })
         
-        /* 
-        'tracking_number' : item.tracking_number,
-                    'total_amount' : <span>&#8369; {item.total_amount}</span>,
-                    'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                    'action' : {...item},
-                    'total' : item.total_amount */
     }
     exportCSV(){
         const { userInfo } = this.state 
@@ -96,8 +157,7 @@ class Biography extends Component {
     }
     render() {
         const { userTransaction } = this.props;
-        const { loading, count, pagination, userInfo, total } = this.state
-        
+        const { loading, count, pagination, userInfo, total, column, data, columnl, datal } = this.state
         const columnsRules = [
             {
                 Header: 'Tracking Number',
@@ -107,6 +167,16 @@ class Biography extends Component {
                 Header: 'Amount',
                 accessor: 'total_amount',
                 width : 100
+            },
+            {
+                Header: columnl,
+                accessor: datal,
+                width : 180
+            },
+            {
+                Header: column,
+                accessor: data,
+                width : 180
             },
             {
                 Header: 'Date',
@@ -126,35 +196,48 @@ class Biography extends Component {
                         </DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem onClick={() => {this.viewTransaction(rowInfo.value.id)}}>View</DropdownItem>
-                            {/* <DropdownItem onClick={() => {this.setModal(rowInfo.value, 'suspend') }}>Suspend</DropdownItem> */}
-                            <DropdownItem onClick={()=>{this.setModal(rowInfo.value, 'delete')}}>Suspend</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 )
             }]
         return (
             <div className='main-facts'>
-                <div className='space' >
-                    <h4 className='font-weight-bold'>{userTransaction.full_name}</h4>
-                    <p className='text-muted role'>{userTransaction.type}</p>
+                <Switch>
+                    <Route exact path={`/mnguser/users/:id/transaction`} render={()=>(
+                        <React.Fragment>
+                            <div className='space' >
+                                <h4 className='font-weight-bold'>{userTransaction.full_name}</h4>
+                                <p className='text-muted role'>{userTransaction.type}</p>
+                            </div>
+                            <Row>
+                            <Col xs='auto' className='mb-1'><span style={{cursor : 'pointer', color : '#3175B5'}} onClick={this.exportCSV}>
+                            <img src={ExportCSV} className='pr-1'/> Export as CSV
+                            </span></Col>
+                            <Col></Col>
+                            <Col xs='auto'><span>Total Amount: &#8369; {total}</span></Col>
+                            {'|'}
+                            <Col xs='auto'><TotalCount  text='Transaction' count={count}/></Col>
+                            </Row>
+                            <Tables
+                                loading={loading}
+                                columns={columnsRules} 
+                                dataCount={count}
+                                paginationData={pagination}
+                                updateTable={this.getUserTransaction} 
+                                data={userInfo} />
+                        </React.Fragment>
+                    )}/>
+                    <Route exact path={`/mnguser/users/:id/transaction/view`} render={()=>(
+                        <ViewTransaction userTransaction={userTransaction} />
+                    )}/>
+                    <Route render={()=>(
+                    <Redirect to={`/mnguser/users`} />
+                    )}/>
+
+                </Switch>
                 </div>
-                <Row>
-                <Col xs='auto'><span style={{cursor : 'pointer'}} onClick={this.exportCSV}>Export as CSV</span></Col>
-                <Col></Col>
-                <Col xs='auto'><span>Total Amount: &#8369; {total}</span></Col>
-                {'|'}
-                <Col xs='auto'><TotalCount  text='Transaction' count={count}/></Col>
-                </Row>
-                <Tables
-                    loading={loading}
-                    columns={columnsRules} 
-                    dataCount={count}
-                    paginationData={pagination}
-                    updateTable={this.getUserTransaction} 
-                    data={userInfo} />
-            </div>
         );
     }
 }
 
-export default Biography;
+export default withRouter(Transaction);
