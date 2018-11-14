@@ -47,6 +47,10 @@ class ViewCategory extends Component{
                         this.getCategory()
                         Help.toastPop({message: 'Changes Saved!', type: 'success'})
                         this.toggleEdit()
+                        
+                        
+                        // update the options in category filter 
+                        this.props.getAllCategory()
                     }
                 }).catch(err => console.log(err))
         }

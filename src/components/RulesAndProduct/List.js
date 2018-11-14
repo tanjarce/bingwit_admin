@@ -165,7 +165,7 @@ class List extends Component {
                         )}/>
 
                         <Route path="/list/product_categories/view/:id" render={ ()=>(
-                            <ViewCategory optionCategory={optionCategory}/>
+                            <ViewCategory getAllCategory={this.getAllCategory}/>
                         ) } />
                         <Route path="/list/areas/view/:id" component={ ViewArea } />
                         
