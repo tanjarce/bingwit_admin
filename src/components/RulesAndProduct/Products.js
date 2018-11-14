@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, FormGroup, Input, Label, DropdownMenu, DropdownItem, Col } from 'reactstrap';
 import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
@@ -19,12 +19,12 @@ class Products extends Component {
             selectedRow: null,
             modalType: 'delete',
             isOpen: false,
+            optionCategory: []
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
         this.viewProduct = this.viewProduct.bind(this)
-
     }
 
     viewProduct (rowInfo) {
@@ -59,14 +59,17 @@ class Products extends Component {
     )}
 
     deleteProduct () {
-        API.deleteProductType(this.state.selectedRow.id)
+        const { selectedRow: {id, name} } = this.state
+        API.deleteProductType(id)
         .then(res => {
             if(res.success){
+                console.log(res)
                 this.props.getAllProduct()
-                Help.toastPop({message: `${res.product_type.name} Deleted`, type: 'error'})
+                Help.toastPop({message: `${name} Deleted`, type: 'error'})
             }
         }).catch(err => console.log(err))
     }
+
 
     componentDidMount(){
         this.props.getAllProduct()
@@ -76,24 +79,37 @@ class Products extends Component {
 
     render() {
         const { isOpen, selectedRow, modalType } = this.state
-        const { productRow, productCount, isLoading, getAllProduct, paginationData} = this.props
+        const { productRow, productCount, isLoading, getAllProduct, paginationData, optionCategory} = this.props
         const Products = productRow.map((product)=>{
             const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
+            // console.log(product.product_category)
             return (
                 {
                     ...product,
                     'alias_names': aliases,
+                    'product_category': product.product_category.name,
                     'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
                     'action': {...product}}
             )
         })
+
+        const categoryOptions = optionCategory.map(category => {
+            return(
+                <option key={category.id} value={category.name} >{category.name}</option>
+            )
+        })
+
         const columnsProduct = [{
                 Header: 'Product Name',
                 accessor: 'name',
             },
             {
-                Header: 'Alias Name',
+                Header: 'Aliases',
                 accessor: 'alias_names',
+            },
+            {
+                Header: 'Category',
+                accessor: 'product_category',
             },
             {
                 Header: 'Date Created/Updated',
@@ -118,18 +134,29 @@ class Products extends Component {
                     )
             }]
 
+
         const deleteMessage = (selectedRow) ? `Are you sure you want to delete ${selectedRow.name}?` : ''
         
         // checking what modal to be use
         const modal = (modalType === 'delete')
             ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
-            : (<ProductModal isOpen={isOpen} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
+            : (<ProductModal isOpen={isOpen} optionCategory={optionCategory} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
         return (
             <React.Fragment>
                     {  
                         modal
                     }
-                <SearchCount text="Product" count={productCount} updateTable={this.props.getAllProduct}/>
+                <SearchCount text="Product" count={productCount} updateTable={this.props.getAllProduct}>
+                    <FormGroup>
+                        {/* <Label for="exampleSelect" sm={2}>Category: </Label> */}
+                            <Input type="select" name="select" id="exampleSelect" onChange={this.props.updateCategory} >
+                                <option value="">All</option>
+                                {
+                                    categoryOptions
+                                }
+                            </Input>
+                    </FormGroup>
+                </SearchCount>
                 <Table
                     loading={isLoading}
                     columns={columnsProduct} 

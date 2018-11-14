@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
-// import { Container } from 'reactstrap';
-
-// import * as API from '../../services/API'
-
+import { Container, Button, Col, Row  } from 'reactstrap';
+import { withRouter, NavLink } from 'react-router-dom'
+import '../../styles/rule.css'
+import moment from 'moment'
 
 
 class ViewReport extends Component{
@@ -16,11 +16,21 @@ class ViewReport extends Component{
     }
 
     render(){
-        return(
-            <Fragment>
-                <button onClick={this.goBack} >back</button>
-                <h1>feedback view</h1>
-            </Fragment>
+        const { selectedRow, viewTable } = this.props
+        console.log(selectedRow)
+        return (
+            <div className='rule-body'>
+                <Col xs='12' md='12'>
+                <NavLink to='#' activeClassName='gback' onClick={viewTable}>
+                        &lang; &nbsp; Go Back
+                </NavLink>
+                </Col>
+                <Col>
+                    <p>User: {selectedRow.User.full_name}</p>
+                    <p>Date Created: {moment(selectedRow.createdAt).format('MMMM D, YYYY')}</p><br/>
+                    <p>{selectedRow.feedback}</p>
+                </Col>
+            </div>
         )
     }
 }

@@ -149,7 +149,6 @@ export default class CBReactTablePagination extends Component {
         currentPage: currentPageonProps
       }))
     }
-
   }
 
   render () {
@@ -199,6 +198,7 @@ export default class CBReactTablePagination extends Component {
                   onKeyPress={e => {
                       if (e.which === 13 || e.keyCode === 13) {
                         this.Update()
+                        // this.hadleBlur()
                         this.pageInput.current.blur()
                       }
                   }}
