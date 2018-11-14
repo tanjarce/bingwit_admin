@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UncontrolledDropdown, DropdownToggle, FormGroup, Input, Label, DropdownMenu, DropdownItem, Col } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, FormGroup, Input, Label, Button, DropdownMenu, DropdownItem, Col } from 'reactstrap';
 import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
@@ -88,7 +88,7 @@ class Products extends Component {
                     ...product,
                     'alias_names': aliases,
                     'product_category': product.product_category.name,
-                    'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
+                    'createdAt':  moment(product.createdAt).format('MMMM D, YYYY'),
                     'action': {...product}}
             )
         })
@@ -112,8 +112,8 @@ class Products extends Component {
                 accessor: 'product_category',
             },
             {
-                Header: 'Date Created/Updated',
-                accessor: 'updatedAt',
+                Header: 'Date Created',
+                accessor: 'createdAt',
                 width: 180
             },{
                 Header: ' ',
@@ -155,7 +155,9 @@ class Products extends Component {
                                     categoryOptions
                                 }
                             </Input>
+                            <Button color="primary" className="ml-auto" size="sm" onClick={this.toggleModal}>Add Product</Button>
                     </FormGroup>
+
                 </SearchCount>
                 <Table
                     loading={isLoading}

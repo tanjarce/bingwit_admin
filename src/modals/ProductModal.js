@@ -46,6 +46,7 @@ class ProductModal extends React.Component {
     componentWillReceiveProps(){
         const { selectedRow, type, isOpen } = this.props
         // checking if there is value in selectedRow
+        console.log(selectedRow)
         if(type === 'edit' && !isOpen && selectedRow){
             this.setState((prevState)=>(
                 {

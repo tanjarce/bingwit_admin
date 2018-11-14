@@ -130,7 +130,7 @@ export const addRules = (data) =>
 export const getAllProductTypes = ({ offset = 0, limit = 10, searchQ = '', category = ''}) => {
   const token = headers()
   console.log(token.Authorization)
-  return fetch(`${api}/product_category_all?offset=${offset}&limit=${limit}&q=${searchQ}&category=${category}`, { 
+  return fetch(`${api}/product_category_all?offset=${offset}&limit=${limit}&q=${searchQ}&filter=${category}`, { 
     headers: headers() })
     .then(res => res.json())
 }

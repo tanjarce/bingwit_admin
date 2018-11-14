@@ -85,17 +85,36 @@ class List extends Component {
                 
             API.getAllProductTypes(data)
             .then(res => {
-                // console.log(res)
+
+                console.log(res)
                 if(res.success){
+                    // transforming data
+
+                    const productTypes = res.category.rows
+                        .map((product)=>{
+                            return {category: {name: product.name, id: product.id  }, product_types: product.product_type} 
+                        })
+                        .reduce((productTypes, product)=>{
+                            // console.log(product)
+                            const productCategory = product.category
+                            product.product_types.map(product => {
+                                productTypes.push(
+                                    {...product, 'product_category': {...productCategory}}
+                                )
+                            })
+                            return productTypes
+                        }, [])
+
+                    console.log(productTypes)
                     this.setState(()=>({
-                        productCount: res.product_type.count,
-                        productRow: res.product_type.rows,
+                        productCount: res.product_type_count[1],
+                        productRow: productTypes,
                         isLoading: false
                     }), ()=>{
                         console.log(this.state)
                     })
                 }
-                return res.product_type.rows
+                // return res.product_type.rows
             })
             .catch(err => {
                 this.setState(()=>({

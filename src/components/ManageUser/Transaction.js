@@ -105,12 +105,12 @@ class Transaction extends Component {
         .then((response) => {
             
             if(response.success){
-                const arr = response.receipts.map((item, key) => {
+                const arr = response.rows.map((item, key) => {
                     return ({
                         'tracking_number' : item.tracking_number,
                         'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
                         'address' : item.address,
-                        'transaction' : item.transaction.length,
+                        'transaction' : item.transaction_count,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                         'action' : {...item}
                     })
