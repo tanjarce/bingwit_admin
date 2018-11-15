@@ -46,7 +46,6 @@ class ProductModal extends React.Component {
     componentWillReceiveProps(){
         const { selectedRow, type, isOpen } = this.props
         // checking if there is value in selectedRow
-        console.log(selectedRow)
         if(type === 'edit' && !isOpen && selectedRow){
             this.setState((prevState)=>(
                 {
@@ -58,7 +57,6 @@ class ProductModal extends React.Component {
                     category: selectedRow.product_category
                 }
             ), ()=>{
-                console.log(this.state)
             })
                 API.getAliasName(selectedRow.id)
                     .then(res => {
@@ -89,8 +87,8 @@ class ProductModal extends React.Component {
         const {value: {alias_names}, productNameInput, category, category: {name, id}} = this.state
         const {optionCategory} = this.props;
         // if the category is '' it will get the index 0 on array
-        const categoryID = category.id ? category.id : optionCategory[0].id
-
+        const categoryID = category.id ? id : optionCategory[0].key
+        // console.log(category)
 
         // add product type
         const productname = productNameInput.trim().split(' ').map(block => block.charAt(0).toUpperCase() + block.slice(1)  ).join(' ')
@@ -164,8 +162,6 @@ class ProductModal extends React.Component {
                     'name': name,
                     'category_id': category.id
                 } 
-
-                console.log(data)
 
                 API.updateProductType(id, data)
                 .then(res => {
@@ -296,7 +292,6 @@ class ProductModal extends React.Component {
                 id: target.value
             }
         }), ()=>{
-            console.log(this.state.category)
         })
     }
 
@@ -328,12 +323,6 @@ class ProductModal extends React.Component {
   render() {
     const {selectedRow, isOpen, type, optionCategory} = this.props;
     const {category, alias_name_input, value: { product_name, alias_names }, addedAliases, deletedAliases, productNameInput } = this.state;
-    
-    const categoryOptions = optionCategory.map(category => {
-        return(
-            <option key={category.id} name={category.name} value={category.id} >{category.name}</option>
-        )
-    })
     
     const list_alias = (alias_names.length > 0)
         ? alias_names
@@ -405,9 +394,8 @@ class ProductModal extends React.Component {
                 onChange={this.updateFilterCategory}
                 value={category.id || ''} 
                 >
-
                     {
-                        categoryOptions
+                        optionCategory
                     }
                 </Input>
             </FormGroup>

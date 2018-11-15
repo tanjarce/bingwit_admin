@@ -16,9 +16,12 @@ class Products extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isLoading: true,
             selectedRow: null,
             modalType: 'delete',
             isOpen: false,
+            productCount: 0,
+            productRow: [],
             optionCategory: []
         }
         this.toggleModal = this.toggleModal.bind(this)
@@ -26,11 +29,11 @@ class Products extends Component {
         this.deleteProduct = this.deleteProduct.bind(this)
         this.viewProduct = this.viewProduct.bind(this)
         this.getAllProduct = this.getAllProduct.bind(this)
+        this.handleChangeFilterCategory = this.handleChangeFilterCategory.bind(this)
     }
 
     viewProduct (rowInfo) {
         const { id } = rowInfo
-        console.log(rowInfo)
         const { location: { pathname } } = this.props
 
         this.props.history.push(`${pathname}/view/${id}`)
@@ -64,24 +67,25 @@ class Products extends Component {
         API.deleteProductType(id)
         .then(res => {
             if(res.success){
-                console.log(res)
-                this.props.getAllProduct()
+                this.getAllProduct()
                 Help.toastPop({message: `${name} Deleted`, type: 'error'})
             }
         }).catch(err => console.log(err))
     }
 
-
     componentDidMount(){
         this.getAllProduct()
+    }
+
+    handleChangeFilterCategory(e){
+        this.props.updateCategory(e.target.value, this.getAllProduct)
     }
     
     getAllProduct(paginationData, searchQData) {
         this.setState({
             isLoading: true
         })
-        this.props.updateQuery(paginationData, searchQData)
-        setTimeout(()=>{
+        const updateTable = () => {
             const { pagination, searchQ, category} = this.props
             
             const data =  {
@@ -92,33 +96,12 @@ class Products extends Component {
                 
             API.getAllProductTypes(data)
             .then(res => {
-
                 if(res.success){
-                    // transforming data
-
-                    const productTypes = res.category.rows
-                        .map((product)=>{
-                            return {category: {name: product.name, id: product.id  }, product_types: product.product_type} 
-                        })
-                        .reduce((productTypes, product)=>{
-                            // console.log(product)
-                            const productCategory = product.category
-                            product.product_types.map(product => {
-                                productTypes.push(
-                                    {...product, 'product_category': {...productCategory}}
-                                )
-                            })
-                            return productTypes
-                        }, [])
-
-                    console.log(productTypes)
                     this.setState(()=>({
-                        productCount: res.product_type_count[1],
-                        productRow: productTypes,
+                        productCount: res.product_type.count,
+                        productRow: res.product_type.rows,
                         isLoading: false
-                    }), ()=>{
-                        console.log(this.state)
-                    })
+                    }))
                 }
                 // return res.product_type.rows
             })
@@ -128,12 +111,16 @@ class Products extends Component {
                 }))
                 Help.toastPop({message: err, type: 'error'})
             })
-        },10)
+        }
+
+        // passing callback function so that it will update the table
+        // after updating the queries in parent component
+        this.props.updateQuery(paginationData, searchQData, updateTable)
     }
 
     render() {
-        const { isOpen, selectedRow, modalType,  } = this.state
-        const {   productRow, productCount, isLoading, getAllProduct, paginationData, optionCategory} = this.props
+        const { productRow, productCount, isOpen, selectedRow, modalType, isLoading } = this.state
+        const { pagination, optionCategory} = this.props
         const Products = productRow.map((product)=>{
             const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
             // console.log(product.product_category)
@@ -144,12 +131,6 @@ class Products extends Component {
                     'product_category': product.product_category.name,
                     'createdAt':  moment(product.createdAt).format('MMMM D, YYYY'),
                     'action': {...product}}
-            )
-        })
-
-        const categoryOptions = optionCategory.map(category => {
-            return(
-                <option key={category.id} value={category.name} >{category.name}</option>
             )
         })
 
@@ -193,20 +174,30 @@ class Products extends Component {
         
         // checking what modal to be use
         const modal = (modalType === 'delete')
-            ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
-            : (<ProductModal isOpen={isOpen} optionCategory={optionCategory} toggle={this.toggleModal} selectedRow={selectedRow} type={modalType} getAllProduct={this.props.getAllProduct}/>)
+            ? (<DeleteModal 
+                isOpen={isOpen} 
+                toggle={this.toggleModal} 
+                deleteFunc={this.deleteProduct} 
+                message={deleteMessage}/>)
+            : (<ProductModal 
+                isOpen={isOpen} 
+                toggle={this.toggleModal} 
+                optionCategory={optionCategory} 
+                selectedRow={selectedRow} 
+                type={modalType} 
+                getAllProduct={this.getAllProduct}/>)
         return (
             <React.Fragment>
-                    {  
-                        modal
-                    }
-                <SearchCount text="Product" count={productCount} updateTable={this.props.getAllProduct}>
+                {  
+                    modal
+                }
+                <SearchCount text="Product" count={productCount} updateTable={this.getAllProduct}>
                     <FormGroup>
                         {/* <Label for="exampleSelect" sm={2}>Category: </Label> */}
-                            <Input type="select" name="select" id="exampleSelect" onChange={this.props.updateCategory} >
+                            <Input type="select" name="select" id="exampleSelect" onChange={this.handleChangeFilterCategory} >
                                 <option value="">All</option>
                                 {
-                                    categoryOptions
+                                    optionCategory
                                 }
                             </Input>
                     </FormGroup>
@@ -217,8 +208,8 @@ class Products extends Component {
                     loading={isLoading}
                     columns={columnsProduct} 
                     dataCount={productCount}
-                    paginationData={paginationData}
-                    updateTable={getAllProduct}
+                    paginationData={pagination}
+                    updateTable={this.getAllProduct}
                     data={Products} />
             </React.Fragment>
         );
