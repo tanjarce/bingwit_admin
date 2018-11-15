@@ -103,10 +103,8 @@ class Categories extends Component {
 
     getAllCategories(paginationData, searchQData){
         this.setState({loading: true})
-        
-        this.props.updateQuery(paginationData, searchQData)
-
-        setTimeout(()=>{
+     
+        const func = () => {
             const {pagination, searchQ } = this.props 
 
             const data = {
@@ -126,7 +124,10 @@ class Categories extends Component {
                     }), ()=>{ console.log( this.state )})           
                 }
             }).catch(err => console.log(err))
-        },10)
+        }
+
+        this.props.updateQuery(paginationData, searchQData, func)
+
     }
     
     render() {

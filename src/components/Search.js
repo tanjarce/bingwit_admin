@@ -37,7 +37,7 @@ class Search extends Component {
         
         return (
             <Row className='main-search'>
-                <Col xs='auto'>Search:</Col>
+                {/* <Col xs='auto'>Search:</Col> */}
                 <Col className='rel' xs='auto' >
                   <Input type='text' placeholder='Search something...' 
                     name='searchValue'

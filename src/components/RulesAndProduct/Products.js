@@ -201,7 +201,7 @@ class Products extends Component {
                                 }
                             </Input>
                     </FormGroup>
-                    <Button color="primary" className="ml-auto" size="sm" onClick={()=>{this.setModal(null, 'add')}}>Add Product</Button>
+                    <Button color="primary" className="ml-auto" size="sm" onClick={()=>{this.setModal(null, 'add')}}>&#43; Add Product</Button>
 
                 </SearchCount>
                 <Table
@@ -210,7 +210,8 @@ class Products extends Component {
                     dataCount={productCount}
                     paginationData={pagination}
                     updateTable={this.getAllProduct}
-                    data={Products} />
+                    data={Products} 
+                    />
             </React.Fragment>
         );
     }
