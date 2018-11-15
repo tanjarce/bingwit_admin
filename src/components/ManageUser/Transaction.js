@@ -42,11 +42,14 @@ class Transaction extends Component {
         API.getUserId(id)
         .then((response) => {
         if(response.success === true){
-            response.user.type !== 'admin' ? 
+            this.setState({
+                type : response.user.type
+            })
+            response.user.type !== 'admin' ? (
             response.user.type === 'consumer' ?
             this.getUserTransactionConsumer() 
             :
-            this.getUserTransactionProducer()
+            this.getUserTransactionProducer())
             :
             Help.toastPop({message: 'Admin type doesnt have this features.', type: 'error'})
         }
@@ -55,27 +58,30 @@ class Transaction extends Component {
         }
         })
     }
-    viewTransaction(){
-        const { userTransaction } = this.props;
-        this.props.history.push(`/mnguser/users/${userTransaction.id}/transaction/view`)
+    viewTransaction(rowInfo){
+        const { type } = this.state
+        type === 'consumer' ?
+         this.props.history.push(`/mnguser/users/${rowInfo.consumer_id}/transaction/view_${rowInfo.tracking_number}`)
+        :
+         this.props.history.push(`/mnguser/users/${rowInfo.producer_id}/transaction/view_${rowInfo.id}`)
     }
     getUserTransactionProducer(){
         this.setState({
             loading : true
         })       
         const id = this.props.match.params.id
-        API.getUserTransactionTransaction(id)
+        API.getUserTransactionProducer(id)
         .then((response) => {
             if(response.success){
-                console.log(response.transaction)
                 const arr = response.transaction.rows.map((item, key) => {
                     return ({
                         'tracking_number' : item.tracking_number,
                         'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
-                        'rating' : item.rating ? item.rating : '- -',
-                        'consumer' : item.consumer_id ,
+                        'status' : item.status,
+                        'consumer' : item.consumer.full_name ,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
                         'action' : {...item},
+                        'total' : item.total_amount
                     })
                 })
                 const items = []
@@ -84,8 +90,8 @@ class Transaction extends Component {
                 this.setState({
                     column : 'Consumer',
                     data : 'consumer',
-                    columnl : 'Rating',
-                    datal : 'rating',
+                    columnl : 'Status',
+                    datal : 'status',
                     userInfo : arr,
                     count : response.transaction.count,
                     loading : false,
@@ -103,26 +109,27 @@ class Transaction extends Component {
         const id = this.props.match.params.id
         API.getUserTransactionReceipt(id)
         .then((response) => {
+            console.log(response)
             if(response.success){
-                console.log(response)
                 const arr = response.rows.map((item, key) => {
                     return ({
                         'tracking_number' : item.tracking_number,
                         'total_amount' :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.total_amount)}</span>,
-                        'address' : item.address,
+                        'status' : item.status,
                         'transaction' : item.transaction_count,
                         'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                        'action' : {...item}
+                        'action' : {...item},
+                        'total' : item.total_amount
                     })
                 })
                 const items = []
                 arr.map(item => items.push(item.total))
                 const total = items.reduce((prev,next) => prev + next,0);
                 this.setState({
-                    column : 'No. of Transaction',
-                    data : 'transaction',
-                    columnl : 'Address',
-                    datal : 'address',
+                    column : 'Status',
+                    data : 'status',
+                    columnl : 'Transactions',
+                    datal : 'transaction',
                     userInfo : arr,
                     count : response.count,
                     loading : false,
@@ -161,7 +168,8 @@ class Transaction extends Component {
         const columnsRules = [
             {
                 Header: 'Tracking Number',
-                accessor: 'tracking_number'
+                accessor: 'tracking_number',
+                width : 160,
             },
             {
                 Header: 'Amount',
@@ -169,17 +177,16 @@ class Transaction extends Component {
                 width : 100
             },
             {
-                Header: columnl,
-                accessor: datal,
-                width : 180
-            },
-            {
                 Header: column,
                 accessor: data,
-                width : 180
             },
             {
-                Header: 'Date',
+                Header: columnl,
+                accessor: datal,
+                width : 120
+            },
+            {
+                Header: 'Date Created',
                 accessor: 'createdAt',
                 width : 180
             },
@@ -195,7 +202,7 @@ class Transaction extends Component {
                             <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => {this.viewTransaction(rowInfo.value.id)}}>View</DropdownItem>
+                            <DropdownItem onClick={() => {this.viewTransaction(rowInfo.value)}}>View</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 )
@@ -216,7 +223,7 @@ class Transaction extends Component {
                             <Col></Col>
                             <Col xs='auto'><span>Total Amount: &#8369; {total}</span></Col>
                             {'|'}
-                            <Col xs='auto'><TotalCount  text='Transaction' count={count}/></Col>
+                            <Col xs='auto'><TotalCount  text='Transactions' count={count}/></Col>
                             </Row>
                             <Tables
                                 loading={loading}
@@ -227,7 +234,7 @@ class Transaction extends Component {
                                 data={userInfo} />
                         </React.Fragment>
                     )}/>
-                    <Route exact path={`/mnguser/users/:id/transaction/view`} render={()=>(
+                    <Route exact path={`/mnguser/users/:id/transaction/view_:v_id`} render={()=>(
                         <ViewTransaction userTransaction={userTransaction} />
                     )}/>
                     <Route render={()=>(
