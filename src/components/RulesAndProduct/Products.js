@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UncontrolledDropdown, DropdownToggle, FormGroup, Input, Label, DropdownMenu, DropdownItem, Col } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, FormGroup, Input, Label, Button, DropdownMenu, DropdownItem, Col } from 'reactstrap';
 import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
@@ -16,20 +16,24 @@ class Products extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isLoading: true,
             selectedRow: null,
             modalType: 'delete',
             isOpen: false,
+            productCount: 0,
+            productRow: [],
             optionCategory: []
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.setModal = this.setModal.bind(this)
         this.deleteProduct = this.deleteProduct.bind(this)
         this.viewProduct = this.viewProduct.bind(this)
+        this.getAllProduct = this.getAllProduct.bind(this)
+        this.handleChangeFilterCategory = this.handleChangeFilterCategory.bind(this)
     }
 
     viewProduct (rowInfo) {
         const { id } = rowInfo
-        console.log(rowInfo)
         const { location: { pathname } } = this.props
 
         this.props.history.push(`${pathname}/view/${id}`)
@@ -50,9 +54,9 @@ class Products extends Component {
     setModal (data, type) {
         this.setState({
             modalType: type,
-            selectedRow: {
+            selectedRow: data ? {
                 ...data,
-            },
+            } : null ,
         }, () => {
             this.toggleModal()
         }
@@ -63,23 +67,60 @@ class Products extends Component {
         API.deleteProductType(id)
         .then(res => {
             if(res.success){
-                console.log(res)
-                this.props.getAllProduct()
+                this.getAllProduct()
                 Help.toastPop({message: `${name} Deleted`, type: 'error'})
             }
         }).catch(err => console.log(err))
     }
 
-
     componentDidMount(){
-        this.props.getAllProduct()
+        this.getAllProduct()
+    }
+
+    handleChangeFilterCategory(e){
+        this.props.updateCategory(e.target.value, this.getAllProduct)
     }
     
+    getAllProduct(paginationData, searchQData) {
+        this.setState({
+            isLoading: true
+        })
+        const updateTable = () => {
+            const { pagination, searchQ, category} = this.props
+            
+            const data =  {
+                searchQ : searchQ,
+                category: category,
+                ...pagination
+            }
+                
+            API.getAllProductTypes(data)
+            .then(res => {
+                if(res.success){
+                    this.setState(()=>({
+                        productCount: res.product_type.count,
+                        productRow: res.product_type.rows,
+                        isLoading: false
+                    }))
+                }
+                // return res.product_type.rows
+            })
+            .catch(err => {
+                this.setState(()=>({
+                    isLoading: false
+                }))
+                Help.toastPop({message: err, type: 'error'})
+            })
+        }
 
+        // passing callback function so that it will update the table
+        // after updating the queries in parent component
+        this.props.updateQuery(paginationData, searchQData, updateTable)
+    }
 
     render() {
-        const { isOpen, selectedRow, modalType } = this.state
-        const { productRow, productCount, isLoading, getAllProduct, paginationData, optionCategory} = this.props
+        const { productRow, productCount, isOpen, selectedRow, modalType, isLoading } = this.state
+        const { pagination, optionCategory} = this.props
         const Products = productRow.map((product)=>{
             const aliases = product.product_type_alias.length ? product.product_type_alias.map(alias => alias.alias).join(", ") : '--'
             // console.log(product.product_category)
@@ -88,14 +129,8 @@ class Products extends Component {
                     ...product,
                     'alias_names': aliases,
                     'product_category': product.product_category.name,
-                    'updatedAt':  moment(product.updatedAt).format('MMMM D, YYYY'),
+                    'createdAt':  moment(product.createdAt).format('MMMM D, YYYY'),
                     'action': {...product}}
-            )
-        })
-
-        const categoryOptions = optionCategory.map(category => {
-            return(
-                <option key={category.id} value={category.name} >{category.name}</option>
             )
         })
 
@@ -112,8 +147,8 @@ class Products extends Component {
                 accessor: 'product_category',
             },
             {
-                Header: 'Date Created/Updated',
-                accessor: 'updatedAt',
+                Header: 'Date Created',
+                accessor: 'createdAt',
                 width: 180
             },{
                 Header: ' ',
@@ -139,30 +174,42 @@ class Products extends Component {
         
         // checking what modal to be use
         const modal = (modalType === 'delete')
-            ? (<DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteProduct} message={deleteMessage}/>)
-            : (<ProductModal isOpen={isOpen} optionCategory={optionCategory} toggle={this.toggleModal} selectedRow={selectedRow} type="edit" getAllProduct={this.props.getAllProduct}/>)
+            ? (<DeleteModal 
+                isOpen={isOpen} 
+                toggle={this.toggleModal} 
+                deleteFunc={this.deleteProduct} 
+                message={deleteMessage}/>)
+            : (<ProductModal 
+                isOpen={isOpen} 
+                toggle={this.toggleModal} 
+                optionCategory={optionCategory} 
+                selectedRow={selectedRow} 
+                type={modalType} 
+                getAllProduct={this.getAllProduct}/>)
         return (
             <React.Fragment>
-                    {  
-                        modal
-                    }
-                <SearchCount text="Product" count={productCount} updateTable={this.props.getAllProduct}>
+                {  
+                    modal
+                }
+                <SearchCount text="Product" count={productCount} updateTable={this.getAllProduct}>
                     <FormGroup>
                         {/* <Label for="exampleSelect" sm={2}>Category: </Label> */}
-                            <Input type="select" name="select" id="exampleSelect" onChange={this.props.updateCategory} >
+                            <Input type="select" name="select" id="exampleSelect" onChange={this.handleChangeFilterCategory} >
                                 <option value="">All</option>
                                 {
-                                    categoryOptions
+                                    optionCategory
                                 }
                             </Input>
                     </FormGroup>
+                    <Button color="primary" className="ml-auto" size="sm" onClick={()=>{this.setModal(null, 'add')}}>Add Product</Button>
+
                 </SearchCount>
                 <Table
                     loading={isLoading}
                     columns={columnsProduct} 
                     dataCount={productCount}
-                    paginationData={paginationData}
-                    updateTable={getAllProduct}
+                    paginationData={pagination}
+                    updateTable={this.getAllProduct}
                     data={Products} />
             </React.Fragment>
         );

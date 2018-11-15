@@ -40,11 +40,10 @@ class Search extends Component {
                 <Col xs='auto'>Search:</Col>
                 <Col className='rel' xs='auto' >
                   <Input type='text' placeholder='Search something...' 
-                  name='searchValue'
-                  onChange={this.handleChange}
-                  value={this.state.searchValue}
-                  onKeyPress={this._handleKeyPress}
-                  />
+                    name='searchValue'
+                    onChange={this.handleChange}
+                    value={this.state.searchValue}
+                    onKeyPress={this._handleKeyPress}/>
                   <img className='img' src={searchIco} alt='search'/>
                 </Col>
             </Row>

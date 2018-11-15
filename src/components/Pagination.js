@@ -18,7 +18,11 @@ export default class CBReactTablePagination extends Component {
     this.pageInput = React.createRef()
   }
   handleFocus () {
+    const {paginationData: {offset, limit} } = this.props
+    const currentPageonProps = (offset / limit) + 1
+
     this.setState(()=>({
+      currentPage: currentPageonProps,
       focus: true
     }))
   }
@@ -102,8 +106,13 @@ export default class CBReactTablePagination extends Component {
   }
 
   Next () {
+    const {paginationData: {limit, offset}, onPageSizeChange} = this.props
+
+    // const {paginationData: {offset, limit}} = this.props
+    const currentPageonProps = (offset / limit) + 1
+
     this.setState((prevState)=>({
-      currentPage: Number(prevState.currentPage) + 1
+      currentPage: currentPageonProps + 1
     }), ()=>{
       // const { paginationData: {offset, limit}, updateTable, pageSize } = this.props
 
@@ -112,11 +121,14 @@ export default class CBReactTablePagination extends Component {
   }
 
   Previous () {
+    const {paginationData: {limit, offset}, onPageSizeChange} = this.props
+
+    // const {paginationData: {offset, limit}} = this.props
+    const currentPageonProps = (offset / limit) + 1
+
     this.setState((prevState)=>({
-      currentPage: Number(prevState.currentPage) - 1
+      currentPage: currentPageonProps - 1
     }),()=>{
-      // const { paginationData: {offset, limit}, updateTable, pageSize } = this.props
-      console.log(this.state.currentPage)
       this.Update()
     })
   }
@@ -137,27 +149,22 @@ export default class CBReactTablePagination extends Component {
   }
 
   componentWillReceiveProps(){
-    const {paginationData: {limit, offset}} = this.props
+    const {paginationData, paginationData: {limit, offset}} = this.props
     const currentPageonProps = (offset / limit) + 1
+    console.log(paginationData)
     
-    if(offset === 0){
-      this.setState(()=>({
-        currentPage: 1
-      }))
-    } else {
-      this.setState(()=>({
-        currentPage: currentPageonProps
-      }))
-    }
   }
 
   render () {
     const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props
     const {focus, currentPage} = this.state
 
+    console.log(currentPage)
+
     const pagelength = Math.ceil(dataCount / limit)
     
     const currentPageonProps = (offset / limit) + 1
+
 
     // if input field is focused the buttons will automatically disable
     const canPrevious = (focus) ? false : (currentPageonProps <= 1) ? false : true
@@ -189,7 +196,7 @@ export default class CBReactTablePagination extends Component {
                   name="currentPage"
                   type='number'
                   value={
-                    currentPage || ''
+                    focus? currentPage || '' : currentPageonProps 
                   }
                   innerRef={this.pageInput}
                   onChange={this.handleChange}

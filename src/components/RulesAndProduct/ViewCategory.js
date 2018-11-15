@@ -74,10 +74,13 @@ class ViewCategory extends Component{
         API.getCategoryById(id)
             .then(res => {
                 if(res.success){
+                    console.log(res)
+                    const productTypes = res.product_category.rows[0].product_type
+                    const category = {name: res.product_category.rows[0].name}
                     this.setState((prevState)=>({
-                        productTypes: res.product_type.rows, 
-                        productCategory: {...res.product_category.rows[0]},
-                        categoryInput: res.product_category.rows[0].name,
+                        productTypes: productTypes, 
+                        productCategory: {...category},
+                        categoryInput: category.name,
                         loading: false
                     }), ()=>{console.log(this.state)})
                 }
