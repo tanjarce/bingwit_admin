@@ -287,10 +287,24 @@ fetch(`${api}/users/${id}/receipts`, {
   headers: headers() })
 .then(res => res.json())
 
-// GET USER TANSACTIONS PRODUCERE
+// GET USER TANSACTIONS PRODUCER
 
-export const getUserTransactionTransaction = (id) =>  
+export const getUserTransactionProducer = (id) =>  
 fetch(`${api}/users/${id}/transactions`, { 
+  headers: headers() })
+.then(res => res.json())
+
+// GET USER TANSACTIONS CONSUMER BY TRACKING NUMBER
+
+export const getUserTransactionReceiptByTRK = (id, trk_id) =>  
+fetch(`${api}/users/${id}/receipts/${trk_id}`, { 
+  headers: headers() })
+.then(res => res.json())
+
+// GET USER TANSACTIONS PRODUCER BY ID
+
+export const getUserTransactionProducerById = (id, transaction_id) =>  
+fetch(`${api}/users/${id}/transactions/${transaction_id}`, { 
   headers: headers() })
 .then(res => res.json())
 

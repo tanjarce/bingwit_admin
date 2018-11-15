@@ -19,7 +19,7 @@ class CardUser extends Component {
         }
         this.goBack = this.goBack.bind(this)
     }
-    componentDidMount(){
+    componentWillMount(){
         this.setState({
             prevPath : this.props.prevPath.pathname
         })
