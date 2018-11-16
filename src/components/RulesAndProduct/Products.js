@@ -192,7 +192,7 @@ class Products extends Component {
                     modal
                 }
                 <SearchCount text="Product" count={productCount} updateTable={this.getAllProduct}>
-                    <FormGroup>
+                    {/* <FormGroup> */}
                         {/* <Label for="exampleSelect" sm={2}>Category: </Label> */}
                             <Input type="select" name="select" id="exampleSelect" onChange={this.handleChangeFilterCategory} >
                                 <option value="">All</option>
@@ -200,7 +200,7 @@ class Products extends Component {
                                     optionCategory
                                 }
                             </Input>
-                    </FormGroup>
+                    {/* </FormGroup> */}
                     <Button color="primary" className="ml-auto" size="sm" onClick={()=>{this.setModal(null, 'add')}}>&#43; Add Product</Button>
 
                 </SearchCount>
