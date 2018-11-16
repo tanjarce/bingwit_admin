@@ -34,10 +34,11 @@ class ViewConsumer extends Component {
         const dataTable = arr.map((item) => {
             console.log(item)
             return({
-                product_name : item.product.name,
+                product_name : item.product,
                 producer_name : item.product.producer.full_name,
-                quantity : item.quantity,
+                quantity : item.quantity + ' kg',
                 amount :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.amount)}</span>,
+                cancel : item.isCancelled ? 'Yes' : 'No',
                 date : moment(item.createdAt).format('MMMM D, YYYY')
             })
         })
@@ -52,7 +53,20 @@ class ViewConsumer extends Component {
         const columnsRules = [
             {
                 Header: 'Products',
-                accessor: 'product_name'
+                accessor: 'product_name',
+                Cell: rowInfo =>  {
+                    return (
+                        <div>
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                                <img 
+                                width="25px" height="25px" 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : ''} 
+                                className="m-auto rounded-circle"/>
+                            </span>
+                            {rowInfo.value.name}
+                        </div>
+                    )
+                }
             },
             {
                 Header: 'Producer',
@@ -66,6 +80,11 @@ class ViewConsumer extends Component {
             {
                 Header: 'Amount',
                 accessor: 'amount',
+                width : 100
+            },
+            {
+                Header: 'Cancelled',
+                accessor: 'cancel',
                 width : 100
             },
             {
