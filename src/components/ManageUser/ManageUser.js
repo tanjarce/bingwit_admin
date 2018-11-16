@@ -157,19 +157,19 @@ class ManageUser extends Component {
                     <Switch>
                         <Route exact path="/mnguser/users" render={()=>(
                             <TableUser
-                            dataUsers = {dataUsers}
-                            isOpen = {isOpen}
-                            updateTable={this.updateTable}
-                            pagination={pagination}
-                            count = {count}
-                            userData = {userData}
-                            modalType = {modalType}
-                            loading = {loading}
-                            orderSort = {this.orderSort}
-                            toggleModal = {this.toggleModal}
-                            suspendUser = {this.suspendUser}
-                            viewUser = {this.viewUser}
-                            setModal = {this.setModal}
+                                dataUsers = {dataUsers}
+                                isOpen = {isOpen}
+                                updateTable={this.updateTable}
+                                pagination={pagination}
+                                count = {count}
+                                userData = {userData}
+                                modalType = {modalType}
+                                loading = {loading}
+                                orderSort = {this.orderSort}
+                                toggleModal = {this.toggleModal}
+                                suspendUser = {this.suspendUser}
+                                viewUser = {this.viewUser}
+                                setModal = {this.setModal}
                             />
                         )}/>
                         <Route path="/mnguser/suspended" component={SuspendedUser}/>
