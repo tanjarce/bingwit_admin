@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment'
-
+import userDefault from '../../assets/userDefault.svg'
 import Tables from './Table'
 
 class ViewConsumer extends Component {
@@ -29,21 +29,24 @@ class ViewConsumer extends Component {
         const { data } = this.props
         const arr = []
         data.transaction.map((item) => {
-            arr.push(...item.transaction_product)
-        })
-        const dataTable = arr.map((item) => {
             console.log(item)
-            return({
-                product_name : item.product,
-                producer_name : item.product.producer.full_name,
-                quantity : item.quantity + ' kg',
-                amount :  <span>&#8369; {Intl.NumberFormat('en-GB').format(item.amount)}</span>,
-                cancel : item.isCancelled ? 'Yes' : 'No',
-                date : moment(item.createdAt).format('MMMM D, YYYY')
+            item.transaction_product.map((item_product) => 
+            {
+                // console.log(item_product)
+                let tmp_arr = {
+                    product_name : item_product.product,
+                    producer_name : item.producer,
+                    quantity : item_product.quantity + ' kg',
+                    amount : <span>&#8369; {Intl.NumberFormat('en-GB').format(item_product.amount)}</span>,
+                    cancel : item_product.isCancelled ? 'Yes' : 'No',
+                    date : moment(item_product.createdAt).format('MMMM D, YYYY')
+                }    
+                arr.push(tmp_arr)
             })
+            
         })
         this.setState({
-            dataTable : dataTable,
+            dataTable : arr,
             data : data
         })
     }
@@ -60,7 +63,7 @@ class ViewConsumer extends Component {
                             <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                                 <img 
                                 width="25px" height="25px" 
-                                src={rowInfo.value.image_url ? rowInfo.value.image_url : ''} 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefault} 
                                 className="m-auto rounded-circle"/>
                             </span>
                             {rowInfo.value.name}
@@ -70,7 +73,20 @@ class ViewConsumer extends Component {
             },
             {
                 Header: 'Producer',
-                accessor: 'producer_name'
+                accessor: 'producer_name',
+                Cell: rowInfo =>  {
+                    return (
+                        <div>
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                                <img 
+                                width="25px" height="25px" 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefault} 
+                                className="m-auto rounded-circle"/>
+                            </span>
+                            {rowInfo.value.full_name}
+                        </div>
+                    )
+                }
             },
             {
                 Header: 'Quantity',

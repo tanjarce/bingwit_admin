@@ -109,7 +109,7 @@ class Transaction extends Component {
         const id = this.props.match.params.id
         API.getUserTransactionReceipt(id)
         .then((response) => {
-            console.log(response)
+            // console.log(response)
             if(response.success){
                 const arr = response.rows.map((item, key) => {
                     return ({
@@ -144,7 +144,7 @@ class Transaction extends Component {
     }
     exportCSV(){
         const { userInfo } = this.state 
-        console.log(userInfo)
+        // console.log(userInfo)
         let csvToExport = [',Tracking Number,Amount,Date'];
         let csvRow = [];
         csvRow = userInfo.map((item) => (
