@@ -38,7 +38,7 @@ class AccountSetting extends Component {
         this.changePass();
     }
   }
-  componentDidMount(){
+  componentWillMount(){
     const id = Session.getToken();
     API.getUserId(id.id)
     .then((response) => {
