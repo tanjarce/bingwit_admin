@@ -27,6 +27,9 @@ input[type="number"] {
     border-left: 0 !important;
     border-right: 0 !important;
 }
+.ReactTable .rt-tbody {
+    overflow-x: hidden!important;
+    }
 .rt-th
 {
     cursor: pointer;

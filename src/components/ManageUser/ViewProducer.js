@@ -16,7 +16,7 @@ class ViewProducer extends Component {
         const arr = data.rows.map((item) => {
             return({
                 product_name : item.product.name,
-                quantity : item.quantity,
+                quantity : item.quantity + ' kg',
                 amount : <span>&#8369; {Intl.NumberFormat('en-GB').format(item.amount)}</span>,
                 comment : item.comment ? item.comment : 'No Comment.',
                 date : moment(item.createdAt).format('MMMM D, YYYY')
@@ -34,7 +34,6 @@ class ViewProducer extends Component {
             {
                 Header: 'Product Name',
                 accessor: 'product_name',
-                width : 160
             },
             {
                 Header: 'Quantity',
@@ -44,6 +43,7 @@ class ViewProducer extends Component {
             {
                 Header: 'Amount',
                 accessor: 'amount',
+                width : 100
             },
             {
                 Header: 'Comment',
