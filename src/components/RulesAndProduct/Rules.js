@@ -44,9 +44,7 @@ class RulesTable extends Component {
 
     updateTable(paginationData, searchQData){
         this.loading()
-        this.props.updateQuery(paginationData, searchQData)
-
-        setTimeout(()=>{
+        const func = () => {
             const {pagination, searchQ } = this.props 
 
             const data = {
@@ -54,29 +52,32 @@ class RulesTable extends Component {
                 ...pagination
             }
 
-        API.getAllRules(data)
-        .then((response) => { 
-            if (response.success) {
-                console.log(response)
-                const arr = response.rule.rows.map((item, key) => {
-                    return ({
-                        'no' : key+1,
-                        'description' : item.description,
-                        'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
-                        'action' : {...item, 'no': key+1}
+            API.getAllRules(data)
+            .then((response) => { 
+                if (response.success) {
+                    console.log(response)
+                    const arr = response.rule.rows.map((item, key) => {
+                        return ({
+                            'no' : key+1,
+                            'description' : item.description,
+                            'createdAt' : moment(item.createdAt).format('MMMM D, YYYY'),
+                            'action' : {...item, 'no': key+1}
+                        })
                     })
-                })
-                this.setState({
-                    ruleRow : arr,
-                    count : response.rule.count,
-                    loading : false
-                })
-            } 
-            else {
-                console.log(response.error.message)
-            }
-        }).catch(err => console.log(err))
-    },10)
+                    this.setState({
+                        ruleRow : arr,
+                        count : response.rule.count,
+                        loading : false
+                    })
+                } 
+                else {
+                    console.log(response.error.message)
+                }
+            }).catch(err => console.log(err))
+        }
+
+        this.props.updateQuery(paginationData, searchQData, func)
+
 
     }
 

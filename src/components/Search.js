@@ -36,17 +36,19 @@ class Search extends Component {
     render() {
         
         return (
-            <Row className='main-search'>
-                <Col xs='auto'>Search:</Col>
-                <Col className='rel' xs='auto' >
-                  <Input type='text' placeholder='Search something...' 
-                    name='searchValue'
-                    onChange={this.handleChange}
-                    value={this.state.searchValue}
-                    onKeyPress={this._handleKeyPress}/>
-                  <img className='img' src={searchIco} alt='search'/>
-                </Col>
-            </Row>
+            // <Row className='main-search'>
+                // {/* <Col xs='auto'>Search:</Col> */}
+                // <Col className='rel' xs='auto' >
+                  <div>
+                    <Input type='text' placeholder='Search something...' 
+                        name='searchValue'
+                        onChange={this.handleChange}
+                        value={this.state.searchValue}
+                        onKeyPress={this._handleKeyPress}/>
+                    <img className='img' src={searchIco} alt='search'/>
+                </div>
+                // </Col>
+            // </Row>
         );
     }
 }

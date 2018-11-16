@@ -94,9 +94,7 @@ class Areas extends Component {
     getAllArea(paginationData, searchQData){
         this.setState({loading: true})
 
-        this.props.updateQuery(paginationData, searchQData)
-
-        setTimeout(()=>{
+        const func = () =>  {
             const {pagination, searchQ } = this.props 
 
             const data = {
@@ -115,7 +113,10 @@ class Areas extends Component {
                     }), ()=>{ console.log( this.state )})           
                 }
             }).catch(err => console.log(err))
-        },10)
+        }
+
+        this.props.updateQuery(paginationData, searchQData, func)
+
     }
     
     render() {
