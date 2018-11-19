@@ -20,6 +20,13 @@
     top: 10px;
     left: 25px;
 }
+input[type="button"]{
+    outline:none;
+    
+}
+ input[type="button"]::-moz-focus-inner {
+    border: 0;
+ }
 
 *:focus,
 *:active,
@@ -32,12 +39,19 @@ input:active {
     outline: 0;
 }
 
+input[type="submit"], input[type="button"], button{
+    cursor: pointer;
+}
+
 .inpt{
     border: 1px solid #dee2e6;
     background-color: white;
     padding: 0 8px;
 }
 
+.addInput{
+    width: 100%;
+}
 .searchInput{
     background-image: url('../assets/Search.svg');
     background-position: 8px 50%;
@@ -46,6 +60,7 @@ input:active {
     /* color: orange; */
     padding-left: 30px!important;   
     width: 300px;
+    z-index: 2;
 }
 
 .form-control-inline {
@@ -55,7 +70,7 @@ input:active {
 }
 
 .tableTop_container{
-    margin: 20px 0px 10px 0px;
+    margin: 20px 0px 0px 0px;
 }
 
 .tableTop_container .tableTop_row:first-child{
@@ -67,14 +82,42 @@ input:active {
 .tableTop_row{
     /* background:pink; */
     display: flex;
+    position: relative;
     /* background: coral; */
 }
+
+.addForm{
+    margin-left: auto;
+    display: inline-flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+}
+.addForm-show{
+    margin-left: auto;
+    display: inline-flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 4;
+}
+
 
 .addButton{
     margin-left: auto;
     background-color: #17C1BC;
     color: white;
     border: none;
-    cursor: pointer;
+    font-weight: bold
+}
+.cancelButton{
+    background-color: gray;
+    color: white;
+    border: none;
     font-weight: bold
 }

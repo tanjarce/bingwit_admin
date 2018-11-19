@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import DeleteModal from '../../modals/DeleteModal'
+import ToggleAddForm from './ToggleAddForm'
 
 import dots from '../../images/show_more.svg'
 import * as API from '../../services/API'
@@ -26,7 +27,7 @@ class Categories extends Component {
         this.deleteCategory = this.deleteCategory.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.getAllCategories = this.getAllCategories.bind(this)
-        this.handleChange = this.handleChange.bind(this)
+        // this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.viewCategory =  this.viewCategory.bind(this)
     }
@@ -35,17 +36,8 @@ class Categories extends Component {
         this.getAllCategories();
     }
 
-    handleChange(e) {
-        const value = e.target.value
-        const name = e.target.name
-        this.setState(()=>({
-            [name]: value
-        }))
-    }
-
-    handleSubmit(e){
-        const { categoryInput } = this.state
-        e.preventDefault()
+    handleSubmit(categoryInput){
+        // const { categoryInput } = this.state
         if(categoryInput.trim().length){
             console.log(categoryInput)
             API.addCategory(categoryInput)
@@ -167,10 +159,8 @@ class Categories extends Component {
                                 <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
                             </DropdownToggle>
                             <DropdownMenu>
-
                                 <DropdownItem onClick={()=>{this.viewCategory(rowInfo.value)}}>View</DropdownItem>
                                 <DropdownItem onClick={()=>{this.toggleModal(rowInfo.value)}}>Delete</DropdownItem>
-
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     )
@@ -182,15 +172,7 @@ class Categories extends Component {
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteCategory} message={deleteMessage}/>
                 <SearchCount text="Category" count={ categoryCount } updateTable={this.getAllCategories}>
-                    <Form onSubmit={this.handleSubmit}>
-                        <InputGroup>
-                            <Input 
-                                name="categoryInput"
-                                onChange={this.handleChange}    
-                            />
-                            <InputGroupAddon addonType="append"><Button color="primary">Add Category</Button></InputGroupAddon>
-                        </InputGroup>
-                    </Form>
+                    <ToggleAddForm handleSubmit={this.handleSubmit} text="Category" />
                 </SearchCount>
                 <Table
                     loading = {loading}

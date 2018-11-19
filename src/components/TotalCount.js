@@ -7,11 +7,12 @@ class TotalCount extends Component {
             count : this.props.count ? this.props.count : 0
         }
         return (
-            <div className='mt-auto'>
-                {
-                    `Total of ${rule.text} : ${rule.count}`
-                }
-                
+            <div className='ml-auto'>
+                <small>
+                    {
+                        `Total of ${rule.text} : ${rule.count}`
+                    }
+                </small>
             </div>
         );
     }
