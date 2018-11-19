@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment'
-
+import fishDefault from '../../assets/fish.svg'
 import Tables from './Table'
 
 class ViewProducer extends Component {
@@ -15,7 +15,7 @@ class ViewProducer extends Component {
         const { data } = this.props
         const arr = data.rows.map((item) => {
             return({
-                product_name : item.product.name,
+                product_name : item.product,
                 quantity : item.quantity + ' kg',
                 amount : <span>&#8369; {Intl.NumberFormat('en-GB').format(item.amount)}</span>,
                 comment : item.comment ? item.comment : 'No Comment.',
@@ -32,8 +32,21 @@ class ViewProducer extends Component {
         const { data, dataTable } = this.state
         const columnsRules = [
             {
-                Header: 'Product Name',
+                Header: 'Products',
                 accessor: 'product_name',
+                Cell: rowInfo =>  {
+                    return (
+                        <div>
+                            <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
+                                <img 
+                                width="25px" height="25px" 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : fishDefault} 
+                                className="m-auto rounded-circle"/>
+                            </span>
+                            {rowInfo.value.name}
+                        </div>
+                    )
+                }
             },
             {
                 Header: 'Quantity',
@@ -84,7 +97,7 @@ class ViewProducer extends Component {
                     <Col xs='2' className='d-inline align-top col'>Products:</Col>
                     <Col xs='auto'><span className='px-3 col'>{data.count ? data.count : '0'}</span></Col><br/>
                 </Row>
-
+                <hr/>
                 <Tables
                     columns={columnsRules}
                     data={dataTable} 

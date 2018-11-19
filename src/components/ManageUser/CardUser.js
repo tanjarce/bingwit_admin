@@ -8,6 +8,7 @@ import Transaction from './Transaction'
 import * as API from '../../services/API'
 import NoImage from '../../assets/NoImage.png'
 
+import * as Help from '../../toastify/helpers'
 
 class CardUser extends Component {
     constructor(props){
@@ -32,12 +33,13 @@ class CardUser extends Component {
                 type : response.user.type
             })
             :
-            console.log(response.error.message)
+            Help.toastPop({message: response.error.message, type: 'error'})
         })
     }
     goBack (){
         const { prevPath } = this.state
-        this.props.history.push( prevPath ? prevPath : this.props.history.goBack())
+        // this.props.history.goBack())
+        this.props.history.push( prevPath ? prevPath : '/mnguser/users' )
         //
     }
     render() {

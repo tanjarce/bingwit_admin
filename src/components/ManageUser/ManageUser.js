@@ -80,7 +80,7 @@ class ManageUser extends Component {
                     loading : false
                 })
                 :
-                console.log(response.error.message)
+                Help.toastPop({message: response.error.message, type: 'error'})
             })
         })
 
