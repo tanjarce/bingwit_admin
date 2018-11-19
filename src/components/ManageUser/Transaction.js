@@ -43,6 +43,7 @@ class Transaction extends Component {
         .then((response) => {
         if(response.success === true){
             this.setState({
+                dataUsers : response.user,
                 type : response.user.type
             })
             response.user.type !== 'admin' ? (
@@ -143,28 +144,29 @@ class Transaction extends Component {
         
     }
     exportCSV(){
-        const { userInfo } = this.state 
-        // console.log(userInfo)
-        let csvToExport = [',Tracking Number,Amount,Date'];
+        const { dataUsers, userInfo, total } = this.state 
+        console.log(dataUsers)
+        let csvToExport = [',,Tracking Number,Consumer,Status,Amount,Date'];
         let csvRow = [];
-        csvRow = userInfo.map((item) => (
-            item.tracking_number + ',' + item.total + ',' + item.createdAt.replace(',','-')
+        csvRow = userInfo.map((item, index) => (
+            index+1 + ',' + item.tracking_number + ',' + item.consumer + ',' + item.status + ',' + item.total + ',' + item.createdAt.replace(/[, ]+/g, "-").trim()
         ));
         
-        csvToExport.push(...csvRow);
+        csvToExport.push('%0A' , ...csvRow, '%0A' , `,,,,Total Amount: ${total.replace(',' , ' ')}`);
 
         csvToExport = csvToExport.join('%0A');
 
         var a = document.createElement("a");
         a.href = 'data:attachment/csv' + csvToExport;
         a.target = '_Blank';
-        a.download = 'testfile.csv';
+        a.download = `${dataUsers.full_name}-transaction.csv`;
         document.body.appendChild(a);
         a.click();
     }
     render() {
         const { userTransaction } = this.props;
         const { loading, count, pagination, userInfo, total, column, data, columnl, datal } = this.state
+        console.log(userInfo)
         const columnsRules = [
             {
                 Header: 'Tracking Number',

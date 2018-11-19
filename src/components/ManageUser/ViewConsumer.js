@@ -26,7 +26,7 @@ class ViewConsumer extends Component {
                     quantity : item_product.quantity + ' kg',
                     amount : <span>&#8369; {Intl.NumberFormat('en-GB').format(item_product.amount)}</span>,
                     cancel : item_product.isCancelled ? 'Yes' : 'No',
-                    date : moment(item_product.createdAt).format('MMMM D, YYYY')
+                    date : moment(item_product.createdAt).format('h:mm:ss a')
                 }    
                 arr.push(tmp_arr)
             })
