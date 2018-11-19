@@ -68,7 +68,7 @@ class List extends Component {
             pagination: paginationData ? {...paginationData} : (typeof searchQData !== 'undefined')
                 ? {...prevState.pagination, offset: 0} : prevState.pagination
         }), ()=>{
-            console.log(this.state.pagination)
+            // console.log(this.state.pagination)
             func()
         })
     }

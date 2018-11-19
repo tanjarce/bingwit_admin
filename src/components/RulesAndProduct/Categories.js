@@ -181,16 +181,17 @@ class Categories extends Component {
         return (
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteCategory} message={deleteMessage}/>
-                <SearchCount text="Category" count={ categoryCount } updateTable={this.getAllCategories}/>
-                <Form onSubmit={this.handleSubmit}>
-                    <InputGroup>
-                        <Input 
-                            name="categoryInput"
-                            onChange={this.handleChange}    
-                        />
-                        <InputGroupAddon addonType="append"><Button color="primary">Add Category</Button></InputGroupAddon>
-                    </InputGroup>
-                </Form>
+                <SearchCount text="Category" count={ categoryCount } updateTable={this.getAllCategories}>
+                    <Form onSubmit={this.handleSubmit}>
+                        <InputGroup>
+                            <Input 
+                                name="categoryInput"
+                                onChange={this.handleChange}    
+                            />
+                            <InputGroupAddon addonType="append"><Button color="primary">Add Category</Button></InputGroupAddon>
+                        </InputGroup>
+                    </Form>
+                </SearchCount>
                 <Table
                     loading = {loading}
                     columns={columnsAreas}
