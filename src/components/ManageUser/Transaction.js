@@ -109,7 +109,7 @@ class Transaction extends Component {
         const id = this.props.match.params.id
         API.getUserTransactionReceipt(id)
         .then((response) => {
-            console.log(response)
+            // console.log(response)
             if(response.success){
                 const arr = response.rows.map((item, key) => {
                     return ({
@@ -144,7 +144,7 @@ class Transaction extends Component {
     }
     exportCSV(){
         const { userInfo } = this.state 
-        console.log(userInfo)
+        // console.log(userInfo)
         let csvToExport = [',Tracking Number,Amount,Date'];
         let csvRow = [];
         csvRow = userInfo.map((item) => (
@@ -179,11 +179,19 @@ class Transaction extends Component {
             {
                 Header: column,
                 accessor: data,
+                Cell: rowInfo =>  
+                (
+                    rowInfo.value === 'cancelled' ? <span className="text-danger">cancelled</span> : rowInfo.value
+                )
             },
             {
                 Header: columnl,
                 accessor: datal,
-                width : 120
+                width : 120,
+                Cell: rowInfo =>  
+                (
+                    rowInfo.value === 'cancelled' ? <span className="text-danger">cancelled</span> : rowInfo.value
+                )
             },
             {
                 Header: 'Date Created',

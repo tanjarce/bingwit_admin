@@ -81,7 +81,9 @@ class Feedback extends Component {
                         loading : false
                     }))
                 }
-                
+                else{
+                    Help.toastPop({message: response.error.message , type: 'error'})
+                }
             }).catch(error =>{
                 console.log(error)
             })

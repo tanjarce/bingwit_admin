@@ -151,7 +151,7 @@ export default class CBReactTablePagination extends Component {
   componentWillReceiveProps(){
     const {paginationData, paginationData: {limit, offset}} = this.props
     const currentPageonProps = (offset / limit) + 1
-    console.log(paginationData)
+    // console.log(paginationData)
     
   }
 
@@ -159,7 +159,7 @@ export default class CBReactTablePagination extends Component {
     const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props
     const {focus, currentPage} = this.state
 
-    console.log(currentPage)
+    // console.log(currentPage)
 
     const pagelength = Math.ceil(dataCount / limit)
     

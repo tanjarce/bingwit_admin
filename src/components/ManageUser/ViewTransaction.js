@@ -65,9 +65,14 @@ class ViewTransaction extends Component {
         API.getUserTransactionProducerById(id, v_id)
         .then((response) => {
             console.log(response)
-            this.setState({
-                data : {...response.transaction, ...response.transaction_products}
-            })
+            if(response.success) {
+                this.setState({
+                    data : {...response.transaction, ...response.transaction_products}
+                })
+            }
+            else{
+            Help.toastPop({message: response.error.message, type: 'error'})
+            }
         })
     }
     render() {
@@ -81,6 +86,7 @@ class ViewTransaction extends Component {
                             <h4 className='font-weight-bold'>{userInfo.full_name ? userInfo.full_name : '- -'}</h4>
                             <p className='text-muted role'>{userInfo.type}</p>
                         </div>
+                
                         {userInfo.type === 'consumer' ?
                             <Consumer data={data}/> 
                             :
