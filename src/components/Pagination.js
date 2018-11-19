@@ -188,7 +188,7 @@ export default class CBReactTablePagination extends Component {
           </Col>
           <Col xs='auto'className='col'>
             {this.props.pageText}{''}
-              { showPageJump && 
+              {
                 <CustomInput
                   id="custom"
                   min="1"

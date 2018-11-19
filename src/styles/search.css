@@ -20,3 +20,61 @@
     top: 10px;
     left: 25px;
 }
+
+*:focus,
+*:active,
+a:active,
+a:focus,
+input:focus,
+input:active { 
+    -moz-outline-style: none;
+	outline:none;
+    outline: 0;
+}
+
+.inpt{
+    border: 1px solid #dee2e6;
+    background-color: white;
+    padding: 0 8px;
+}
+
+.searchInput{
+    background-image: url('../assets/Search.svg');
+    background-position: 8px 50%;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    /* color: orange; */
+    padding-left: 30px!important;   
+    width: 300px;
+}
+
+.form-control-inline {
+    min-width: 0;
+    width: auto!important;
+    display: inline;
+}
+
+.tableTop_container{
+    margin: 20px 0px 10px 0px;
+}
+
+.tableTop_container .tableTop_row:first-child{
+    /* background: blue; */
+    margin-bottom: 5px;
+    height: 35px;
+}
+
+.tableTop_row{
+    /* background:pink; */
+    display: flex;
+    /* background: coral; */
+}
+
+.addButton{
+    margin-left: auto;
+    background-color: #17C1BC;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold
+}

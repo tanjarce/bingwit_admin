@@ -168,16 +168,17 @@ class Areas extends Component {
         return (
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteArea} message={deleteMessage}/>
-                <SearchCount text="Area" count={ areaCount } updateTable={this.getAllArea}/>
-                <Form onSubmit={this.handleSubmit}>
-                    <InputGroup>
-                        <Input 
-                            name="areaInput"
-                            onChange={this.handleChange}    
-                        />
-                        <InputGroupAddon addonType="append"><Button color="primary">Add Area</Button></InputGroupAddon>
-                    </InputGroup>
-                </Form>
+                <SearchCount text="Area" count={ areaCount } updateTable={this.getAllArea}>
+                    <Form onSubmit={this.handleSubmit}>
+                        <InputGroup>
+                            <Input 
+                                name="areaInput"
+                                onChange={this.handleChange}    
+                            />
+                            <InputGroupAddon addonType="append"><Button color="primary">Add Area</Button></InputGroupAddon>
+                        </InputGroup>
+                    </Form>
+                </SearchCount>
                 <Table
                     loading = {loading}
                     columns={columnsAreas}
