@@ -26,14 +26,8 @@ class LoginForm extends Component {
     handleSignIn (e) {
         this.toggleLoading()
         e.preventDefault()
-        const values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        
-        API.getUserType({
-            'username' : values.username
-        })
-        .then((response) => {
-            if(response.success){
-                if(response.type === 'admin'){
+        let values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
+        values = {...values , type : 'admin'}     
                     API.login(values)
                     .then((response) => {
                         if(response.success){
@@ -42,19 +36,7 @@ class LoginForm extends Component {
                         } else {
                             this.props.onError(response.error.message)
                         }
-                    })
-                }
-                else{
-                    this.toggleLoading()
-                    this.props.onError("You don't have access to this site.")
-                }
-            }
-            else
-            {
-                this.toggleLoading()
-                this.props.onError(response.error.message)
-            }
-        }).catch(err => {
+                    }).catch(err => {
             this.toggleLoading()
             console.log(err)
         })
