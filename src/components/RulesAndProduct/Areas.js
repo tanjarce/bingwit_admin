@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
 import DeleteModal from '../../modals/DeleteModal'
+import ToggleAddForm from './ToggleAddForm'
 
 import dots from '../../images/show_more.svg'
 import * as API from '../../services/API'
@@ -42,9 +43,9 @@ class Areas extends Component {
             [name]: value
         }))
     }
-    handleSubmit(e){
-        const { areaInput } = this.state
-        e.preventDefault()
+    handleSubmit(areaInput){
+        // const { areaInput } = this.state
+        // e.preventDefault()
         if(areaInput.trim().length){
             API.addArea(areaInput)
                 .then(res => {
@@ -169,15 +170,7 @@ class Areas extends Component {
             <React.Fragment>
                 <DeleteModal isOpen={isOpen} toggle={this.toggleModal} deleteFunc={this.deleteArea} message={deleteMessage}/>
                 <SearchCount text="Area" count={ areaCount } updateTable={this.getAllArea}>
-                    <Form onSubmit={this.handleSubmit}>
-                        <InputGroup>
-                            <Input 
-                                name="areaInput"
-                                onChange={this.handleChange}    
-                            />
-                            <InputGroupAddon addonType="append"><Button color="primary">Add Area</Button></InputGroupAddon>
-                        </InputGroup>
-                    </Form>
+                        <ToggleAddForm handleSubmit={this.handleSubmit} text="Area" />
                 </SearchCount>
                 <Table
                     loading = {loading}
