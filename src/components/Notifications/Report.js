@@ -88,7 +88,7 @@ class Report extends Component {
                     })
                 }
                 else{
-                    console.log(response.error.message)
+                    Help.toastPop({message: response.error.message , type: 'error'})
                 }
             }).catch(error =>{
                 console.log(error)

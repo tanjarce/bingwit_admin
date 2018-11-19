@@ -179,11 +179,19 @@ class Transaction extends Component {
             {
                 Header: column,
                 accessor: data,
+                Cell: rowInfo =>  
+                (
+                    rowInfo.value === 'cancelled' ? <span className="text-danger">cancelled</span> : rowInfo.value
+                )
             },
             {
                 Header: columnl,
                 accessor: datal,
-                width : 120
+                width : 120,
+                Cell: rowInfo =>  
+                (
+                    rowInfo.value === 'cancelled' ? <span className="text-danger">cancelled</span> : rowInfo.value
+                )
             },
             {
                 Header: 'Date Created',

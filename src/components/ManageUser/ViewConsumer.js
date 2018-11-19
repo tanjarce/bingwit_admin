@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment'
+import fishDefault from '../../assets/fish.svg'
 import userDefault from '../../assets/userDefault.svg'
 import Tables from './Table'
+import * as Help from '../../toastify/helpers'
 
 class ViewConsumer extends Component {
     constructor(props){
@@ -12,27 +14,12 @@ class ViewConsumer extends Component {
             dataTable : []
         }
     }
-    /* 
-    const product_arr = []
-            item.transaction_product.map((item) => product_arr.push(item.product.name))
-            console.log(product_arr.join(", "))
-            return({
-                product_name : product_arr,
-                producer_name : item.producer.full_name,
-                quantity : '',
-                amount : '',
-                status : '',
-                date : ''
-            });
-    */
     componentWillMount(){
         const { data } = this.props
         const arr = []
         data.transaction.map((item) => {
-            console.log(item)
             item.transaction_product.map((item_product) => 
             {
-                // console.log(item_product)
                 let tmp_arr = {
                     product_name : item_product.product,
                     producer_name : item.producer,
@@ -52,7 +39,6 @@ class ViewConsumer extends Component {
     }
     render() {
         const { data, dataTable } = this.state
-        console.log(dataTable)
         const columnsRules = [
             {
                 Header: 'Products',
@@ -63,7 +49,7 @@ class ViewConsumer extends Component {
                             <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                                 <img 
                                 width="25px" height="25px" 
-                                src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefault} 
+                                src={rowInfo.value.image_url ? rowInfo.value.image_url : fishDefault} 
                                 className="m-auto rounded-circle"/>
                             </span>
                             {rowInfo.value.name}
