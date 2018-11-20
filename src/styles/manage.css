@@ -40,6 +40,8 @@
     .main-card .card-img{
         width: 250px;
         height: 350px;
+        object-fit: cover;
+        object-position: 50% 50%
     }
     .main-card .card-footer{
         padding: 0px;

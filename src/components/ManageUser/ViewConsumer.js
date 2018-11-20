@@ -6,6 +6,11 @@ import userDefault from '../../assets/userDefault.svg'
 import Tables from './Table'
 import * as Help from '../../toastify/helpers'
 
+import ordered from '../../assets/Ordered.svg'
+import ready from '../../assets/Ready.svg'
+import shipped from '../../assets/Shipped.svg'
+import delivered from '../../assets/Delivered.svg'
+
 class ViewConsumer extends Component {
     constructor(props){
         super(props);
@@ -123,11 +128,44 @@ class ViewConsumer extends Component {
                     <Col xs='auto'><span className='px-3 col'>{dataTable ? dataTable.length : '0'}</span></Col><br/>
                 </Row>
                 <hr/>
-                <Tables
+                <div style={{height : '220px', overflowY : 'auto', overflowX : 'hidden'}}>
+                <Row>
+                    <Col xs='12' >
+                    <Row>
+                        <Col >
+                            <Row>
+                                <Col xs='12'>Consumer:</Col>
+                                <Col xs='12'>Products:</Col>
+                                <Col xs='12'>Weight:</Col>
+                                <Col xs='12'>Total Amount:</Col>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Row>
+                                <Col xs='12'>Berto Toto</Col>
+                                <Col xs='12'>Bangus</Col>
+                                <Col xs='12'>2 Kilos</Col>
+                                <Col xs='12'>P 1,169.00</Col>
+                            </Row>
+                        </Col>
+                        <Col xs='7'>
+                            <div className='d-flex flex-column m-0 p-0'>
+                                <span><img src={ordered} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Order Placed</span>
+                                <span><img src={ready} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Ready for Delivery</span>
+                                <span><img src={shipped} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Shipped</span>
+                                <span><img src={delivered} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Delivered</span>
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr />
+                    </Col>
+                </Row>
+                </div>
+                {/* <Tables
                     columns={columnsRules} 
                     data = {dataTable}
                     defaultRow={dataTable.length}
-                />
+                /> */}
             </React.Fragment>
         );
     }
