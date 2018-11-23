@@ -157,6 +157,7 @@ class Report extends Component {
                     <div>
                         <span className="mr-3" style={{'display': 'inlineBlock', 'width': '25px', 'height': '25px'}}>
                             <img 
+                            alt="reported seller"
                             width="25px" height="25px" 
                             src={rowInfo.value.image_url ? rowInfo.value.image_url : userDefafult} 
                             className="m-auto rounded-circle"

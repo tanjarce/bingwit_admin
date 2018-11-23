@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row, Input } from 'reactstrap'
 import '../styles/search.css'
-
-import searchIco from '../assets/Search.svg'
 
 class Search extends Component {
     constructor(props){

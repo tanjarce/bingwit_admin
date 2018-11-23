@@ -22,7 +22,6 @@ class Feedback extends Component {
             feedbackCount: 0,
             selectedRow: null,
             loading : true,
-            showTable: true
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.getFeedbacks = this.getFeedbacks.bind(this)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Input, Button, InputGroupAddon, InputGroup, Form } from 'reactstrap'
+import { Form } from 'reactstrap'
 import '../../styles/style.css'
-import * as API from '../../services/API'
+// import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
 
 class ToggleAddForm extends Component {
