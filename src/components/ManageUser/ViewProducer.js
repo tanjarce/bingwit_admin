@@ -3,6 +3,7 @@ import { Row, Col } from 'reactstrap';
 import moment from 'moment'
 import fishDefault from '../../assets/fish.svg'
 import Tables from './Table'
+import SubViewProducer from './SubViewProducer';
 
 class ViewProducer extends Component {
     constructor(props){
@@ -30,6 +31,9 @@ class ViewProducer extends Component {
 
     render() {
         const { data, dataTable } = this.state
+        // const dataArr = dataTable.map((item, key) => {
+        //     return <SubViewProducer key={key} item={item}/>
+        // })
         const columnsRules = [
             {
                 Header: 'Products',
@@ -70,32 +74,41 @@ class ViewProducer extends Component {
         return (
             <React.Fragment>
                 <Row>
-                    <Col xs='2' className='d-inline align-top col'>Tracking No:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.tracking_number ? data.tracking_number : '- -'}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Consumer:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.consumer.full_name ? data.consumer.full_name : '- -'}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Total Amount:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{<span>&#8369; {Intl.NumberFormat('en-GB').format(data.total_amount ? data.total_amount : '0')}</span>}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Status:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.status ? data.status : '- -'}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Comment:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.additional_information ? data.additional_information : '- -'}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Rating:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.rating ? data.rating : '- -'}</span></Col><br/>
-                </Row>
-                <Row>
-                    <Col xs='2' className='d-inline align-top col'>Products:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{data.count ? data.count : '0'}</span></Col><br/>
+                    <Col>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Tracking No:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.tracking_number ? data.tracking_number : '- -'}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Consumer:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.consumer.full_name ? data.consumer.full_name : '- -'}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Total Amount:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{<span>&#8369; {Intl.NumberFormat('en-GB').format(data.total_amount ? data.total_amount : '0')}</span>}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Status:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.status ? data.status : '- -'}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Comment:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.additional_information ? data.additional_information : '- -'}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Rating:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.rating ? data.rating : '- -'}</span></Col><br/>
+                        </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Products:</Col>
+                            <Col xs='auto'><span className='px-3 col'>{data.count ? data.count : '0'}</span></Col><br/>
+                        </Row>
+                    </Col>
+                    <Col xs='auto'>
+                        <div>
+                            <SubViewProducer />
+                        </div>
+                    </Col>
                 </Row>
                 <hr/>
                 <Tables
