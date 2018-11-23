@@ -6,7 +6,7 @@ import PrimaryFact from './PrimaryFact'
 import Transaction from './Transaction'
 
 import * as API from '../../services/API'
-import NoImage from '../../assets/NoImage.png'
+import NoImage from '../../assets/NoImage.svg'
 
 import * as Help from '../../toastify/helpers'
 
