@@ -166,7 +166,6 @@ class Transaction extends Component {
     render() {
         const { userTransaction } = this.props;
         const { loading, count, pagination, userInfo, total, column, data, columnl, datal } = this.state
-        console.log(userInfo)
         const columnsRules = [
             {
                 Header: 'Tracking Number',
@@ -231,7 +230,7 @@ class Transaction extends Component {
                             <img src={ExportCSV} className='pr-1'/> Export as CSV
                             </span></Col>
                             <Col></Col>
-                            <Col xs='auto'><span>Total Amount: &#8369; {total}</span></Col>
+                            <Col xs='auto'><small>Total Amount: &#8369; {total}</small></Col>
                             {'|'}
                             <Col xs='auto'><TotalCount  text='Transactions' count={count}/></Col>
                             </Row>
