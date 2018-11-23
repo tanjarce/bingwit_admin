@@ -14,6 +14,7 @@ class ViewProducer extends Component {
     }
     componentWillMount(){
         const { data } = this.props
+        console.log(data)
         const arr = data.rows.map((item) => {
             return({
                 product_name : item.product,

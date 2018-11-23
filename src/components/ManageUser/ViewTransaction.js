@@ -71,7 +71,7 @@ class ViewTransaction extends Component {
             console.log(response)
             if(response.success) {
                 this.setState({
-                    data : {...response.transaction, ...response.transaction_products}
+                    data : {...response.transaction, ...response.transaction_products, status : {...status_log}}
                 })
             }
             else{
