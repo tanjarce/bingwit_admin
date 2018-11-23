@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Button, Col, Row  } from 'reactstrap';
+import { Col } from 'reactstrap';
 import { withRouter, NavLink } from 'react-router-dom'
 import '../../styles/rule.css'
 import moment from 'moment'

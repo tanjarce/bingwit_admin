@@ -106,7 +106,7 @@ export default class CBReactTablePagination extends Component {
   }
 
   Next () {
-    const {paginationData: {limit, offset}, onPageSizeChange} = this.props
+    const {paginationData: {limit, offset}} = this.props
 
     // const {paginationData: {offset, limit}} = this.props
     const currentPageonProps = (offset / limit) + 1
@@ -121,7 +121,7 @@ export default class CBReactTablePagination extends Component {
   }
 
   Previous () {
-    const {paginationData: {limit, offset}, onPageSizeChange} = this.props
+    const {paginationData: {limit, offset}} = this.props
 
     // const {paginationData: {offset, limit}} = this.props
     const currentPageonProps = (offset / limit) + 1
@@ -148,15 +148,8 @@ export default class CBReactTablePagination extends Component {
     }, 1)
   }
 
-  componentWillReceiveProps(){
-    const {paginationData, paginationData: {limit, offset}} = this.props
-    const currentPageonProps = (offset / limit) + 1
-    // console.log(paginationData)
-    
-  }
-
   render () {
-    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, showPageJump, onPageSizeChange, dataCount } = this.props
+    const {paginationData: {offset, limit}, showPageSizeOptions, pageSizeOptions, onPageSizeChange, dataCount } = this.props
     const {focus, currentPage} = this.state
 
     // console.log(currentPage)

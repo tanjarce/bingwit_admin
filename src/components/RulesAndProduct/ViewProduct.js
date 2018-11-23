@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Button, Col, Row  } from 'reactstrap';
-import { withRouter, NavLink } from 'react-router-dom'
+// import { Container, Button, Col, Row  } from 'reactstrap';
+import { NavLink } from 'react-router-dom'
 import '../../styles/rule.css'
 import * as API from '../../services/API'
 import moment from 'moment'
@@ -45,7 +45,6 @@ class ViewProduct extends Component{
 
     render(){
         const momentFormat = (data) => moment(data).format('MMMM D, YYYY')
-        const { match } = this.props
         const { productName, aliases, loading } = this.state
 
         const aliasesList = aliases.length ? aliases.map(alias => {

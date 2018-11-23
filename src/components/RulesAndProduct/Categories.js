@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, Form, InputGroupAddon, Input, Button } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { withRouter } from 'react-router-dom'
 import Table from '../Tables'
 import SearchCount from '../SearchAndCount'
@@ -60,7 +60,7 @@ class Categories extends Component {
     viewCategory (rowInfo) {
         const { id } = rowInfo
         console.log(rowInfo.id)
-        const { history: { push, goBack } , location: { pathname } } = this.props
+        const { location: { pathname } } = this.props
 
         console.log(pathname)
         this.props.history.push(`${pathname}/view/${id}`)

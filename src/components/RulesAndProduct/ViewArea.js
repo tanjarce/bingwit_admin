@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import { Container, Form, InputGroupAddon, InputGroup, Input, Button } from 'reactstrap';
+import React, { Component } from 'react'
+import { Form, InputGroupAddon, InputGroup, Input, Button } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom'
 import * as Help from '../../toastify/helpers'
 import editIcon from '../../assets/edit-solid.svg'
@@ -132,7 +132,7 @@ class ViewFeedback extends Component{
                                 <span className="d-inline-block productName">
                                     <h4>{area_address}</h4>
                                     <span className="d-inline-flex align-items-center editIcon" onClick={this.toggleEdit}>
-                                        edit <img src={editIcon} style={{'width': '18px', 'height': '18px', 'paddingLeft': '3px'}}/>
+                                        edit <img src={editIcon} alt="edit icon" style={{'width': '18px', 'height': '18px', 'paddingLeft': '3px'}}/>
                                     </span>
                                 </span>
                                 

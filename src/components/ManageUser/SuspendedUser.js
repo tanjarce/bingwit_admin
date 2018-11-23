@@ -45,13 +45,12 @@ class SuspendedUser extends Component {
         })
         API.suspendUser( selectedRow.id )
         .then((response) => {
-            response.success ? 
-            (
-            this.getSuspendUsers(),
-            Help.toastPop({message: `Activate successfully`, type: 'success'})
-            )
-            :
-            Help.toastPop({message: response.error.message, type: 'error'})
+            if(response.success){
+                this.getSuspendUsers()
+                Help.toastPop({message: `Activate successfully`, type: 'success'})
+            } else {
+                Help.toastPop({message: response.error.message, type: 'error'})
+            }  
         })
     }
 
