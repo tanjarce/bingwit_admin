@@ -58,8 +58,12 @@
 
 .all_padding .inputField {
     border-color: #ffffff !important;
-    box-shadow: 0 0 0 0.2rem rgb(255, 255, 255) !important;
+    box-shadow: 0 0 0 0.1rem rgb(255, 255, 255) !important;
     border : 1px solid #ced4da !important;
+}
+.all_padding .inputField:focus {
+    box-shadow: 0 0 1px 0.2rem #83c3ff8f !important;
+    border : 1px solid #9be6ff !important;
 }
 
 .productName{

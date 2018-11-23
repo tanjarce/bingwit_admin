@@ -369,15 +369,3 @@ export const updateCategory = (id, data) => {
 //   fetch(`${api}/product_category_all?offset=${offset}&limit=${limit}&q=${searchQ}`, { headers: headers() }) 
 //   .then(res => res.json())
   
-
-// DASHBOARD
-
-export const dashUser = ({ type = '', area = ''}) =>
-  fetch(`${api}/dashboard/users?type=${type}&area=${area}`, { headers: headers() }) 
-  .then(res => res.json())
-  
-  // TOPLIST
-  export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales'}) =>
-    fetch(`${api}/dashboard/transaction?q=${searchQ}&s=${'2018-9-30'}&e=${'2019-12-30'}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
-    .then(res => res.json())
-

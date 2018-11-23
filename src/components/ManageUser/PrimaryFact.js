@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Col, Row } from 'reactstrap';
 import { css } from 'react-emotion';
+
+import moment from 'moment'
 import { PulseLoader
 } from 'react-spinners';
 
@@ -15,6 +17,7 @@ class PrimaryFact extends Component {
     }
     render() {
         const { user } = this.props;
+        console.log(user)
         return (
             <div className='main-facts'>
                 { user ? 
@@ -33,7 +36,7 @@ class PrimaryFact extends Component {
                 </Row>    
                 <Row>
                     <Col xs="2" className='d-inline align-top col'>Area:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{user.Area ? user.Area.area_address : 'Null'}</span></Col><br/>
+                    <Col xs='auto'><span className='px-3 col'>{user.area ? user.area.area_address : '- -'}</span></Col><br/>
                 </Row>
                 <div className='space' />
                 <Row>
@@ -47,6 +50,10 @@ class PrimaryFact extends Component {
                 <Row>
                     <Col xs="2" className='d-inline col'>Ratings:</Col>
                     <Col xs='auto'><span className='px-3 col'>{user.rating ? user.rating : '- -'}</span></Col><br/>
+                </Row>    
+                <Row>
+                    <Col xs="2" className='d-inline col'>Member Since:</Col>
+                    <Col xs='auto'><span className='px-3 col'>{moment(user.createdAt).format('MMMM D, YYYY')}</span></Col><br/>
                 </Row>    
                     {/* <Col className='d-inline'>Total Sales: <span className='px-4'>&#8369; {user.sales}</span></Col> */}
                 </React.Fragment> 

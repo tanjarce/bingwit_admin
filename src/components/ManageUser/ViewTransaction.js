@@ -6,7 +6,7 @@ import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
 import Consumer from './ViewConsumer'
 import Producer from './ViewProducer'
-
+import close from '../../assets/close.svg'
 import { css } from 'react-emotion';
 import { PulseLoader
 } from 'react-spinners';
@@ -24,6 +24,7 @@ class ViewTransaction extends Component {
             userInfo : [],
             data : ''
         }
+        this.goBack = this.goBack.bind(this)
         this.getUserTransactionConsumer = this.getUserTransactionConsumer.bind(this)
         this.getUserTransactionProducer = this.getUserTransactionProducer.bind(this)
     }
@@ -47,10 +48,13 @@ class ViewTransaction extends Component {
         }
         })
     }
+    goBack (){
+        this.props.history.goBack()
+        //
+    }
     getUserTransactionConsumer(id, v_id){
         API.getUserTransactionReceiptByTRK(id, v_id)
         .then((response) => {
-            console.log(response)
             if(response.success) {
                 this.setState({
                     data : {...response.receipt, count : response.receipt.transaction.length}
@@ -79,12 +83,23 @@ class ViewTransaction extends Component {
         const { userInfo, data } = this.state
         
         return (
-            <React.Fragment>
+            <div>
                  {data ?
-                    <React.Fragment>
+                    <React.Fragment >
                         <div className='space' >
+                        <Row>
+                            <Col xs='auto'>
                             <h4 className='font-weight-bold'>{userInfo.full_name ? userInfo.full_name : '- -'}</h4>
                             <p className='text-muted role'>{userInfo.type}</p>
+                            </Col>
+                            <Col />
+                            <Col xs='auto'>
+                            <span style={{cursor : 'pointer'}} onClick={this.goBack}>
+                            <img style={{width : '12px' , height : '12px'}} src={close} alt='close'/>
+                            <span className='text-danger pl-2'>close</span>
+                            </span>
+                            </Col>
+                        </Row>
                         </div>
                 
                         {userInfo.type === 'consumer' ?
@@ -102,7 +117,7 @@ class ViewTransaction extends Component {
                         loading={true}
                     />
                 }
-            </React.Fragment>
+            </div>
         );
     }
 }

@@ -34,7 +34,6 @@ class ManageUser extends Component {
             prevPath : ''
         }
         this.orderSort = this.orderSort.bind(this)
-        this.loading = this.loading.bind(this)
         this.suspendUser = this.suspendUser.bind(this)
         this.updateTable = this.updateTable.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
@@ -43,11 +42,6 @@ class ManageUser extends Component {
     }
     componentDidMount(){
         this.updateTable();
-    }
-    loading(){
-        this.setState({
-            loading : true
-        })
     }
     updateTable(paginationData, searchQData){
         this.setState((prevState)=>({
