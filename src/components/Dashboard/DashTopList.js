@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Col, Row, Button } from 'reactstrap';
+import { withRouter } from 'react-router-dom'
+
 import TopListCard from './TopListCard'
 import * as API from '../../services/API'
 
-// import DateRangePicker from 'react-bootstrap-daterangepicker';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import 'bootstrap-daterangepicker/daterangepicker.css';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
@@ -15,23 +14,28 @@ class DashTopList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            start: '',
-            end: ''
+            start: moment().startOf('month').format('YYYY-MM-DD'),
+            end: moment().format('YYYY-MM-DD')
         }
         this.handleEvent = this.handleEvent.bind(this)
         this.getTopListArea = this.getTopListArea.bind(this)
         this.getTopSalesArea = this.getTopSalesArea.bind(this)
         this.getTopTransArea = this.getTopTransArea.bind(this)
+        this.getTopSalesAndTrans = this.getTopSalesAndTrans.bind(this)
     }
-    async componentDidMount(){
+    componentDidMount(){
+        this.getTopSalesAndTrans()
+    }
+
+    async getTopSalesAndTrans(){
         let topSalesArea = await this.getTopSalesArea()
         let topTransArea = await this.getTopTransArea()
-        // console.log(topTransArea.results)
-        // console.log(topSalesArea.results)
+        
         topSalesArea = topSalesArea.results.map(area => ({
             'key': area.Area,
             'value': `₱ ${area.Total_Sales}` 
         }))
+        
         topTransArea = topTransArea.results.map(area => ({
             'key': area.Area,
             'value': `${area.Number_of_Transactions}` 
@@ -45,17 +49,23 @@ class DashTopList extends Component {
     }
 
     getTopTransArea(){
+        const { start, end } = this.state
         const params = {
             limit: 3,
-            order: 'Number_of_Transactions'
+            order: 'Number_of_Transactions ASC',
+            start,
+            end,
         }
         return this.getTopListArea(params)
     }
 
     getTopSalesArea(){
+        const { start, end } = this.state
         const params = {
             limit: 3,
-            order: 'Total_Sales'
+            order: 'Total_Sales ASC',
+            start,
+            end,
         }
         return this.getTopListArea(params)
     }
@@ -71,16 +81,20 @@ class DashTopList extends Component {
 
     handleEvent(event, picker) {
         this.setState({
-          start: picker.startDate.format('L'),
-          end: picker.endDate.format('L')
+          start: picker.startDate.format('YYYY-MM-DD'),
+          end: picker.endDate.format('YYYY-MM-DD')
+        }, ()=>{
+            this.getTopSalesAndTrans()
         })
     }
 
     render(){
         const { start, end, topSalesArea, topTransArea } = this.state
-        console.log(topSalesArea)
+        const { expand } = this.props
         const dateToday = moment().format('MMMM D, YYYY')
-        const startDate = start ? moment(new Date(start)).format('MMMM D, YYYY') : dateToday
+        const startDate = start 
+            ? moment(new Date(start)).format('MMMM D, YYYY') 
+            : moment().startOf('month').format('MMMM D, YYYY');
         const endDate = end ? moment(new Date(end)).format('MMMM D, YYYY') : dateToday
 
         return(
@@ -92,8 +106,8 @@ class DashTopList extends Component {
                     <Col xs={{ size: 'auto'}}>
                         <DateRangePicker 
                             onApply={this.handleEvent } 
-                            startDate={start || moment().format('L')} 
-                            endDate={end || moment().format('L')}>
+                            startDate={moment(start).format('L')} 
+                            endDate={moment(end).format('L')}>
                             <h4 style={{'cursor': 'pointer'}}>{`${startDate} - ${endDate}`}
                                 <span className="ml-1">
                                     <svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" >
@@ -110,6 +124,7 @@ class DashTopList extends Component {
                             data={topSalesArea} 
                             label={['Area - Total Sales', 'Area', 'Total Sales']}
                             link={'Area'}    
+                            expand={expand}
                         />
                     </Col>
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
@@ -117,6 +132,7 @@ class DashTopList extends Component {
                             data={topTransArea} 
                             label={['Area - No. of Transaction', 'Area', 'No. of Transaction']} 
                             link={'Area'}
+                            expand={expand}
                         />
                     </Col>
                     {/* <Col xs="12" md="4" className="mb-3 mb-md-0">
@@ -150,4 +166,4 @@ class DashTopList extends Component {
     }
 }
 
-export default DashTopList
+export default withRouter(DashTopList)
