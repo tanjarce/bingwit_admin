@@ -15,21 +15,46 @@ class DashTopList extends Component {
         super(props);
         this.state = {
             start: moment().startOf('month').format('YYYY-MM-DD'),
-            end: moment().format('YYYY-MM-DD')
+            end: moment().format('YYYY-MM-DD'),
+            isLoading: true,
         }
-        this.handleEvent = this.handleEvent.bind(this)
+        this.pickDate = this.pickDate.bind(this)
+        
+        this.getTopList = this.getTopList.bind(this)
+
         this.getTopListArea = this.getTopListArea.bind(this)
         this.getTopSalesArea = this.getTopSalesArea.bind(this)
         this.getTopTransArea = this.getTopTransArea.bind(this)
-        this.getTopSalesAndTrans = this.getTopSalesAndTrans.bind(this)
+
+        this.getTopTransConsumer = this.getTopTransConsumer.bind(this)
+        this.getTopPurchaseConsumer = this.getTopPurchaseConsumer.bind(this)
+        this.getTopListConsumer = this.getTopListConsumer.bind(this)
+
+        this.getTopTransProducer = this.getTopTransProducer.bind(this)
+        this.getTopSalesProducer = this.getTopSalesProducer.bind(this)
+        this.getTopListProducer = this.getTopListProducer.bind(this)
+        
+        this.getTopQuantityProduct = this.getTopQuantityProduct.bind(this)
+        this.getTopAmountProduct = this.getTopAmountProduct.bind(this)
+        this.getTopListProduct = this.getTopListProduct.bind(this)
+
+        this.getMostCancel = this.getMostCancel.bind(this)
     }
     componentDidMount(){
-        this.getTopSalesAndTrans()
+        this.getTopList()
     }
 
-    async getTopSalesAndTrans(){
+    async getTopList(){
         let topSalesArea = await this.getTopSalesArea()
         let topTransArea = await this.getTopTransArea()
+        let topQuantityProduct = await this.getTopQuantityProduct()
+        let topAmountProduct = await this.getTopAmountProduct()
+        let topPurchaseCon = await this.getTopPurchaseConsumer()
+        let topTransCon = await this.getTopTransConsumer()
+        let topTransProd = await this.getTopTransProducer()
+        let topSalesProd = await this.getTopSalesProducer()
+        let mostCancel = await this.getMostCancel()
+
         
         topSalesArea = topSalesArea.results.map(area => ({
             'key': area.Area,
@@ -41,15 +66,58 @@ class DashTopList extends Component {
             'value': `${area.Number_of_Transactions}` 
         }))
 
+        console.log(topQuantityProduct)
+        
+        // topQuantityProduct = topQuantityProduct.mapping_array.map(product => ({
+        //     'key': product.product_type,
+        //     'value': `₱ ${product.amount}`
+        // }))
+
+        // topAmountProduct = topAmountProduct.mapping_array.map(product => ({
+        //     'key': product.product_type ,
+        //     'value': `${product.quantity} kg`
+        // }))
+
+        topPurchaseCon = topPurchaseCon.reports.map(producer => ({
+            'key': producer.Username,
+            'value': `₱ ${producer.Total_Purchases}`
+        }))
+
+        topTransCon = topTransCon.reports.map(producer => ({
+            'key': producer.Username,
+            'value': producer.Number_of_Transactions
+        }))
+
+        topSalesProd = topSalesProd.reports.map(producer => ({
+            'key': producer.Username,
+            'value': `₱ ${producer.Total_Sales}`
+        }))
+
+        topTransProd = topTransProd.reports.map(producer => ({
+            'key': producer.Username,
+            'value': producer.Number_of_Transactions
+        }))
+
+        mostCancel = mostCancel.reports.map(report => ({
+            'key': report.Username,
+            'value': report.Cancels
+        }))
+
         this.setState(()=>({
             topSalesArea,
-            topTransArea
-            }), ()=>{ console.log(this.state) }
+            topTransArea,
+            topPurchaseCon,
+            topTransCon,
+            topSalesProd,
+            topTransProd,
+            mostCancel,
+            isLoading: false
+            })
         )
     }
 
     getTopTransArea(){
-        const { start, end } = this.state
+        const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
             order: 'Number_of_Transactions ASC',
@@ -60,7 +128,8 @@ class DashTopList extends Component {
     }
 
     getTopSalesArea(){
-        const { start, end } = this.state
+        const { dateToplist: { start, end } } = this.props
+
         const params = {
             limit: 3,
             order: 'Total_Sales ASC',
@@ -78,19 +147,138 @@ class DashTopList extends Component {
                 }
             })
     }
+    
+    getTopQuantityProduct(){
+        const { dateToplist: { start, end } } = this.props
 
-    handleEvent(event, picker) {
+        const params = {
+            limit: 3,
+            order: 'quantity_asc',
+            start,
+            end,
+        }
+        return this.getTopListProduct(params)
+    }
+
+    getTopAmountProduct(){
+        const { dateToplist: { start, end } } = this.props
+
+        const params = {
+            limit: 3,
+            order: 'amount_asc',
+            start,
+            end,
+        }
+        return this.getTopListProduct(params)
+    }
+
+    getTopListProduct(params){
+        return API.getTopListProduct(params)
+        .then(res => {
+            if(res.success){
+                return res
+            }
+        })
+    }
+
+
+
+    getTopTransConsumer(){
+        const { dateToplist: { start, end } } = this.props
+        const params = {
+            limit: 3,
+            order: 'Number_of_Transactions ASC',
+            start,
+            end,
+        }
+        return this.getTopListConsumer(params)
+    }
+
+    getTopPurchaseConsumer(){
+        const { dateToplist: { start, end } } = this.props
+        const params = {
+            limit: 3,
+            order: 'Total_Purchases ASC',
+            start,
+            end,
+        }
+        return this.getTopListConsumer(params)
+    }
+
+    getTopListConsumer(params){
+        return API.getTopListConsumer(params)
+        .then(res => {
+            if(res.success){
+                return res
+            }
+        })
+    }
+
+
+
+    getTopTransProducer(){
+        const { dateToplist: { start, end } } = this.props
+        const params = {
+            limit: 3,
+            order: 'Number_of_Transactions ASC',
+            start,
+            end,
+        }
+        return this.getTopListProducer(params)
+    }
+
+    getTopSalesProducer(){
+        const { dateToplist: { start, end } } = this.props
+        const params = {
+            limit: 3,
+            order: 'Total_Sales ASC',
+            start,
+            end,
+        }
+        return this.getTopListProducer(params)
+    }
+
+    getTopListProducer(params){
+        return API.getTopListProducer(params)
+        .then(res => {
+            if(res.success){
+                return res
+            }
+        })
+    }
+
+
+    getMostCancel(){
+        const { dateToplist: { start, end } } = this.props
+        const params = {
+            limit: 3,
+            order: 'Cancels DESC',
+            start,
+            end,
+        }
+
+        return API.getMostCancel(params)
+            .then(res => {
+                if(res.success){
+                    return res
+                }
+            })
+    }
+
+    pickDate(event, picker) {
+        this.props.setDate(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
         this.setState({
-          start: picker.startDate.format('YYYY-MM-DD'),
-          end: picker.endDate.format('YYYY-MM-DD')
+            isLoading: true,
+            start: picker.startDate.format('YYYY-MM-DD'),
+            end: picker.endDate.format('YYYY-MM-DD')
         }, ()=>{
             this.getTopSalesAndTrans()
         })
     }
 
     render(){
-        const { start, end, topSalesArea, topTransArea } = this.state
-        const { expand } = this.props
+        const { topSalesArea, topTransArea, topTransCon, topPurchaseCon, topSalesProd, topTransProd, mostCancel, isLoading } = this.state
+        const { expand, dateToplist: { start, end } } = this.props
         const dateToday = moment().format('MMMM D, YYYY')
         const startDate = start 
             ? moment(new Date(start)).format('MMMM D, YYYY') 
@@ -105,7 +293,7 @@ class DashTopList extends Component {
                     </Col>
                     <Col xs={{ size: 'auto'}}>
                         <DateRangePicker 
-                            onApply={this.handleEvent } 
+                            onApply={this.pickDate } 
                             startDate={moment(start).format('L')} 
                             endDate={moment(end).format('L')}>
                             <h4 style={{'cursor': 'pointer'}}>{`${startDate} - ${endDate}`}
@@ -125,6 +313,7 @@ class DashTopList extends Component {
                             label={['Area - Total Sales', 'Area', 'Total Sales']}
                             link={'Area'}    
                             expand={expand}
+                            isLoading={isLoading}
                         />
                     </Col>
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
@@ -133,34 +322,73 @@ class DashTopList extends Component {
                             label={['Area - No. of Transaction', 'Area', 'No. of Transaction']} 
                             link={'Area'}
                             expand={expand}
+                            isLoading={isLoading}
                         />
                     </Col>
+ 
+                </Row>
+                <Row  className="mb-5">
+                    <Col xs="12" md="4" className="mb-3 mb-md-0">
+                        <TopListCard 
+                            data={topSalesProd} 
+                            label={['Producer - Total Sales', 'Producer', 'Total Sales']} 
+                            link={'Producer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
+                    </Col>
+                    <Col xs="12" md="4" className="mb-3 mb-md-0">
+                        <TopListCard 
+                            data={topTransProd} 
+                            label={['Producer - No. of Transaction', 'Producer', 'No. of Transaction']} 
+                            link={'Producer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
+                    </Col>
+
+                    {/* <Col xs="12" md="4" className="mb-3 mb-md-0">
+                        <TopListCard 
+                            data={topTransProd} 
+                            label={['Producer - No. of Transaction', 'Producer', 'No. of Transaction']} 
+                            link={'Producer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
+                    </Col> */}
                     {/* <Col xs="12" md="4" className="mb-3 mb-md-0">
                         <TopListCard data={topSalesArea} />
                     </Col> */}
                 </Row>
-                {/* <Row  className="mb-5">
-                    <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
-                    </Col>
-                    <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
-                    </Col>
-                    <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
-                    </Col>
-                </Row>
                 <Row  className="mb-5">
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
+                        <TopListCard 
+                            data={topPurchaseCon} 
+                            label={['Consumer - Total Purchase', 'Consumer', 'Total Purchase']} 
+                            link={'Consumer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
                     </Col>
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
+                        <TopListCard 
+                            data={topTransCon} 
+                            label={['Consumer - No. of Transaction', 'Consumer', 'No. of Transaction']} 
+                            link={'Consumer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
                     </Col>
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
+                        <TopListCard 
+                            data={mostCancel} 
+                            label={['Consumer - Most Canceling', 'Consumer', 'No. Canceled Transaction']} 
+                            link={'Cancels'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
                     </Col>
-                </Row> */}
+                </Row>
             </Fragment>
         )
     }

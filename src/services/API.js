@@ -2,7 +2,9 @@ import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.0.125:3000/api/v1';
 // const api = 'https://bingwit-backend.herokuapp.com/api/v1';
-const api = 'http://18.224.2.191/api/v1';
+// const api = 'http://18.224.2.191/api/v1';
+const api = 'http://13.229.79.47/api/v1';
+
 
 const headers = () => {
   const token = Session.getToken()
@@ -377,9 +379,40 @@ export const dashUser = ({ type = '', area = ''}) =>
   .then(res => res.json())
   
   // TOPLIST
+
+  // AREA
+
   export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales', start, end}) =>{
-    console.log(`Start: ${start}, End: ${end}`)
+    // console.log(`Start: ${start}, End: ${end}`)
     return fetch(`${api}/dashboard/transaction?q=${searchQ}&start_date=${start}&end_date=${end}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
     .then(res => res.json())
   }
 
+  // PRODUCT
+
+  export const getTopListProduct = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales', start, end, area_id }) =>{
+    console.log(`Start: ${start}, End: ${end}`)
+    return fetch(`${api}/dashboard/product_type?q=${searchQ}&date_from=${start}&date_to=${end}&order=${order}&offset=${offset}&limit=${limit}&area_id=${area_id}`, { headers: headers() }) 
+    .then(res => res.json())
+  }
+
+  // CONSUMER
+
+  export const getTopListConsumer = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Purchases ASC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/purchases/all?limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
+    .then(res => res.json())
+  }
+
+  // PRODUCER
+
+  export const getTopListProducer = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales ASC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/sales/all?limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
+    .then(res => res.json())
+  }
+
+  // PRODUCER MOST CANCEL
+  
+  export const getMostCancel = ({ offset = 0, limit = 10, searchQ = '', order = 'Cancels DESC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/cancels/all??limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
+    .then(res => res.json())
+  }

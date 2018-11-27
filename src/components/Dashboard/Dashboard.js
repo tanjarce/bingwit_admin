@@ -7,6 +7,7 @@ import DashUser from './DashUser'
 import DashTopList from './DashTopList'
 import DashTransaction from './DashTransaction'
 import DashExpandView from './DashExpandView'
+import * as API from '../../services/API'
 
 import moment from 'moment'
 
@@ -15,10 +16,55 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dateToplist: {
+                start: moment().startOf('month').format('YYYY-MM-DD'),
+                end: moment().format('YYYY-MM-DD')
+            },
+            areaOptions: []
         }
         this.repopulate = this.repopulate.bind(this)
-        this.expand = this.expand.bind(this) 
+        this.expand = this.expand.bind(this)
+        this.setDate = this.setDate.bind(this)
     }
+
+    componentDidMount(){
+        this.getAllArea()
+    }
+
+    getAllArea(data){
+        const search = {
+            offset: 0,
+            limit: '',
+            searchQ: data            
+        }
+
+        API.getAllAreas(search)
+            .then((res) => {
+                if(res.success){
+                    const areaOptions = res.area.rows.map((area)=>{
+                        return ({
+                            value: area.area_address,
+                            label: area.area_address
+                        })
+                    })
+                    this.setState(()=>({
+                        areaOptions
+                    }))
+                }
+            })
+    }
+
+    setDate (start, end) {
+        this.setState(()=>({
+            dateToplist: {
+                start,
+                end
+            }
+        }), () => {
+            // console.log(this.state.dateToplist)
+        })
+    }
+
     repopulate () {
         const { items } = this.state
 
@@ -39,12 +85,13 @@ class Dashboard extends Component {
     }
 
     expand(type){
-        console.log(type)
         const { location: { pathname } } = this.props
         this.props.history.push(`${pathname}/${type}_expand`)
     }
     
     render() {
+        const { dateToplist, areaOptions } = this.state
+        // console.log(moment().format('WW'))
         return (
             <div className='bottom-pad'>
                 <Banner 
@@ -55,12 +102,12 @@ class Dashboard extends Component {
                     <Switch>
                         <Route exact path="/dashboard" render={()=>(
                             <Fragment>
-                                <DashTransaction />
-                                <DashUser />
-                                <DashTopList expand={this.expand}/>
+                                <DashTransaction areaOptions={areaOptions}/>
+                                <DashUser areaOptions={areaOptions}/>
+                                <DashTopList expand={this.expand} setDate={this.setDate} dateToplist={dateToplist}/>
                             </Fragment>
                         )}/>
-                        <Route exact path="/dashboard/:type" component={ DashExpandView }/>
+                        <Route exact path="/dashboard/:type" render={ ()=> <DashExpandView dateToplist={dateToplist} /> } />
                     </Switch>
                 </Container>
             </div>

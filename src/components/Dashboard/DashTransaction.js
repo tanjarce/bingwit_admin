@@ -5,42 +5,8 @@ import Select from 'react-select';
 import * as API from '../../services/API'
 
 class DashTransaction extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            areaOptions: []
-        }
-    }
-
-    componentDidMount(){
-        this.getAllArea()
-    }
-
-    getAllArea(data){
-        const search = {
-            offset: 0,
-            limit: '',
-            searchQ: data            
-        }
-
-        API.getAllAreas(search)
-            .then((res) => {
-                if(res.success){
-                    const areaOptions = res.area.rows.map((area)=>{
-                        return ({
-                            value: area.area_address,
-                            label: area.area_address
-                        })
-                    })
-                    this.setState(()=>({
-                        areaOptions
-                    }))
-                }
-            })
-    }
-
     render(){
-        const { areaOptions } = this.state
+        const { areaOptions } = this.props
         const data = [
             {name: 'Jan', 'No. Transaction': 2400, 'Total Sales': 4000, amt: 2400},
             {name: 'Feb', 'No. Transaction': 1398, 'Total Sales': 3000, amt: 2210},
@@ -80,13 +46,7 @@ class DashTransaction extends Component {
                             placeholder="Search for Area"
                         />
                     </Col>
-                    <Col sm={{ size: 2, offset: 3 }}>
-                        <Input className="d-inline-block" type="select" name="usertype" id="usertype">
-                            <option>Producer</option>
-                            <option>Consumer</option>
-                        </Input>
-                    </Col>
-                    <Col sm={{ size: 2 }}>
+                    <Col sm={{ size: 2, offset: 5 }}>
                         <Input className="d-inline-block" type="select" name="usertype" id="usertype">
                             <option>This Year</option>
                             <option>This Month</option>
