@@ -2,7 +2,7 @@ import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.0.125:3000/api/v1';
 // const api = 'https://bingwit-backend.herokuapp.com/api/v1';
-const api = 'http://18.224.2.191/api/v1';
+const api = 'http://13.229.79.47/api/v1';
 
 const headers = () => {
   const token = Session.getToken()
@@ -129,7 +129,7 @@ export const addRules = (data) =>
 // GET ALL PRODUCT TYPES
 export const getAllProductTypes = ({ offset = 0, limit = 10, searchQ = '', category = ''}) => {
   const token = headers()
-  // console.log(token.Authorization)
+  console.log(token.Authorization)
   return fetch(`${api}/product_types?offset=${offset}&limit=${limit}&q=${searchQ}&filter=${category}`, { 
     headers: headers() })
     .then(res => res.json())
@@ -282,15 +282,15 @@ export const updateArea = (id, data) => {
 
 // GET USER TANSACTIONS CONSUMER
 
-export const getUserTransactionReceipt = (id) =>  
-fetch(`${api}/users/${id}/receipts`, { 
+export const getUserTransactionReceipt = ({ id = '' , offset = 0, limit = 10, searchQ = '', order = '' , sort = 'ASC'}) =>  
+fetch(`${api}/users/${id}/receipts?offset=${offset}&limit=${limit}`, { 
   headers: headers() })
 .then(res => res.json())
 
 // GET USER TANSACTIONS PRODUCER
 
-export const getUserTransactionProducer = (id) =>  
-fetch(`${api}/users/${id}/transactions`, { 
+export const getUserTransactionProducer = ({ id = '', offset = 0, limit = 10, searchQ = '', order = '' , sort = 'ASC'}) =>  
+fetch(`${api}/users/${id}/transactions?offset=${offset}&limit=${limit}`, { 
   headers: headers() })
 .then(res => res.json())
 
@@ -369,3 +369,24 @@ export const updateCategory = (id, data) => {
 //   fetch(`${api}/product_category_all?offset=${offset}&limit=${limit}&q=${searchQ}`, { headers: headers() }) 
 //   .then(res => res.json())
   
+
+// DASHBOARD
+
+export const dashUser = ({ type = '', area = ''}) =>
+  fetch(`${api}/dashboard/users?type=${type}&area=${area}`, { headers: headers() }) 
+  .then(res => res.json())
+  
+  // TOPLIST
+  export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales'}) =>
+    fetch(`${api}/dashboard/transaction?q=${searchQ}&s=${'2018-9-30'}&e=${'2019-12-30'}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
+    .then(res => res.json())
+
+  // UPLOAD IMAGE
+  export const uploadImage = (data) =>   
+    fetch(`${api}/storage/upload`, {
+      method: 'POST',
+      headers: headers(),
+      body: data
+    }).then(res => {
+      console.log(res)
+      return res.json()})

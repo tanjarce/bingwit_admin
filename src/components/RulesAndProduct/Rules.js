@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { withRouter , Route} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 
 import Table from '../Tables'

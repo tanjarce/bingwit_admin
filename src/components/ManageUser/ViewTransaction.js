@@ -63,7 +63,7 @@ class ViewTransaction extends Component {
             else{
             Help.toastPop({message: response.error.message, type: 'error'})
             }
-        })
+        }) 
     }
     getUserTransactionProducer(id, v_id){
         API.getUserTransactionProducerById(id, v_id)
@@ -71,7 +71,7 @@ class ViewTransaction extends Component {
             console.log(response)
             if(response.success) {
                 this.setState({
-                    data : {...response.transaction, ...response.transaction_products, status : {...status_log}}
+                    data : {...response.transaction, ...response.transaction_products, log : response.status_log}
                 })
             }
             else{

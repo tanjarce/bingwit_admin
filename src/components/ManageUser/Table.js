@@ -16,9 +16,6 @@ class Table extends React.Component {
   constructor() {
     super();
   }
-  componentDidMount(){
-    console.log(this.props)
-  }
   render() {
     let { columns, data, loading, dataCount, defaultRow} = this.props
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 
 import Banner from '../Banner';
-import PieChartCard from './PieChartCard'
-import TopListCard from './TopListCard'
-import LineChartCard from './LineChartCard'
+import DashUser from './DashUser'
+import DashTopList from './DashTopList'
+import DashTransaction from './DashTransaction'
+
 import moment from 'moment'
 
 
@@ -42,30 +43,9 @@ class Dashboard extends Component {
                     contents={moment().format('MMMM D, YYYY')} 
                 />
                 <Container>
-                    <Row className="mb-5">
-                        <Col xs="12" lg="7" className="mb-3 mb-lg-0">
-                            <LineChartCard />
-                        </Col>
-                        <Col xs="12" lg="5" className="mb-3 mb-lg-0">
-                            <PieChartCard />
-                        </Col>
-                    </Row>
-                    <Row className="mb-3">
-                        <Col>
-                            <h4>Top List</h4>
-                        </Col>
-                    </Row>
-                    <Row  className="mb-5">
-                        <Col xs="12" md="4" className="mb-3 mb-md-0">
-                            <TopListCard />
-                        </Col>
-                        <Col xs="12" md="4" className="mb-3 mb-md-0">
-                            <TopListCard />
-                        </Col>
-                        <Col xs="12" md="4" className="mb-3 mb-md-0">
-                            <TopListCard />
-                        </Col>
-                    </Row>
+                    <DashTransaction />
+                    <DashUser />
+                    <DashTopList />
                 </Container>
             </div>
         );

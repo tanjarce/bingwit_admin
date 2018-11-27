@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import Tabs from '../Tabs'
 import Rules from './Rules'
@@ -10,9 +10,7 @@ import Banner from '../Banner'
 import ViewProduct from './ViewProduct'
 import ViewArea from './ViewArea'
 import ViewCategory from './ViewCategory'
-import ProductModal from '../../modals/ProductModal'
 import * as API from '../../services/API'
-import * as Help from '../../toastify/helpers'
 
 class List extends Component {
     constructor(props){
@@ -111,15 +109,12 @@ class List extends Component {
                 <Container>
                     <Tabs links={tabs} resetPaginationAndSearch={this.resetQueries} />
                     <Switch>
-                        // RULES //
                         <Route path="/list/rules" render={()=>(
                             <Rules 
                                 updateQuery={this.updateQuery} 
                                 searchQ={searchQ}
                                 pagination={pagination}/>
                         )}/>
-
-                        // PRODUCTS //
                         <Route exact path="/list/products" render={()=>(
                             <Products 
                                 updateQuery={this.updateQuery} 
@@ -130,14 +125,10 @@ class List extends Component {
                                 pagination={pagination}/>
                         )}/>
                         <Route path="/list/products/view/:id" component={ ViewProduct } />
-                        
-                        // AREAS //
                         <Route exact path="/list/areas" render={()=>(
                             <Areas updateQuery={this.updateQuery} searchQ={searchQ} pagination={pagination}/>
                         )}/>
                         <Route path="/list/areas/view/:id" component={ ViewArea } />
-                        
-                        // CATEGORY //
                         <Route exact path="/list/product_categories" render={()=>(
                             <Categories updateQuery={this.updateQuery} optionCategory={optionCategory} getAllCategory={this.getAllCategory} searchQ={searchQ} pagination={pagination}/>
                         )}/>
@@ -148,7 +139,6 @@ class List extends Component {
                         <Route render={()=>(
                             <Redirect to="/list/rules" />
                         )}/>
-
                     </Switch>
                 </Container>
             </div>
