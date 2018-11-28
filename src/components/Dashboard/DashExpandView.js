@@ -141,9 +141,11 @@ class DashExpandView extends Component{
         const { match: { params: { type } } } = this.props
         const dataType = type.toLowerCase()
 
-        const datas = (dataType === 'consumer_expand' || dataType === 'producer_expand' || dataType === 'cancels_expand' ) 
-            ? res.reports 
-            : res.results
+        // const datas = (dataType === 'consumer_expand' || dataType === 'producer_expand' || dataType === 'cancels_expand' ) 
+        //     ? res.reports 
+        //     : res.results'
+        
+        const datas = res.reports
 
         this.setState(()=>({
             datas,

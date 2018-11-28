@@ -45,38 +45,37 @@ class DashTopList extends Component {
     }
 
     async getTopList(){
-        let topSalesArea = await this.getTopSalesArea()
-        let topTransArea = await this.getTopTransArea()
-        let topQuantityProduct = await this.getTopQuantityProduct()
-        let topAmountProduct = await this.getTopAmountProduct()
-        let topPurchaseCon = await this.getTopPurchaseConsumer()
-        let topTransCon = await this.getTopTransConsumer()
-        let topTransProd = await this.getTopTransProducer()
-        let topSalesProd = await this.getTopSalesProducer()
-        let mostCancel = await this.getMostCancel()
+        let topSalesArea        = await this.getTopSalesArea()
+        let topTransArea        = await this.getTopTransArea()
+        let topQuantityProduct  = await this.getTopQuantityProduct()
+        let topAmountProduct    = await this.getTopAmountProduct()
+        let topPurchaseCon      = await this.getTopPurchaseConsumer()
+        let topTransCon         = await this.getTopTransConsumer()
+        let topTransProd        = await this.getTopTransProducer()
+        let topSalesProd        = await this.getTopSalesProducer()
+        let mostCancel          = await this.getMostCancel()
 
-        
-        topSalesArea = topSalesArea.results.map(area => ({
+        // console.log(topSalesArea)
+        topSalesArea = topSalesArea.reports.map(area => ({
             'key': area.Area,
             'value': `₱ ${area.Total_Sales}` 
         }))
         
-        topTransArea = topTransArea.results.map(area => ({
+        topTransArea = topTransArea.reports.map(area => ({
             'key': area.Area,
             'value': `${area.Number_of_Transactions}` 
         }))
 
-        console.log(topQuantityProduct)
-        
-        // topQuantityProduct = topQuantityProduct.mapping_array.map(product => ({
-        //     'key': product.product_type,
-        //     'value': `₱ ${product.amount}`
-        // }))
+        topQuantityProduct = topQuantityProduct.reports.map(product => ({
+            'key': product.product_type,
+            'value': `${product.quantity} kg`
+        }))
 
-        // topAmountProduct = topAmountProduct.mapping_array.map(product => ({
-        //     'key': product.product_type ,
-        //     'value': `${product.quantity} kg`
-        // }))
+        topAmountProduct = topAmountProduct.reports.map(product => ({
+            'key': product.product_type ,
+            'value': `₱ ${product.amount}`
+
+        }))
 
         topPurchaseCon = topPurchaseCon.reports.map(producer => ({
             'key': producer.Username,
@@ -106,6 +105,8 @@ class DashTopList extends Component {
         this.setState(()=>({
             topSalesArea,
             topTransArea,
+            topQuantityProduct,
+            topAmountProduct,
             topPurchaseCon,
             topTransCon,
             topSalesProd,
@@ -120,7 +121,7 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
-            order: 'Number_of_Transactions ASC',
+            order: 'Number_of_Transactions DESC',
             start,
             end,
         }
@@ -132,7 +133,7 @@ class DashTopList extends Component {
 
         const params = {
             limit: 3,
-            order: 'Total_Sales ASC',
+            order: 'Total_Sales DESC',
             start,
             end,
         }
@@ -148,12 +149,14 @@ class DashTopList extends Component {
             })
     }
     
+
     getTopQuantityProduct(){
         const { dateToplist: { start, end } } = this.props
 
         const params = {
+            offset: '',
             limit: 3,
-            order: 'quantity_asc',
+            order: 'quantity_desc',
             start,
             end,
         }
@@ -164,8 +167,9 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
 
         const params = {
+            offset: '',
             limit: 3,
-            order: 'amount_asc',
+            order: 'amount_desc',
             start,
             end,
         }
@@ -187,7 +191,7 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
-            order: 'Number_of_Transactions ASC',
+            order: 'Number_of_Transactions DESC',
             start,
             end,
         }
@@ -198,7 +202,7 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
-            order: 'Total_Purchases ASC',
+            order: 'Total_Purchases DESC',
             start,
             end,
         }
@@ -220,7 +224,7 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
-            order: 'Number_of_Transactions ASC',
+            order: 'Number_of_Transactions DESC',
             start,
             end,
         }
@@ -231,7 +235,7 @@ class DashTopList extends Component {
         const { dateToplist: { start, end } } = this.props
         const params = {
             limit: 3,
-            order: 'Total_Sales ASC',
+            order: 'Total_Sales DESC',
             start,
             end,
         }
@@ -277,7 +281,7 @@ class DashTopList extends Component {
     }
 
     render(){
-        const { topSalesArea, topTransArea, topTransCon, topPurchaseCon, topSalesProd, topTransProd, mostCancel, isLoading } = this.state
+        const { topAmountProduct, topQuantityProduct, topSalesArea, topTransArea, topTransCon, topPurchaseCon, topSalesProd, topTransProd, mostCancel, isLoading } = this.state
         const { expand, dateToplist: { start, end } } = this.props
         const dateToday = moment().format('MMMM D, YYYY')
         const startDate = start 
@@ -325,6 +329,15 @@ class DashTopList extends Component {
                             isLoading={isLoading}
                         />
                     </Col>
+                    <Col xs="12" md="4" className="mb-3 mb-md-0">
+                        <TopListCard 
+                            data={topQuantityProduct} 
+                            label={['Product - qty. of sold', 'Product', 'qty. of sold']} 
+                            link={'Producer'}
+                            expand={expand}
+                            isLoading={isLoading}
+                        />
+                    </Col>
  
                 </Row>
                 <Row  className="mb-5">
@@ -346,19 +359,15 @@ class DashTopList extends Component {
                             isLoading={isLoading}
                         />
                     </Col>
-
-                    {/* <Col xs="12" md="4" className="mb-3 mb-md-0">
+                    <Col xs="12" md="4" className="mb-3 mb-md-0">
                         <TopListCard 
-                            data={topTransProd} 
-                            label={['Producer - No. of Transaction', 'Producer', 'No. of Transaction']} 
-                            link={'Producer'}
+                            data={topAmountProduct} 
+                            label={['Product - Total Amount ', 'Product', 'Total Amount']} 
+                            link={'Product'}
                             expand={expand}
                             isLoading={isLoading}
                         />
-                    </Col> */}
-                    {/* <Col xs="12" md="4" className="mb-3 mb-md-0">
-                        <TopListCard data={topSalesArea} />
-                    </Col> */}
+                    </Col>
                 </Row>
                 <Row  className="mb-5">
                     <Col xs="12" md="4" className="mb-3 mb-md-0">
