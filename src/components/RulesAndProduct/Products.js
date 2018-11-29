@@ -35,7 +35,7 @@ class Products extends Component {
     viewProduct (rowInfo) {
         const { id } = rowInfo
         const { location: { pathname } } = this.props
-
+        
         this.props.history.push(`${pathname}/view/${id}`)
     }
 
