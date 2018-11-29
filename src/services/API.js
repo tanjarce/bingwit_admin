@@ -390,3 +390,30 @@ export const dashUser = ({ type = '', area = ''}) =>
     }).then(res => {
       console.log(res)
       return res.json()})
+
+    // ANNOUNCEMENT
+    // GET
+    export const getAllAnnouncement = (id = '') =>
+      fetch(`${api}/notification?q=${id}`, { 
+        headers: headers() }) 
+      .then(res => res.json())
+    
+    // COMPOSE ANNOUNCEMENT
+
+    export const composeAnnouncement = (body) =>   
+    fetch(`${api}/notification`, {
+      method: 'POST',
+      headers: headers(),
+      body: toFormURLEncode(body)
+    })
+    .then(res => {
+      console.log(body)
+      return res.json()})
+
+    // DELETE ANNOUNCEMENT
+    export const delteAnnouncement = (id) =>  
+    fetch(`${api}/notification/${id}`, { 
+      method: 'DELETE', 
+      headers: headers() })
+    .then(res => res.json())
+      

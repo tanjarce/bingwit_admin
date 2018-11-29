@@ -25,6 +25,7 @@
 .all_padding .mainScroll{
     cursor: pointer;
 }
+
 .all_padding .header{
     background: #17C1BC;
     color: white
@@ -41,7 +42,7 @@
 }
 .all_padding .bar{
     background: #17C1BC;
-    width: 10px;
+    width: 3px;
 }
 .all_padding .scroll{
     border: 1px solid rgb(236, 236, 236);

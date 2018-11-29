@@ -1,24 +1,44 @@
 import React, {Component} from 'react'
 import { Row, Col } from 'reactstrap';
 import { withRouter } from 'react-router-dom'
+import moment from 'moment'
+
 
 class SubContainer extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            activeMark : false,
+            id : ''
+        }
+    }
+
+    componentDidMount(){
+        const { keyValue } = this.props
+        console.log(keyValue)   
+    }
+
     render(){
-        const { x, isDelete } = this.props
+        const { id } = this.state
+        const { isDelete, item, viewAnnouncement, keyValue, delteAnnouncement } = this.props
         return(
-            <div className='border d-flex flex-row mainScroll' onClick={()=>{
-                this.props.history.push('/announcement/view-id')
-            }}>
-                <div className='m-3 text-truncate'>
+            <div className='border d-flex flex-row mainScroll' onClick={((e) => {
+                viewAnnouncement(e, item.id)
+            })}>
+                <Col xs='12'>
+                <div className='my-3 ml-2 text-truncate'>
                     <Row>
-                        <Col><b>Update Features v2.2{x}</b></Col>
-                        {isDelete ? <Col xs='auto' onClick={ ()=> {alert(`DELETED ${x}`)}}>x</Col> : ''}
+                        <Col className='text-truncate' ><b >{item.title}</b></Col>
+                        {isDelete ? <Col xs='auto' onClick={ ()=> {
+                            delteAnnouncement(item.id)
+                        }}>x</Col> : ''}
                     </Row>
-                    <p className='lHeight'>Posted - October {x+1}, 2018</p>
-                    <p className='lHeight'>To - All</p>
-                    Lorem ipsum dolor sit amet, minim consequun alwdawkjdnakwjnkjaw
+                    <p className='lHeight'>Posted - {moment(item.createdAt).format('MMMM D, YYYY')}</p>
+                    <p className='lHeight'>To - {item.target.charAt(0).toUpperCase() + item.target.slice(1, item.target.length)}</p>
+                    {item.body}
                 </div>
-                <div className={x === 0 ? 'bar' : ''}/>
+                </Col>
+                <div className={id ? 'bar ml-auto' : 'ml-auto'}/>
             </div>
         );
     }

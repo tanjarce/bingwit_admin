@@ -1,9 +1,67 @@
 import React, {Component} from 'react'
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
+import { withRouter } from 'react-router-dom'
+
+import moment from 'moment'
+import * as API from '../../services/API'
+import * as Help from '../../toastify/helpers'
+import { css } from 'react-emotion';
+import { SyncLoader
+} from 'react-spinners';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class ViewAnnouncement extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+          data : '',
+          id : ''
+        }
+        this.viewAnnouncement = this.viewAnnouncement.bind(this)
+    }
+    componentDidMount(){
+        let id = this.props.match.params.id
+        this.setState({
+            id : id
+        },
+        console.log('VIEW - ' + id))
+        this.viewAnnouncement(id)
+    }
+    componentWillReceiveProps(nxtprops){
+        const { id } = this.state
+        let idx = nxtprops.match.params.id
+        
+        if(id === idx || id === ''){
+            this.viewAnnouncement(idx)
+        }
+        else{
+            this.viewAnnouncement(idx)
+        }
+    }
+
+    viewAnnouncement(id){
+        this.setState({
+            data : ''
+        })
+        API.getAllAnnouncement(id)
+        .then((response) => {
+            response.success ?
+            this.setState({
+                data : response.notifications.rows[0]
+            })
+            :
+            Help.toastPop({message: response.error.message, type: 'error'})
+        })
+    }
     render(){
+        const { data } = this.state
         return(
+            data ? 
             <div className='border'>
                 <div className='header px-3 py-1'>
                 <Row>
@@ -12,12 +70,13 @@ class ViewAnnouncement extends Component{
                 </div>
             <div className='m-3'>
                 <div>
+                    
                     <Row>
                         <Col xs='12' className='my-1'>
                             <Row>
                                 <Col xs='1' className='my-auto'>Title:</Col>
                                 <Col>
-                                Update Features v2.23
+                                {data.title}
                                 </Col>
                             </Row>
                         </Col>
@@ -25,7 +84,7 @@ class ViewAnnouncement extends Component{
                             <Row>
                                 <Col xs='1' className='my-auto'>To:</Col>
                                 <Col>
-                                All
+                                {data.target.charAt(0).toUpperCase() + data.target.slice(1, data.target.length)}
                                 </Col>
                             </Row>
                         </Col>
@@ -33,7 +92,7 @@ class ViewAnnouncement extends Component{
                             <Row>
                                 <Col xs='1' className='my-auto'>From:</Col>
                                 <Col>
-                                CDI_ADMIN
+                                {data.admin_username}
                                 </Col>
                             </Row>
                         </Col>
@@ -41,7 +100,7 @@ class ViewAnnouncement extends Component{
                             <Row>
                                 <Col xs='1' className='my-auto'>Date:</Col>
                                 <Col>
-                                October 3, 2018
+                                {moment(data.createdAt).format('MMMM D, YYYY')}
                                 </Col>
                             </Row>
                         </Col>
@@ -50,14 +109,7 @@ class ViewAnnouncement extends Component{
                         <div  className='my-1'>
                             <div className='text-justify px-3' style={{height : '200px', overflowY : 'auto'}}>
                             <p>
-                            I. Major features fixed
-                            1. Announcement – Changes in duration of active time, The previous time was 8 seconds and it was changed to 5 seconds. The style of bar is fixed. It’s compatible for any version of android and iOS.
-                            <br/><br/>
-                            2. Rules – All rules is updated. Please spend time to read it.
-                            <br/><br/>
-                            II. New Features was added.
-                            <br/><br/>
-                            18 Super features: Wave sensor for browsing products, Products scanner, AI for tutorials, Online Wallet, Auto-fishing for producers, Fish sensor for better catch, Black market, Anti-virus, System Clean-up, Dynamite fishing, Tutorials for Dark fising : Dynamite, Super spiking net, Vaccum, Lightning Saga, etc...
+                                {data.body}
                             </p>
                             </div>
                         </div>
@@ -67,11 +119,21 @@ class ViewAnnouncement extends Component{
                         <Col/>
                         </Row>
                         </Col>
-                    </Row>
+                    </Row> 
                 </div>
             </div>
+            </div>
+            :
+            <div>
+            <SyncLoader
+            className={override}
+            sizeUnit={"px"}
+            size={5}
+            color={'#17C1BC'}
+            loading={true}
+            />
             </div>
         );
     }
 }
-export default ViewAnnouncement
+export default withRouter(ViewAnnouncement)
