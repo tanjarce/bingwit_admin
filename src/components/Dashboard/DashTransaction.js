@@ -15,69 +15,34 @@ class DashTransaction extends Component {
         this.setBarGraph = this.setBarGraph.bind(this)
         this.getDashTransaction = this.getDashTransaction.bind(this)
         this.formatByThisYear = this.formatByThisYear.bind(this)
+        this.formatByThisMonth = this.formatByThisMonth.bind(this)
+        this.formatByThisWeek = this.formatByThisWeek.bind(this)
+        this.filterFormat = this.filterFormat.bind(this)
+        this.filterArea = this.filterArea.bind(this)
     }
+
     componentDidMount(){
-        // const start = moment().day("Monday").year(2018).week(47).toDate();
-        let reports = [{
-            "WEEK": 46,
-            "Total_Sales_Purchases": 820,
-            "Number_of_Transactions": 4
-        },
-        {
-            "WEEK": 47,
-            "Total_Sales_Purchases": 140,
-            "Number_of_Transactions": 2
-        }]
-
-        const formatedreports = reports.reduce((result, report ) => {
-            const weekNum = report.WEEK
-            const start = moment().day("monday").week(weekNum).format('ll');
-            const end = moment().day("monday").week(weekNum).add(6, 'days').format('ll');
-
-            result[`${start} - ${end}`] = {
-                'No. Transaction': report.Number_of_Transactions,
-                'Total Sales': report.Total_Sales_Purchases
-            }
-
-            return result
-        }, {})
-
-        console.log(formatedreports)
-
-        const weekStart = moment().startOf('month').week()
-        const weekEnd = moment().endOf('month').week()
-        const monthRange = Array(weekEnd -weekStart + 1).fill(null)
-            .reduce((range, week, index) => {
-                const weekNum = weekStart + index
-                const start = moment().day("monday").week(weekNum).format('ll');
-                const end = moment().day("monday").week(weekNum).add(6, 'days').format('ll');
-
-                range[`${start} - ${end}`] = null
-
-                return range
-            }, {})
-
-        console.log(monthRange)
-
-        // console.log(`${start} - ${end}`)
-
-        // let num = Array(30).fill(null).map((day, index) => {
-        //     var firstDay = moment(`2018-11-${index+1}`); 
-
-        //     console.log()
-        //     var nthOfMoth = Math.ceil(firstDay.date() / 7); 
-        //     return nthOfMoth
-        //     // console.log(nthOfMoth)
-        // })
-
-        // console.log(num)
-        // var day = firstDay.day(); //6 = saturday
-
-
-        // get day name
-        // console.log(moment(day).format('dddd'))
-
         this.getDashTransaction()        
+    }
+
+    filterArea(selectedOption){
+        const filterValue = selectedOption ? selectedOption.value : ''
+        
+        this.setState(()=>({
+            filterArea: filterValue
+        }), () => {
+            this.getDashTransaction()
+        })
+    }
+
+    filterFormat(e){
+        const target = e.target
+        
+        this.setState(()=>({
+            filterFormat: target.value 
+        }), () => {
+            this.getDashTransaction()
+        })
     }
 
     getDashTransaction(){
@@ -96,10 +61,87 @@ class DashTransaction extends Component {
             }).catch(err => console.log(err))
     }
 
+    formatByThisWeek(transactionDatas){
+        let weekNum = moment().week()
+
+        const dayRange = Array(7).fill(null)
+            .map((day, index) => {
+                const dayNum = moment().day("sunday").week(weekNum).add(index, 'days').format('DD');
+                const dayString = moment().day("sunday").week(weekNum).add(index, 'days').format('ll');
+                const label = dayString.replace(/\,\s[0-9]{4}/g, '')
+                
+                const withVal = transactionDatas.reduce((res, item) => {
+                    if(Number(item.DAY) === Number(dayNum)){
+                        res['name'] = label
+                        res['No. Transaction'] = item['Number_of_Transactions']
+                        res['Total Sales'] = item['Total_Sales_Purchases']
+                    }
+                    return res 
+                }, {})
+
+                const noVal = 
+                    {
+                        name: label, 
+                        'No. Transaction': 0, 
+                        'Total Sales': 0
+                    }
+
+                return Object.keys(withVal).length ? withVal : noVal
+            })
+        return dayRange
+    }
+
+    formatByThisMonth(transactionDatas){
+        const weekStart = moment().startOf('month').week()
+        const weekEnd = moment().endOf('month').week()
+        const numberOfWeeks = weekEnd - weekStart + 1
+
+        const monthRange = Array(numberOfWeeks).fill(null)
+            .reduce((range, week, index) => {
+                const weekNum = weekStart + index 
+                const start = moment().day("sunday").week(weekNum).format('ll');
+                const end = moment().day("sunday").week(weekNum).add(6, 'days').format('ll');
+
+                let label = `${start} - ${end}`
+                label = label.replace(/\,\s[0-9]{4}/g, '')
+                // console.log()
+                // console.log(start.replace(/, /i, 'ha'))
+
+                range[label] = 0
+
+                return range
+            }, {})
+
+        const reportDatas = transactionDatas.reduce((result, report ) => {
+                const weekNum = report.WEEK + 1
+                const start = moment().day("sunday").week(weekNum).format('ll');
+                const end = moment().day("sunday").week(weekNum).add(6, 'days').format('ll');
+
+                let label = `${start} - ${end}`
+                label = label.replace(/\,\s[0-9]{4}/g, '')
+
+                result[label] = {
+                    'No. Transaction': report.Number_of_Transactions,
+                    'Total Sales': report.Total_Sales_Purchases
+                }
+
+                return result
+            }, monthRange)
+
+        const formatedReports = Object.keys(reportDatas)
+            .map(key => ({
+                'name': key,
+                'No. Transaction': reportDatas[key]['No. Transaction'],
+                'Total Sales': reportDatas[key]['Total Sales']
+            }))
+
+        return formatedReports
+    }
+
     formatByThisYear(transactionDatas){
         const currentMonth = new Date().getMonth();
 
-        const dataMonth = Array(currentMonth).fill(null)
+        const dataMonth = Array(12).fill(null)
         .reduce((result, data, index) => {
             const formattedMonth = moment().month(index).format('MMM')
             result[formattedMonth] = 0
@@ -127,34 +169,24 @@ class DashTransaction extends Component {
         return formattedData
     }
 
-
     setBarGraph(transactionDatas){
-        const byYear = this.formatByThisYear
+        const { filterFormat } = this.state
 
+        const trasactionReport = filterFormat === 'YEAR' 
+            ? this.formatByThisYear(transactionDatas)
+            : filterFormat === 'MONTH'
+                ? this.formatByThisMonth(transactionDatas)
+                : this.formatByThisWeek(transactionDatas)
 
 
         this.setState(()=>({
-            transactionDatas: byYear(transactionDatas),
+            transactionDatas: trasactionReport ,
         }))
     }
 
     render(){
         const { transactionDatas } = this.state
         const { areaOptions } = this.props
-        // const data = [
-        //     {name: 'Jan', 'No. Transaction': 2400, 'Total Sales': 4000, amt: 2400},
-        //     {name: 'Feb', 'No. Transaction': 1398, 'Total Sales': 3000, amt: 2210},
-        //     {name: 'Mar', 'No. Transaction': 9800, 'Total Sales': 2000, amt: 2290},
-        //     {name: 'Apr', 'No. Transaction': 3908, 'Total Sales': 2780, amt: 2000},
-        //     {name: 'May', 'No. Transaction': 4800, 'Total Sales': 1890, amt: 2181},
-        //     {name: 'Jun', 'No. Transaction': 3800, 'Total Sales': 2390, amt: 2500},
-        //     {name: 'Jul', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        //     {name: 'Aug', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        //     {name: 'Sep', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        //     {name: 'Oct', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        //     {name: 'Nov', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        //     {name: 'Dec', 'No. Transaction': 4300, 'Total Sales': 3490, amt: 2100},
-        // ];  
 
         return(
             <Fragment>
@@ -176,15 +208,20 @@ class DashTransaction extends Component {
                             isSearchable={true}
                             name="color"
                             options={areaOptions}
-                            onChange={this.handleChange}
+                            onChange={this.filterArea}
                             placeholder="Search for Area"
                         />
                     </Col>
                     <Col sm={{ size: 2, offset: 5 }}>
-                        <Input className="d-inline-block" type="select" name="usertype" id="usertype">
-                            <option>This Year</option>
-                            <option>This Month</option>
-                            <option>This Week</option>
+                        <Input 
+                            className="d-inline-block" 
+                            onChange={this.filterFormat} 
+                            type="select" 
+                            name="usertype" 
+                            id="usertype">
+                                <option value="YEAR">This Year</option>
+                                <option value="MONTH" >This Month</option>
+                                <option value="WEEK" >This Week</option>
                         </Input>
                     </Col>
                 </Row>

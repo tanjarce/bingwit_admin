@@ -30,7 +30,7 @@ class DashUser extends Component {
 
     handleFilterArea(selectedOption){
         const filterValue = selectedOption ? selectedOption.value : ''
-        console.log(filterValue)
+        
         this.setState((e)=>({
             filterArea: filterValue
         }), () => {
