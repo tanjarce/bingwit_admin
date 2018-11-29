@@ -14,6 +14,7 @@ class ViewProducer extends Component {
     }
     componentWillMount(){
         const { data } = this.props
+        console.log(data)
         const arr = data.rows.map((item) => {
             return({
                 product_name : item.product,
@@ -31,9 +32,6 @@ class ViewProducer extends Component {
 
     render() {
         const { data, dataTable } = this.state
-        // const dataArr = dataTable.map((item, key) => {
-        //     return <SubViewProducer key={key} item={item}/>
-        // })
         const columnsRules = [
             {
                 Header: 'Products',
@@ -92,10 +90,6 @@ class ViewProducer extends Component {
                             <Col xs='auto'><span className='px-3 col'>{data.status ? data.status : '- -'}</span></Col><br/>
                         </Row>
                         <Row>
-                            <Col xs='4' className='d-inline align-top col'>Comment:</Col>
-                            <Col xs='auto'><span className='px-3 col'>{data.additional_information ? data.additional_information : '- -'}</span></Col><br/>
-                        </Row>
-                        <Row>
                             <Col xs='4' className='d-inline align-top col'>Rating:</Col>
                             <Col xs='auto'><span className='px-3 col'>{data.rating ? data.rating : '- -'}</span></Col><br/>
                         </Row>
@@ -103,10 +97,14 @@ class ViewProducer extends Component {
                             <Col xs='4' className='d-inline align-top col'>Products:</Col>
                             <Col xs='auto'><span className='px-3 col'>{data.count ? data.count : '0'}</span></Col><br/>
                         </Row>
+                        <Row>
+                            <Col xs='4' className='d-inline align-top col'>Message:</Col>
+                            <Col xs='auto'><div className='px-3 col text-justify' style={{width : '300px'}}>{data.additional_information ? `"${data.additional_information}"` : '- -'}</div></Col><br/>
+                        </Row>
                     </Col>
                     <Col xs='auto'>
                         <div>
-                            <SubViewProducer />
+                            <SubViewProducer item={data}/>
                         </div>
                     </Col>
                 </Row>

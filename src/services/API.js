@@ -284,15 +284,15 @@ export const updateArea = (id, data) => {
 
 // GET USER TANSACTIONS CONSUMER
 
-export const getUserTransactionReceipt = (id) =>  
-fetch(`${api}/users/${id}/receipts`, { 
+export const getUserTransactionReceipt = ({ id = '' , offset = 0, limit = 10, searchQ = '', order = '' , sort = 'ASC'}) =>  
+fetch(`${api}/users/${id}/receipts?offset=${offset}&limit=${limit}`, { 
   headers: headers() })
 .then(res => res.json())
 
 // GET USER TANSACTIONS PRODUCER
 
-export const getUserTransactionProducer = (id) =>  
-fetch(`${api}/users/${id}/transactions`, { 
+export const getUserTransactionProducer = ({ id = '', offset = 0, limit = 10, searchQ = '', order = '' , sort = 'ASC'}) =>  
+fetch(`${api}/users/${id}/transactions?offset=${offset}&limit=${limit}`, { 
   headers: headers() })
 .then(res => res.json())
 
@@ -423,3 +423,40 @@ export const updateCategory = (id, data) => {
     return fetch(`${api}/dashboard/users/cancels/all??limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
     .then(res => res.json())
   }
+
+  // UPLOAD IMAGE
+  export const uploadImage = (data) =>   
+    fetch(`${api}/storage/upload`, {
+      method: 'POST',
+      headers: headers(),
+      body: data
+    }).then(res => {
+      console.log(res)
+      return res.json()})
+
+    // ANNOUNCEMENT
+    // GET
+    export const getAllAnnouncement = (id = '') =>
+      fetch(`${api}/notification?q=${id}`, { 
+        headers: headers() }) 
+      .then(res => res.json())
+    
+    // COMPOSE ANNOUNCEMENT
+
+    export const composeAnnouncement = (body) =>   
+    fetch(`${api}/notification`, {
+      method: 'POST',
+      headers: headers(),
+      body: toFormURLEncode(body)
+    })
+    .then(res => {
+      console.log(body)
+      return res.json()})
+
+    // DELETE ANNOUNCEMENT
+    export const delteAnnouncement = (id) =>  
+    fetch(`${api}/notification/${id}`, { 
+      method: 'DELETE', 
+      headers: headers() })
+    .then(res => res.json())
+      

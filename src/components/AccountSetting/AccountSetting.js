@@ -107,7 +107,7 @@ class AccountSetting extends Component {
                       <Col sm={10} lg='6'>
                       <AvGroup>
                           <AvInput
-                          className='inputField'
+                          className={err ? 'inputFieldError' : 'inputField'}
                           type='password' 
                           name="password" 
                           placeholder='Type password...' 
@@ -126,7 +126,7 @@ class AccountSetting extends Component {
                       <Col sm={10} lg='6'>
                       <AvGroup>
                           <AvInput 
-                          className='inputField'
+                          className={err ? 'inputFieldError' : 'inputField'}
                           type='password' 
                           name="vpassword" 
                           placeholder='Verify password...' 
@@ -148,7 +148,7 @@ class AccountSetting extends Component {
                             Re-enter your password to save changes to your account.
                           </FormText>
                           <AvInput
-                          className='inputField'
+                          className={err ? 'inputFieldError' : 'inputField'}
                           type='password' 
                           name="oldPass" 
                           placeholder='Confirm old password...' 
@@ -163,7 +163,7 @@ class AccountSetting extends Component {
 
                   <Row><Col sm={10} lg='9'>
                   
-                  <Button className='float-right' onClick={this.changePass} style={{width : '180px'}}>
+                  <Button className='float-right button' onClick={this.changePass} style={{width : '180px'}}>
                     <div>
                       {loading ? 
                       <PulseLoader

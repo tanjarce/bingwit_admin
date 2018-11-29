@@ -59,19 +59,33 @@ class SubViewConsumer extends Component {
             }
             if(x === 3){
                 item.log.rows[x] ? 
-                item.log.rows[x].to === 'delivered' ? 
-                arr.push( <div style={{lineHeight : '0'}}><img src={delivered_x} className='pr-2'/>
-                {`${moment(item.log.rows[x].createdAt).format('MMM DD, YYYY - h:mm a')} - Delivered`}
-                </div>)
+                    <React.Fragment>
+                    {item.log.rows[x].to === 'delivered' ? 
+                        arr.push( <div style={{lineHeight : '0'}}><img src={delivered_x} className='pr-2'/>
+                        {`${moment(item.log.rows[x].createdAt).format('MMM DD, YYYY - h:mm a')} - Delivered`}
+                        </div>)
+                    :
+                        <React.Fragment>
+                        {item.log.rows[x].to === "returned upon delivery" ? 
+                            arr.push( <div style={{lineHeight : '0'}}><img src={cancelled} className='pr-2'/>
+                            {`${moment(item.log.rows[x].createdAt).format('MMM DD, YYYY - h:mm a')} - RUD`}
+                            </div>)
+                        :
+                            arr.push( <div style={{lineHeight : '0'}}><img src={delivered} className='pr-2'/>Delivered</div>)
+                        }
+                        </React.Fragment>
+                    }
+                    </React.Fragment>
                 :
-                arr.push( <div style={{lineHeight : '0'}}><img src={delivered} className='pr-2'/>Delivered</div>)
-                :
-                item.log.rows[1].to === 'cancelled' ? 
-                arr.push( <div style={{lineHeight : '0'}}><img src={cancelled} className='pr-2'/>
-                {`${moment(item.log.rows[1].createdAt).format('MMM DD, YYYY - h:mm a')} - Cancelled`}
-                </div>)
-                :
-                arr.push( <div style={{lineHeight : '0'}}><img src={delivered} className='pr-2'/>Delivered</div>)
+                    <React.Fragment>
+                    {item.log.rows[1] ? 
+                        arr.push( <div style={{lineHeight : '0'}}><img src={cancelled} className='pr-2'/>
+                        {`${moment(item.log.rows[1].createdAt).format('MMM DD, YYYY - h:mm a')} - Cancelled`}
+                        </div>)
+                    :
+                        arr.push( <div style={{lineHeight : '0'}}><img src={delivered} className='pr-2'/>Delivered</div>)
+                    }
+                    </React.Fragment>
         }
     }
         return(
@@ -118,10 +132,6 @@ class SubViewConsumer extends Component {
                         <Col>
                             <div className='d-flex flex-column'>
                                 {arr}
-                                {/* <div style={{lineHeight : '0'}}><img src={ordered} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Order Placed</div> */}
-                                {/* <div style={{lineHeight : '0'}}><img src={ready} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Ready for Delivery</div>
-                                <div style={{lineHeight : '0'}}><img src={shipped} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Shipped</div>
-                                <div style={{lineHeight : '0'}}><img src={delivered} className='pr-2'/> Nov. 29, 2018 - 4:30pm : Delivered</div> */}
                             </div>
                         </Col>
                     </Row>
