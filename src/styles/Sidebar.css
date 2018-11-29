@@ -228,6 +228,7 @@
       display: none;
     }
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////// */
 
     @media (max-width: 500px) {
       #topNavLogo {
@@ -277,7 +278,12 @@
         width: 100%;
       }
       .main-menu .nav-text {
-        width: auto;
+        width: auto; 
+      }
+      .main-menu .nav-text-logo {
+        position: absolute;
+        top: -40px;
+        left : 60px
       }
       .topContent {
         margin: 56px 0 0 0;
@@ -293,10 +299,11 @@
         text-align: center;
         line-height: 56px;
       }
-      .mobile-nav-logo {
+      .nav-logo {
+        width: 35px;
+        height: 35px;
         position: absolute;
-        top: 14px;
-        left: 16px;
+        top: -48px;
       }
       .main-menu>ul.logout {
         transition-delay: 0.2s;

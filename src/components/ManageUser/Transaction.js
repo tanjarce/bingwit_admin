@@ -36,8 +36,34 @@ class Transaction extends Component {
         this.exportCSV = this.exportCSV.bind(this)
         this.getUserTransactionConsumer = this.getUserTransactionConsumer.bind(this)
         this.getUserTransactionProducer = this.getUserTransactionProducer.bind(this)
+        this.getSpecificData = this.getSpecificData.bind(this)
     }
     componentDidMount(){
+       this.getSpecificData()
+    }
+    getSpecificData(paginationData, searchQData){
+        this.setState((prevState)=>({
+            loading: true,
+            searchQ: (typeof searchQData !== 'undefined') ? searchQData.trim() : prevState.searchQ,
+            pagination: paginationData ? {...paginationData} : prevState.pagination
+        }), ()=>{
+            const { pagination, searchQ, order, sort } = this.state 
+            const data = (typeof searchQData === 'undefined')
+            ? {
+                order : order,
+                sort : sort,
+                searchQ : searchQ,
+                ...pagination,
+                id : this.props.match.params.id
+            }
+            : {
+                order : order,
+                sort : sort,
+                searchQ: searchQ,
+                ...pagination,
+                offset: 0,
+                id : this.props.match.params.id
+            }
         const id = this.props.match.params.id
         API.getUserId(id)
         .then((response) => {
@@ -48,9 +74,9 @@ class Transaction extends Component {
             })
             response.user.type !== 'admin' ? (
             response.user.type === 'consumer' ?
-            this.getUserTransactionConsumer() 
+            this.getUserTransactionConsumer(data) 
             :
-            this.getUserTransactionProducer())
+            this.getUserTransactionProducer(data))
             :
             Help.toastPop({message: 'Admin type doesnt have this features.', type: 'error'})
         }
@@ -58,7 +84,8 @@ class Transaction extends Component {
             Help.toastPop({message: response.error.message, type: 'error'})
         }
         })
-    }
+    })
+}
     viewTransaction(rowInfo){
         const { type } = this.state
         type === 'consumer' ?
@@ -66,12 +93,8 @@ class Transaction extends Component {
         :
          this.props.history.push(`/mnguser/users/${rowInfo.producer_id}/transaction/view_${rowInfo.id}`)
     }
-    getUserTransactionProducer(){
-        this.setState({
-            loading : true
-        })       
-        const id = this.props.match.params.id
-        API.getUserTransactionProducer(id)
+    getUserTransactionProducer(data){
+        API.getUserTransactionProducer(data)
         .then((response) => {
             if(response.success){
                 const arr = response.transaction.rows.map((item, key) => {
@@ -103,12 +126,8 @@ class Transaction extends Component {
             Help.toastPop({message: response.error.message, type: 'error'})
         }})
     }
-    getUserTransactionConsumer(){        
-        this.setState({
-            loading : true
-        })        
-        const id = this.props.match.params.id
-        API.getUserTransactionReceipt(id)
+    getUserTransactionConsumer(data){        
+        API.getUserTransactionReceipt(data)
         .then((response) => {
             // console.log(response)
             if(response.success){
@@ -206,14 +225,9 @@ class Transaction extends Component {
                 resizable: false,
                 Cell: rowInfo =>  
                 (
-                    <UncontrolledDropdown className="text-muted" size="sm">
-                        <DropdownToggle className="bg-transparent border-0 p-0 h-auto d-inline-flex">
-                            <img with="15px" height="15px" src={dots} alt="show_more" className="m-auto"/>
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem onClick={() => {this.viewTransaction(rowInfo.value)}}>View</DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
+                <div onClick={() => {this.viewTransaction(rowInfo.value)}} style={{cursor : 'pointer'}}>
+                    <span>&#8827;</span>
+                </div>
                 )
             }]
         return (
@@ -239,7 +253,7 @@ class Transaction extends Component {
                                 columns={columnsRules} 
                                 dataCount={count}
                                 paginationData={pagination}
-                                updateTable={this.getUserTransaction} 
+                                updateTable={this.getSpecificData} 
                                 data={userInfo} />
                         </React.Fragment>
                     )}/>

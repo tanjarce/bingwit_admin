@@ -27,7 +27,8 @@ class LoginForm extends Component {
         this.toggleLoading()
         e.preventDefault()
         let values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
-        values = {...values , type : 'admin'}     
+        values = {...values , type : 'admin'}    
+        console.log(values) 
                     API.login(values)
                     .then((response) => {
                         if(response.success){

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
 import { css } from 'react-emotion';
 
@@ -35,8 +35,11 @@ class PrimaryFact extends Component {
                     <Col xs='auto'><span className='px-3 col'>{user.address}</span></Col><br/>
                 </Row>    
                 <Row>
+                    {user.area ? 
+                    <React.Fragment>
                     <Col xs="2" className='d-inline align-top col'>Area:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{user.area ? user.area.area_address : '- -'}</span></Col><br/>
+                    <Col xs='auto'><span className='px-3 col'>{user.area.area_address}</span></Col>
+                    </React.Fragment>: ''}<br/>
                 </Row>
                 <div className='space' />
                 <Row>

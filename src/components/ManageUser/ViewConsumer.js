@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment'
-import fishDefault from '../../assets/fish.svg'
-import userDefault from '../../assets/userDefault.svg'
-import Tables from './Table'
-import * as Help from '../../toastify/helpers'
 import * as API from '../../services/API'
 
 import SubViewConsumer from './SubViewConsumer'
@@ -58,7 +54,9 @@ class ViewConsumer extends Component {
         })
     }
     render() {
-        const { data, tmp } = this.state
+        const { data, tmp, dataTable } = this.state
+        console.log('tmp  = ' + tmp)
+        console.log('dataTable = ' + dataTable)
         const dataArr = tmp.map((item, key) => {
             return <SubViewConsumer key={key} item={item}/>
         })
