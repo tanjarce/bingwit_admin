@@ -393,8 +393,8 @@ export const dashUser = ({ type = '', area = ''}) =>
 
     // ANNOUNCEMENT
     // GET
-    export const getAllAnnouncement = (id = '') =>
-      fetch(`${api}/notification?q=${id}`, { 
+    export const getAllAnnouncement = (id = '', sort = '') =>
+      fetch(`${api}/notification?q=${id}&order=${sort}`, { 
         headers: headers() }) 
       .then(res => res.json())
     

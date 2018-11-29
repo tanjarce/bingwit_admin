@@ -37,7 +37,6 @@ class Announcement extends Component {
         }
         this.isDelete = this.isDelete.bind(this)
         this.sortBy = this.sortBy.bind(this)
-        this.post = this.post.bind(this)
         this.getAllAnnouncement = this.getAllAnnouncement.bind(this)
         this.viewAnnouncement = this.viewAnnouncement.bind(this)
         this.delteAnnouncement = this.delteAnnouncement.bind(this)   
@@ -81,9 +80,6 @@ class Announcement extends Component {
         this.setState({
             sortBy : !sortBy
         })
-    }
-    post(){
-        alert('POST')
     }
     delteAnnouncement(id){
         API.delteAnnouncement(id)

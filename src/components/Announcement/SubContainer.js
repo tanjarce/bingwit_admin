@@ -13,11 +13,6 @@ class SubContainer extends Component{
         }
     }
 
-    componentDidMount(){
-        const { keyValue } = this.props
-        console.log(keyValue)   
-    }
-
     render(){
         const { id } = this.state
         const { isDelete, item, viewAnnouncement, keyValue, delteAnnouncement } = this.props
