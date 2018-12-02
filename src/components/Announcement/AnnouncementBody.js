@@ -7,8 +7,8 @@ import '../../styles/style.css'
 import SubContainer from './SubContainer'
 import Compose from './Compose'
 import ViewAnnouncement from './ViewAnnouncement';
-import asc from '../../assets/asc.svg'
-import desc from '../../assets/desc.svg'
+import desc from '../../assets/asc.svg'
+import asc from '../../assets/desc.svg'
 import * as API from '../../services/API'
 import * as Help from '../../toastify/helpers'
 
@@ -33,22 +33,34 @@ class Announcement extends Component {
             sortBy : true,
             data : [],
             loading : false,
-            keyValue : ''
+            keyValue : '',
+            sort : 'desc',
+            sortHandle : true
         }
         this.isDelete = this.isDelete.bind(this)
         this.sortBy = this.sortBy.bind(this)
         this.getAllAnnouncement = this.getAllAnnouncement.bind(this)
         this.viewAnnouncement = this.viewAnnouncement.bind(this)
-        this.delteAnnouncement = this.delteAnnouncement.bind(this)   
+        this.delteAnnouncement = this.delteAnnouncement.bind(this)  
+        this.firstSort = this.firstSort.bind(this) 
     }
     componentDidMount(){
         this.getAllAnnouncement()
     }
+    firstSort(){
+        this.setState({
+            sortHandle : true
+        })
+    }
     getAllAnnouncement(){
+        const { sortHandle , sortBy} = this.state
+        console.log(sortHandle ? 'sortHandle: ' + sortHandle + ' || desc ' + sortBy 
+        :'sortHandle: ' + sortHandle + ' || asc ' + sortBy )
+
         this.setState({
             loading : true
         })
-        API.getAllAnnouncement()
+        API.getAllAnnouncement( '' , sortHandle ? 'desc' : 'asc')
         .then((response) => {
             if(response.success === true){ 
                 const arr = []
@@ -57,37 +69,42 @@ class Announcement extends Component {
                 })
             this.setState({
                 data : arr,
-                loading : false
-            })
+                loading : false,})
             }
-            else
-            {
+            else{
             this.setState({
-                loading : false
-            })
+                loading : false})
+
             Help.toastPop({message: response.error.message, type: 'error'})
         }
         })
     }
+
     isDelete(){
-        const { isDelete } = this.state
+        const { isDelete , sortBy, sort} = this.state
         this.setState({
-            isDelete : !isDelete
+            isDelete : !isDelete,
+            sortBy : sortBy ,
+            sort: sort
         })
     }
     sortBy(){
-        const { sortBy } = this.state
+        const { sort, sortBy, sortHandle} = this.state
         this.setState({
-            sortBy : !sortBy
+            sortHandle : sortHandle ? false : true
         })
+        setTimeout(()=>{
+            this.getAllAnnouncement()
+        },10)
     }
+
     delteAnnouncement(id){
         API.delteAnnouncement(id)
         .then((response) => {
             if(response.success === true){
-                this.props.history.push(`/announcement/compose`)
+                this.getAllAnnouncement()
                 Help.toastPop({message: 'Deleted Successfully', type: 'success'})
-                this.getAllAnnouncement();
+                this.props.history.push(`/announcement/compose`)
             }
             else
             {
@@ -101,10 +118,10 @@ class Announcement extends Component {
         this.setState({
             keyValue : id
         })
-        console.log('CLICKED')
+        console.log(id)
     }
     render() {
-        const { sortBy, data ,isDelete, loading, keyValue } = this.state;
+        const { sortHandle, data ,isDelete, loading, keyValue } = this.state;
         const arr = []
         data.map((item) => {
             arr.push(<SubContainer 
@@ -119,7 +136,8 @@ class Announcement extends Component {
                 <Col xs='3'>
                     <span onClick={this.sortBy}>
                         <small className='text-muted' style={{cursor : 'pointer'}}>
-                        Sort by: Date {sortBy ? <img src={asc} style={{width : '15px', height : '15px'}}/> : <img src={desc} style={{width : '15px', height : '15px'}}/>} </small>
+                        Sort by: Date <img src={sortHandle ? asc : desc } style={{width : '15px', height : '15px'}}/> 
+                        </small>
                     </span>
                 </Col>
                 <Col xs='auto' onClick={this.isDelete} 
@@ -151,7 +169,7 @@ class Announcement extends Component {
                 <Col>
                     <Switch>
                         <Route path='/announcement/compose' render={(props) => (
-                            <Compose post = {this.post} getAllAnnouncement={this.getAllAnnouncement}/>
+                            <Compose firstSort={this.firstSort} getAllAnnouncement={this.getAllAnnouncement}/>
                         )}/>
                         <Route path='/announcement/:id' render={(props) => (
                             <ViewAnnouncement {...props}/>

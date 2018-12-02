@@ -17,6 +17,7 @@ class PrimaryFact extends Component {
     }
     render() {
         const { user } = this.props;
+        // console.log(user.address)
         // var obj = JSON.parse(user.address);
         const obj = user ? JSON.parse(user.address) : ''
         console.log(obj)

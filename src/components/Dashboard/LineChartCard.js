@@ -2,86 +2,75 @@ import React, { Component } from 'react'
 import { Card, CardHeader, CardBody} from 'reactstrap';
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area as AR } from 'recharts';
 
-const data = [
-    {
-        amt:2400,
-        name:"Jan",
-        pv:2400,
-        uv:203
-    },
-    {
-        amt:2210,
-        name:"Feb",
-        pv:1398,
-        uv:421
-    },
-    {
-        amt:2290,
-        name:"Mar",
-        pv:9800,
-        uv:786
-    },
-    {
-        amt:2000,
-        name:"Apr",
-        pv:3908,
-        uv:918
-    },
-    {
-        amt:2181,
-        name:"May",
-        pv:4800,
-        uv:1443
-    },
-    {
-        amt:2400,
-        name:"June",
-        pv:2400,
-        uv:1856
-    },
-    {
-        amt:2181,
-        name:"July",
-        pv:4800,
-        uv:2522
-    },
-    {
-        amt:2181,
-        name:"Aug",
-        pv:4800,
-        uv:3013
-    },
-    {
-        amt:2181,
-        name:"Sept",
-        pv:4800,
-        uv:3803
-    },                {
-        amt:2181,
-        name:"Oct",
-        pv:4800,
-        uv:3989
-    },                {
-        amt:2181,
-        name:"Nov",
-        pv:4800,
-        uv:4583
-    },                {
-        amt:2181,
-        name:"Dec",
-        pv:4800,
-        uv:4832
-    },
-]
+// const data = [
+//     {
+//         name:"Jan",
+//         pv:2400,
+//         'uv shit':203
+//     },
+//     {
+//         name:"Feb",
+//         pv:1398,
+//         'uv shit':421
+//     },
+//     {
+//         name:"Mar",
+//         pv:9800,
+//         'uv shit':786
+//     },
+//     {
+//         name:"Apr",
+//         pv:3908,
+//         'uv shit':918
+//     },
+//     {
+//         name:"May",
+//         pv:4800,
+//         'uv shit':1443
+//     },
+//     {
+//         name:"June",
+//         pv:2400,
+//         'uv shit':1856
+//     },
+//     {
+//         name:"July",
+//         pv:4800,
+//         'uv shit':2522
+//     },
+//     {
+//         name:"Aug",
+//         pv:4800,
+//         'uv shit':3013
+//     },
+//     {
+//         name:"Sept",
+//         pv:4800,
+//         'uv shit':3803
+//     },                {
+//         name:"Oct",
+//         pv:4800,
+//         'uv shit':3989
+//     },                {
+//         name:"Nov",
+//         pv:4800,
+//         'uv shit':4583
+//     },                {
+//         name:"Dec",
+//         pv:4800,
+//         'uv shit':4832
+//     },
+// ]
 
 class LineChartCard extends Component {
   render() {
+    const { registeredData } = this.props
     return (
         <Card>
-            <CardHeader className="bg-transparent">Active Users</CardHeader>
+            <CardHeader className="bg-transparent">Registered Users</CardHeader>
             <CardBody>
                 <ResponsiveContainer height={200}>
-                    <AreaChart data={data}
+                    <AreaChart data={registeredData}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -98,7 +87,7 @@ class LineChartCard extends Component {
                         <CartesianGrid strokeDasharray="3 3" />
                         <Tooltip />
                         {/* <Legend /> */}
-                        <AR type="monotone" dataKey="uv" stroke="#17C1BC" fillOpacity={1} fill="url(#colorUv)" />
+                        <AR type="monotone" dataKey="registered user" stroke="#17C1BC" fillOpacity={1} fill="url(#colorUv)" />
                         {/* <AR type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" /> */}
                     </AreaChart>
                 </ResponsiveContainer>

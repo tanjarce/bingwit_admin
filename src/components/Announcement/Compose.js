@@ -29,7 +29,7 @@ class Compose extends Component{
         this.handleClear = this.handleClear.bind(this)
     }
     postAnnouncement(e){
-        const { getAllAnnouncement } = this.props
+        const { getAllAnnouncement, firstSort } = this.props
         e.preventDefault()
         this.setState({
             loading : true
@@ -42,10 +42,10 @@ class Compose extends Component{
             if(response.success){
             this.setState({
                 loading : false,
-                target : '',
-                body : '',
-                title : ''
-            })
+                // target : '',
+                // body : '',
+                // title : ''
+            }, firstSort())
             Help.toastPop({message: 'Added Successfully.', type: 'success'})
             getAllAnnouncement();
             

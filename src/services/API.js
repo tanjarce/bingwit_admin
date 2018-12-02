@@ -2,7 +2,9 @@ import * as Session from './session';
 // const api = 'http://192.168.0.92:3000/api/v1';
 // const api = 'http://192.168.0.125:3000/api/v1';
 // const api = 'https://bingwit-backend.herokuapp.com/api/v1';
+// const api = 'http://18.224.2.191/api/v1';
 const api = 'http://13.229.79.47/api/v1';
+
 
 const headers = () => {
   const token = Session.getToken()
@@ -371,15 +373,56 @@ export const updateCategory = (id, data) => {
   
 
 // DASHBOARD
-
-export const dashUser = ({ type = '', area = ''}) =>
-  fetch(`${api}/dashboard/users?type=${type}&area=${area}`, { headers: headers() }) 
+  // TRANSACTION 
+  
+  export const getDashTransaction = ({ filter= 'YEAR', area = ''}) =>
+  fetch(`${api}/dashboard/transaction/sales/all?limit=&offset=&order=&filter=${filter}&area=${area}&type=producer`, { headers: headers() }) 
   .then(res => res.json())
+
+  // USER
+
+  export const dashUser = ({ type = '', area = ''}) =>
+    fetch(`${api}/dashboard/users?type=${type}&area=${area}`, { headers: headers() }) 
+    .then(res => res.json())
+    
   
   // TOPLIST
-  export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales'}) =>
-    fetch(`${api}/dashboard/transaction?q=${searchQ}&s=${'2018-9-30'}&e=${'2019-12-30'}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
+
+  // AREA
+
+  export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales DESC', start, end}) =>{
+    // console.log(`Start: ${start}, End: ${end}`)
+    return fetch(`${api}/dashboard/area?q=${searchQ}&start_date=${start}&end_date=${end}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
     .then(res => res.json())
+  }
+
+  // PRODUCT
+
+  export const getTopListProduct = ({ offset = 0, limit = 10, searchQ = '', order = 'amout_desc', start, end, area_id }) =>{
+    return fetch(`${api}/dashboard/product_type?q=&date_from=${start}&date_to=${end}&order=${order}quantity_desc&offset=${offset}&limit=${limit}&area_id=`, { headers: headers() }) 
+    .then(res => res.json())
+  }
+
+  // CONSUMER
+
+  export const getTopListConsumer = ({ offset = 0 , limit = 10, searchQ = '', order = 'Total_Purchases ASC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/purchases/all?limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() })
+    .then(res => res.json())
+  }
+
+  // PRODUCER
+
+  export const getTopListProducer = ({ offset = '', limit = 10, searchQ = '', order = 'Total_Sales ASC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/sales/all?limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
+    .then(res => res.json())
+  }
+
+  // PRODUCER MOST CANCEL
+  
+  export const getMostCancel = ({ offset = 0, limit = 10, searchQ = '', order = 'Cancels DESC', start, end}) =>{
+    return fetch(`${api}/dashboard/users/cancels/all??limit=${limit}&offset=${offset}&start_date=${start}&end_date=${end}&order=${order}`, { headers: headers() }) 
+    .then(res => res.json())
+  }
 
   // UPLOAD IMAGE
   export const uploadImage = (data) =>   

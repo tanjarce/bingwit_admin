@@ -9,22 +9,21 @@ class SubContainer extends Component{
         super(props);
         this.state = {
             activeMark : false,
-            id : ''
         }
     }
 
     render(){
-        const { id } = this.state
-        const { isDelete, item, viewAnnouncement, keyValue, delteAnnouncement } = this.props
+        const { keyValue ,isDelete, item, viewAnnouncement , delteAnnouncement } = this.props
+        console.log(keyValue === item.id ? 'EQUAL' : 'NOT EQUAL')
         return(
             <div className='border d-flex flex-row mainScroll' onClick={((e) => {
-                viewAnnouncement(e, item.id)
-            })}>
-                <Col xs='12'>
+                viewAnnouncement(e, item.id)})}>
+                <Col xs='11'>
                 <div className='my-3 ml-2 text-truncate'>
                     <Row>
-                        <Col className='text-truncate' ><b >{item.title}</b></Col>
-                        {isDelete ? <Col xs='auto' onClick={ ()=> {
+                        <Col className='text-truncate'><b>{item.title}</b></Col>
+                        {isDelete ? 
+                        <Col xs='auto' className='ml-auto' onClick={ ()=> {
                             delteAnnouncement(item.id)
                         }}>x</Col> : ''}
                     </Row>
@@ -33,7 +32,7 @@ class SubContainer extends Component{
                     {item.body}
                 </div>
                 </Col>
-                <div className={id ? 'bar ml-auto' : 'ml-auto'}/>
+                <div className={keyValue === item.id ? 'bar ml-auto' : 'ml-auto'}/>
             </div>
         );
     }
