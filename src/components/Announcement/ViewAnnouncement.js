@@ -28,14 +28,12 @@ class ViewAnnouncement extends Component{
         let id = this.props.match.params.id
         this.setState({
             id : id
-        },
-        console.log('VIEW - ' + id))
+        })
         this.viewAnnouncement(id)
     }
     componentWillReceiveProps(nxtprops){
         const { id } = this.state
         let idx = nxtprops.match.params.id
-        
         if(id === idx || id === ''){
             this.viewAnnouncement(idx)
         }

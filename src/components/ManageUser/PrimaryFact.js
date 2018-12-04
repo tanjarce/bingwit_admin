@@ -17,7 +17,10 @@ class PrimaryFact extends Component {
     }
     render() {
         const { user } = this.props;
-        console.log(user)
+        // console.log(user.address)
+        // var obj = JSON.parse(user.address);
+        const obj = user ? JSON.parse(user.address) : ''
+        console.log(obj)
         return (
             <div className='main-facts'>
                 { user ? 
@@ -32,7 +35,7 @@ class PrimaryFact extends Component {
                 </Row>
                 <Row>
                     <Col xs="2" className='d-inline align-top col'>Address:</Col>
-                    <Col xs='auto'><span className='px-3 col'>{user.address}</span></Col><br/>
+                    <Col xs='auto'><span className='px-3 col'>{obj.street + ' ' + obj.barangay + ' ' + obj.municipality + ', ' + obj.province}</span></Col><br/>
                 </Row>    
                 <Row>
                     {user.area ? 

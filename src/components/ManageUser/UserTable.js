@@ -17,12 +17,13 @@ class TableUser extends Component {
         const { dataUsers, count, pagination, isOpen, userData, modalType, loading, updateTable, orderSort, viewUser, setModal, toggleModal, suspendUser } = this.props
         
         const Users = dataUsers.map((user)=>{
+            const obj = user ? JSON.parse(user.address) : ''
             return ({
                 'id' : user.id,
                 'name': user.full_name,
                 'username': user,
                 'role': user.type,
-                'address': user.address,
+                'address': obj.street + ' ' + obj.barangay + ' ' + obj.municipality + ', ' + obj.province,
                 'ratings': user.rating === null ? '- -' : user.rating,
                 'account_status': user.status,
                 'action': {...user}

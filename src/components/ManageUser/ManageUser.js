@@ -76,6 +76,7 @@ class ManageUser extends Component {
                 :
                 Help.toastPop({message: response.error.message, type: 'error'})
             })
+            .catch(err => { console.log(err)})
         })
 
     }
