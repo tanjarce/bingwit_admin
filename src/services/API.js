@@ -449,9 +449,7 @@ export const updateCategory = (id, data) => {
       headers: headers(),
       body: toFormURLEncode(body)
     })
-    .then(res => {
-      console.log(body)
-      return res.json()})
+    .then(res => res.json())
 
     // DELETE ANNOUNCEMENT
     export const delteAnnouncement = (id) =>  

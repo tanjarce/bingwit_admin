@@ -24,8 +24,9 @@
 }
 .all_padding .mainScroll{
     cursor: pointer;
+    transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
 }
-
 .all_padding .header{
     background: #17C1BC;
     color: white

@@ -46,6 +46,17 @@ class Announcement extends Component {
     }
     componentDidMount(){
         this.getAllAnnouncement()
+        async function f() {
+            let result = Promise.resolve(
+                API.getAllAnnouncement()
+                .then((response) => {
+                    return response
+                }))
+
+            let resultPromise = await result;
+
+            console.log(resultPromise)
+        }
     }
     firstSort(){
         this.setState({
@@ -54,8 +65,8 @@ class Announcement extends Component {
     }
     getAllAnnouncement(){
         const { sortHandle , sortBy} = this.state
-        console.log(sortHandle ? 'sortHandle: ' + sortHandle + ' || desc ' + sortBy 
-        :'sortHandle: ' + sortHandle + ' || asc ' + sortBy )
+        // console.log(sortHandle ? 'sortHandle: ' + sortHandle + ' || desc ' + sortBy 
+        // :'sortHandle: ' + sortHandle + ' || asc ' + sortBy )
 
         this.setState({
             loading : true
@@ -102,9 +113,9 @@ class Announcement extends Component {
         API.delteAnnouncement(id)
         .then((response) => {
             if(response.success === true){
-                this.getAllAnnouncement()
                 Help.toastPop({message: 'Deleted Successfully', type: 'success'})
                 this.props.history.push(`/announcement/compose`)
+                this.getAllAnnouncement()
             }
             else
             {
@@ -118,7 +129,6 @@ class Announcement extends Component {
         this.setState({
             keyValue : id
         })
-        console.log(id)
     }
     render() {
         const { sortHandle, data ,isDelete, loading, keyValue } = this.state;
@@ -155,13 +165,14 @@ class Announcement extends Component {
                 <Col xs='4'>
                 <div className='scroll'>
                 {loading ? 
-                    <SyncLoader
-                    className={override}
-                    sizeUnit={"px"}
-                    size={5}
-                    color={'black'}
-                    loading={true}
-                    />
+                    ''
+                    // <SyncLoader
+                    // className={override}
+                    // sizeUnit={"px"}
+                    // size={5}
+                    // color={'black'}
+                    // loading={true}
+                    // />
                  : arr}
                     
                 </div>
