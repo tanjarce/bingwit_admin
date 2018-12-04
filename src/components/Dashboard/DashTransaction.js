@@ -58,7 +58,8 @@ class DashTransaction extends Component {
 
                     this.setBarGraph(transactionDatas)
                 }
-            }).catch(err => console.log(err))
+            })
+            // .catch(err => console.log(err))
     }
 
     formatByThisWeek(transactionDatas){
@@ -94,7 +95,10 @@ class DashTransaction extends Component {
     formatByThisMonth(transactionDatas){
         const weekStart = moment().startOf('month').week()
         const weekEnd = moment().endOf('month').week()
-        const numberOfWeeks = weekEnd - weekStart + 1
+        const numberOfWeeks = (weekStart > weekEnd) ? (weekEnd + 52) - (weekStart) + 1 : weekEnd - weekStart + 1
+
+        // console.log(weekStart)
+        // console.log(numberOfWeeks)
 
         const monthRange = Array(numberOfWeeks).fill(null)
             .reduce((range, week, index) => {
@@ -140,6 +144,8 @@ class DashTransaction extends Component {
 
     formatByThisYear(transactionDatas){
         const currentMonth = new Date().getMonth();
+
+        // console.log(currentMonth)
 
         const dataMonth = Array(12).fill(null)
         .reduce((result, data, index) => {
