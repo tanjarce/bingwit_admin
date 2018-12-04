@@ -276,7 +276,7 @@ class DashTopList extends Component {
             start: picker.startDate.format('YYYY-MM-DD'),
             end: picker.endDate.format('YYYY-MM-DD')
         }, ()=>{
-            this.getTopSalesAndTrans()
+            this.getTopList()
         })
     }
 
@@ -333,7 +333,7 @@ class DashTopList extends Component {
                         <TopListCard 
                             data={topQuantityProduct} 
                             label={['Product - qty. of sold', 'Product', 'qty. of sold']} 
-                            link={'Producer'}
+                            link={'Product'}
                             expand={expand}
                             isLoading={isLoading}
                         />

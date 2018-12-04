@@ -54,7 +54,9 @@ class DashUser extends Component {
     setLineChartData(registered){
         const currentMonth = new Date().getMonth();
 
-        const dataMonth = Array(currentMonth).fill(null)
+        // console.log(currentMonth)
+
+        const dataMonth = Array(12).fill(null)
             .reduce((result, data, index) => {
                 const formattedMonth = moment().month(index).format('MMM')
                 result[formattedMonth] = 0

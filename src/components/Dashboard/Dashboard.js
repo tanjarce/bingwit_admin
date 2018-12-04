@@ -22,7 +22,6 @@ class Dashboard extends Component {
             },
             areaOptions: []
         }
-        this.repopulate = this.repopulate.bind(this)
         this.expand = this.expand.bind(this)
         this.setDate = this.setDate.bind(this)
     }
@@ -41,9 +40,10 @@ class Dashboard extends Component {
         API.getAllAreas(search)
             .then((res) => {
                 if(res.success){
+                    // console.log(res.area.rows)
                     const areaOptions = res.area.rows.map((area)=>{
                         return ({
-                            value: area.area_address,
+                            value: area.id,
                             label: area.area_address
                         })
                     })
@@ -60,28 +60,7 @@ class Dashboard extends Component {
                 start,
                 end
             }
-        }), () => {
-            // console.log(this.state.dateToplist)
-        })
-    }
-
-    repopulate () {
-        const { items } = this.state
-
-        const newArray = items.map(items => {
-            return {
-                ...items,
-                pv: this.random(10000, 2000),
-                uv: this.random(10000, 2000)
-            }
-        })
-
-        this.setState({
-            items: newArray
-        })
-    }
-    random (num, base = 1) {
-        return Math.floor(Math.random() * num) + base
+        }))
     }
 
     expand(type){

@@ -458,3 +458,10 @@ export const updateCategory = (id, data) => {
       headers: headers() })
     .then(res => res.json())
       
+// GET ALL TRASACTIONS
+
+export const getAllTransaction = ({ type='producer', offset = 0, limit = 10, searchQ = '', start, end}) =>{
+  
+  return fetch(`${api}/transactions?type=${type}&q=${searchQ}&startDate=${start}&endDate=${end}&limit=${limit}&offset=${offset}`, { headers: headers() }) 
+  .then(res => res.json())
+}

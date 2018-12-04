@@ -64,6 +64,25 @@ const headers = {
             width: 320
         },
     ] ,
+    'product_expand': [
+        {
+            Header: 'Product',
+            accessor: 'product_type',
+        },
+        {
+            Header: 'Total Amount',
+            accessor: 'amount',
+        },     
+        {
+            Header: 'Total Quantity',
+            accessor: 'quantity',
+        },     
+        {
+            Header: 'Date Range',
+            accessor: 'DateRange',
+            width: 320
+        },
+    ] ,
     'cancels_expand': [
         {
             Header: 'Username',
@@ -120,7 +139,7 @@ class DashExpandView extends Component{
 
         const GetData = {
             'area_expand': API.getTopListArea(data) ,
-            'product_expand': API.getTopListArea(data),
+            'product_expand': API.getTopListProduct(data),
             'producer_expand': API.getTopListProducer(data),
             'consumer_expand': API.getTopListConsumer(data),
             'cancels_expand': API.getMostCancel(data)
@@ -131,6 +150,7 @@ class DashExpandView extends Component{
         GetData[type.toLowerCase()]
             .then(res => {
                 if(res.success){
+                    // console.log(res)
                     this.makeTable(res)
                 }
             })
@@ -139,14 +159,9 @@ class DashExpandView extends Component{
 
     makeTable (res){
         const { match: { params: { type } } } = this.props
-        const dataType = type.toLowerCase()
-
-        // const datas = (dataType === 'consumer_expand' || dataType === 'producer_expand' || dataType === 'cancels_expand' ) 
-        //     ? res.reports 
-        //     : res.results'
         
-        const datas = res.reports
-
+        const datas = typeof res.reports === 'undefined' ? [] : res.reports
+        
         this.setState(()=>({
             datas,
             isLoading: false

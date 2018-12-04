@@ -15,6 +15,7 @@ import ManageUser from './ManageUser/ManageUser'
 import List from './RulesAndProduct/List'
 import Notification from './Notifications/Notification'
 import Announcement from './Announcement/Announcement'
+import AllTransaction from './Transaction/AllTransaction';
 
 class Main extends Component {
     constructor(props) {
@@ -80,6 +81,9 @@ class Main extends Component {
                         )}/>
                         <Route path="/announcement" render={()=>(
                             <Announcement />
+                        )}/>
+                        <Route path="/alltransaction" render={()=>(
+                            <AllTransaction />
                         )}/>
                         <Route render={()=>(
                             <Redirect to="/dashboard" />
