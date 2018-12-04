@@ -436,8 +436,8 @@ export const updateCategory = (id, data) => {
 
     // ANNOUNCEMENT
     // GET
-    export const getAllAnnouncement = (id = '') =>
-      fetch(`${api}/notification?q=${id}`, { 
+    export const getAllAnnouncement = (id = '', sort = '') =>
+      fetch(`${api}/notification?q=${id}&order=${sort}`, { 
         headers: headers() }) 
       .then(res => res.json())
     
@@ -449,9 +449,7 @@ export const updateCategory = (id, data) => {
       headers: headers(),
       body: toFormURLEncode(body)
     })
-    .then(res => {
-      console.log(body)
-      return res.json()})
+    .then(res => res.json())
 
     // DELETE ANNOUNCEMENT
     export const delteAnnouncement = (id) =>  

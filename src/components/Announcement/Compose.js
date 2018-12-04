@@ -22,30 +22,37 @@ class Compose extends Component{
             body : '',
             target : '',
             title : '',
-            loading : false
+            loading : false,
+            isPost : false
         }
         this.postAnnouncement = this.postAnnouncement.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.handleClear = this.handleClear.bind(this)
+        this.toggle = this.toggle.bind(this)
+    }
+    toggle(){
+        this.setState({
+            isPost : !this.state.isPost
+        })
+    }
+    dummyPost(e){
+        e.preventDefault();
     }
     postAnnouncement(e){
-        const { getAllAnnouncement } = this.props
+        const { getAllAnnouncement, firstSort } = this.props
         e.preventDefault()
         this.setState({
             loading : true
         })
         let values = serializeForm(e.target, { hash: true })
-        console.log(values)
-        
         API.composeAnnouncement(values)
         .then((response) => {
             if(response.success){
             this.setState({
                 loading : false,
-                target : '',
                 body : '',
                 title : ''
-            })
+            }, firstSort())
             Help.toastPop({message: 'Added Successfully.', type: 'success'})
             getAllAnnouncement();
             
@@ -70,19 +77,24 @@ class Compose extends Component{
     this.setState({[e.target.name] : e.target.value});
     }
     render(){
-        const { loading, target, body, title } = this.state
+        const { loading, isPost, body, title } = this.state
         return(
             <div className='border'>
                         <div className='header px-3 py-1'> Compose</div>
                         <div className='m-3'>
                             <div>
-                                <form onSubmit={this.postAnnouncement}>
+                                <form onSubmit={isPost === false ? this.postAnnouncement : this.dummyPost}>
                                 <Row>
                                     <Col xs='12' className='my-1'>
                                         <Row>
                                             <Col xs='1' className='my-auto'>To:</Col>
                                             <Col>
-                                            <Input type='text' placeholder='Write something...' name='target' value={target} onChange={this.handleChange} />
+                                            <Input type="select" name="target" onChange={this.handleChange}>
+                                                <option>all</option>
+                                                <option>consumer</option>
+                                                <option>producer</option>
+                                            </Input>
+                                            {/* <Input type='text' placeholder='Write something...' name='target' value={target} onChange={this.handleChange} /> */}
                                             </Col>
                                         </Row>
                                     </Col>
@@ -102,9 +114,12 @@ class Compose extends Component{
                                     <Row>
                                         <Col/>
                                         <Col xs='auto'>
+                                        
                                         <div  className='mx-1 mt-5'>
-                                            <Button className='button_announcement_clear' onClick={this.handleClear}>Clear</Button>
-                                            <Button className='button_announcement_post' type='submit'>{loading ? 
+                                            {isPost && <span className='mr-2 text-muted'>Are you sure ?</span>}
+                                            <Button className='button_announcement_clear' onClick={isPost ? this.toggle : this.handleClear}>{isPost ? 'No' : 'Clear'}</Button>
+                                            <Button className='button_announcement_post' onClick={this.toggle} type='submit'>
+                                            {loading ? 
                                             <SyncLoader
                                             className={override}
                                             sizeUnit={"px"}
@@ -112,10 +127,9 @@ class Compose extends Component{
                                             color={'white'}
                                             loading={true}
                                         />
-                                        :
-                                        "Post"
-                                        }</Button>
+                                        : isPost ? 'Yes!' : 'Post'}</Button>
                                         </div>
+
                                         </Col>
                                     </Row>
                                     </Col>

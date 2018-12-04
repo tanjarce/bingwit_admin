@@ -9,36 +9,40 @@ class SubContainer extends Component{
         super(props);
         this.state = {
             activeMark : false,
-            id : ''
+            // deleteSlide : false
         }
+        // this.deleteSlide = this.deleteSlide.bind(this)
     }
-
-    componentDidMount(){
-        const { keyValue } = this.props
-        console.log(keyValue)   
-    }
-
+    // deleteSlide(){
+    //     console.log('SLIDE')
+    //     this.setState({
+    //         deleteSlide : true
+    //     })
+    // }
     render(){
-        const { id } = this.state
-        const { isDelete, item, viewAnnouncement, keyValue, delteAnnouncement } = this.props
+        // const { deleteSlide } = this.state
+        const { keyValue ,isDelete, item, viewAnnouncement , delteAnnouncement } = this.props
         return(
             <div className='border d-flex flex-row mainScroll' onClick={((e) => {
-                viewAnnouncement(e, item.id)
-            })}>
-                <Col xs='12'>
+                setTimeout(()=> {
+                    viewAnnouncement(e, item.id)}, 10) 
+                })}>
+                <Col xs='11'>
                 <div className='my-3 ml-2 text-truncate'>
                     <Row>
-                        <Col className='text-truncate' ><b >{item.title}</b></Col>
-                        {isDelete ? <Col xs='auto' onClick={ ()=> {
+                        <Col className='text-truncate'><b>{item.title}</b></Col>
+                        {isDelete ? 
+                        <Col xs='auto' className='ml-auto' onClick={ ()=> {
+                            // this.deleteSlide();
                             delteAnnouncement(item.id)
-                        }}>x</Col> : ''}
+                        }}>&times;</Col> : ''}
                     </Row>
                     <p className='lHeight'>Posted - {moment(item.createdAt).format('MMMM D, YYYY')}</p>
                     <p className='lHeight'>To - {item.target.charAt(0).toUpperCase() + item.target.slice(1, item.target.length)}</p>
                     {item.body}
                 </div>
                 </Col>
-                <div className={id ? 'bar ml-auto' : 'ml-auto'}/>
+                <div className={keyValue === item.id ? 'bar ml-auto' : 'ml-auto'}/>
             </div>
         );
     }
