@@ -19,7 +19,8 @@ class DashUser extends Component {
             filterUserType: 'All',
             filterArea: '',
             registeredData: [],
-            isLoading: true
+            isLoading: true,
+            userCount: 0
         }
         this.getAllDashUser = this.getAllDashUser.bind(this)
         this.setPieChartData = this.setPieChartData.bind(this) 
@@ -113,9 +114,20 @@ class DashUser extends Component {
                 this.setLineChartData(registered)
             }
         }).catch(err => console.log(err))
+        API.getOnlineUsers()
+            .then(res => {
+                if(res.success){
+                    console.log(res)
+                    this.setState({
+                        userCount: res.user_count
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
     }
     render(){
-        const { userData, isLoading, registeredData } = this.state
+        const { userData, isLoading, registeredData, userCount } = this.state
         const { areaOptions } = this.props
         return(
             <Fragment>
@@ -125,7 +137,7 @@ class DashUser extends Component {
                     </Col>
                 </Row>
                 <Row noGutters className="mb-3">
-                    <Col xs="12" lg="5" className="mr-2">
+                    <Col xs="12" lg="5">
                         <Select
                             className="basic-single"
                             classNamePrefix="select"
@@ -155,6 +167,11 @@ class DashUser extends Component {
                                 <option>Consumer</option>
                             </Input>
                         </InputGroup>
+                    </Col>
+                    <Col sm={{ size: 2, offset: 2 }}>
+                        <div>
+                            <h4>Online User: {userCount}</h4>
+                        </div>
                     </Col>
                 </Row>
                 <Row className="mb-5">

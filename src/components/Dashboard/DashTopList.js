@@ -66,16 +66,19 @@ class DashTopList extends Component {
             'value': `${area.Number_of_Transactions}` 
         }))
 
-        topQuantityProduct = topQuantityProduct.reports.map(product => ({
-            'key': product.product_type,
-            'value': `${product.quantity} kg`
-        }))
+        topQuantityProduct = (topQuantityProduct.reports === undefined) 
+            ? []
+            :topQuantityProduct.reports.map(product => ({
+                'key': product.product_type,
+                'value': `${product.quantity} kg`
+            }))
 
-        topAmountProduct = topAmountProduct.reports.map(product => ({
-            'key': product.product_type ,
-            'value': `₱ ${product.amount}`
-
-        }))
+        topAmountProduct = (topAmountProduct.reports === undefined) 
+            ? [] 
+            :topAmountProduct.reports.map(product => ({
+                'key': product.product_type ,
+                'value': `₱ ${product.amount}`
+            }))
 
         topPurchaseCon = topPurchaseCon.reports.map(producer => ({
             'key': producer.Username,

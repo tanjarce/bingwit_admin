@@ -3,7 +3,8 @@ import * as Session from './session';
 // const api = 'http://192.168.0.125:3000/api/v1';
 // const api = 'https://bingwit-backend.herokuapp.com/api/v1';
 // const api = 'http://18.224.2.191/api/v1';
-const api = 'http://13.229.79.47/api/v1';
+const api = 'http://3.0.97.108:3000/api/v1';
+
 
 
 const headers = () => {
@@ -463,5 +464,12 @@ export const updateCategory = (id, data) => {
 export const getAllTransaction = ({ type='producer', offset = 0, limit = 10, searchQ = '', start, end}) =>{
   
   return fetch(`${api}/transactions?type=${type}&q=${searchQ}&startDate=${start}&endDate=${end}&limit=${limit}&offset=${offset}`, { headers: headers() }) 
+  .then(res => res.json())
+}
+
+// GET ALL ONLINE USERS
+
+export const getOnlineUsers = () =>{
+  return fetch(`${api}/dashboard/users/online`, { headers: headers() }) 
   .then(res => res.json())
 }
