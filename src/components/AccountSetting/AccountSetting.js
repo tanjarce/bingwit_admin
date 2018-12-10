@@ -53,7 +53,6 @@ class AccountSetting extends Component {
     })
   }
   changePass(){
-    console.log('Change Pass')
     const { password, vpassword, oldPass, loading} = this.state
     this.setState({
       loading : true
@@ -89,7 +88,6 @@ class AccountSetting extends Component {
   };
     render() {
       const { password , vpassword, username, oldPass ,loading, err} = this.state;
-      console.log(oldPass)
         return (
                 <div className='all_padding'>
                 <AvForm>

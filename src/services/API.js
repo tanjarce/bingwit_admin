@@ -133,7 +133,7 @@ export const addRules = (data) =>
 // GET ALL PRODUCT TYPES
 export const getAllProductTypes = ({ offset = 0, limit = 10, searchQ = '', category = ''}) => {
   const token = headers()
-  console.log(token.Authorization)
+  //console.log(token.Authorization)
   return fetch(`${api}/product_types?offset=${offset}&limit=${limit}&q=${searchQ}&filter=${category}`, { 
     headers: headers() })
     .then(res => res.json())
@@ -337,7 +337,7 @@ export const addCategory = (category) => {
   const body = {
     'name': category
   }
-  console.log(body)
+  //console.log(body)
 
   return fetch(`${api}/product_category`, {
     method: 'POST', 
@@ -393,7 +393,7 @@ export const updateCategory = (id, data) => {
   // AREA
 
   export const getTopListArea = ({ offset = 0, limit = 10, searchQ = '', order = 'Total_Sales DESC', start, end}) =>{
-    // console.log(`Start: ${start}, End: ${end}`)
+    // //console.log(`Start: ${start}, End: ${end}`)
     return fetch(`${api}/dashboard/area?q=${searchQ}&start_date=${start}&end_date=${end}&order=${order}&offset=${offset}&limit=${limit}`, { headers: headers() }) 
     .then(res => res.json())
   }
@@ -433,7 +433,7 @@ export const updateCategory = (id, data) => {
       headers: headers(),
       body: data
     }).then(res => {
-      console.log(res)
+      //console.log(res)
       return res.json()})
 
     // ANNOUNCEMENT

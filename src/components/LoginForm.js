@@ -28,7 +28,7 @@ class LoginForm extends Component {
         e.preventDefault()
         let values = serializeForm(e.target, { hash: true }) // returns an object from input values based on name e.g. {name: "name", email: "email@.e.com"}
         values = {...values , type : 'admin'}    
-        console.log(values) 
+        //console.log(values) 
                     API.login(values)
                     .then((response) => {
                         if(response.success){
@@ -39,7 +39,7 @@ class LoginForm extends Component {
                         }
                     }).catch(err => {
             this.toggleLoading()
-            console.log(err)
+            //console.log(err)
         })
            
     }

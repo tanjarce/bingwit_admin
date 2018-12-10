@@ -117,13 +117,13 @@ class DashUser extends Component {
         API.getOnlineUsers()
             .then(res => {
                 if(res.success){
-                    console.log(res)
+                    // console.log(res)
                     this.setState({
                         userCount: res.user_count
                     })
                 }
             }).catch(err => {
-                console.log(err)
+                // console.log(err)
             })
     }
     render(){
