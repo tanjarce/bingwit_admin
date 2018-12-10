@@ -26,12 +26,12 @@ export const getRole = () => {
 export const saveUser = (response) => {
     // const userData = response.data.items[0]
     const userData = response
-    console.log(userData)
+    // console.log(userData)
     // userData.role = role
     cookie.set('user', userData, {path: '/'})
 }
 
 export const removeUser = (id) => {
     cookie.remove('user', {path: '/'})
-    console.log(`cookie set to null ${getUser()}`)
+    // console.log(`cookie set to null ${getUser()}`)
 }

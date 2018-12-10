@@ -81,14 +81,12 @@ class Login extends Component {
 
     // LOGIN METHODS
     handleSignInSuccess (response) {
-        console.log(response)
         Session.saveUser(response);
         this.navigateToHome()
 
     }
     
     handleSignInFail (error) {
-        // console.log(error)
         this.setState(()=>({
             isInvalid: {
                 'username': true,

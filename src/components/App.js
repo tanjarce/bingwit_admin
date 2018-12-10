@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify';
 
 class App extends Component {
+  componentWillMount(){
+    document.title = "Bingwit Admin"
+  }
   render() {
     return (
       <div>
